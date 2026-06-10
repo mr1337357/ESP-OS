@@ -39,15 +39,8 @@ dependencies:
     source:
       type: idf
     version: 6.0.1
-  sd_card:
-    dependencies: []
-    source:
-      path: ..\..\..\..\esp\v6.0.1\esp-idf\examples\storage\sd_card\sdmmc\components\sd_card
-      type: local
-    version: '*'
 direct_dependencies:
 - espressif/esp_tinyusb
-- sd_card
-manifest_hash: 79a39f3ac8db5b9d5da67ff20baa835a2c38e8664212dc93616733e6ab3e9325
+manifest_hash: 00a70186f351900d637d853b92e892396ca73b9b2be83b25582199a4ed112aa1
 target: esp32s3
 version: 3.0.0
