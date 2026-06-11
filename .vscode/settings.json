@@ -2,9 +2,10 @@
   "C_Cpp.intelliSenseEngine": "default",
   "idf.extensionActivationMode": "always",
   "idf.openOcdConfigs": [
-    "board/esp32s3-builtin.cfg"
+    "interface/ftdi/esp_ftdi.cfg",
+    "target/esp32s3.cfg"
   ],
-  "idf.portWin": "COM8",
+  "idf.portWin": "COM10",
   "idf.currentSetup": "C:\\esp\\v6.0.1\\esp-idf",
   "idf.customExtraVars": {
     "IDF_TARGET": "esp32s3"
@@ -13,7 +14,7 @@
   "clangd.arguments": [
     "--background-index",
     "--query-driver=**",
-    "--compile-commands-dir=c:\\Users\\misspapaya\\projects\\ESPOS\\build"
+    "--compile-commands-dir=c:\\Users\\misspapaya\\projects\\ESP-OS\\build"
   ],
   "idf.flashType": "UART",
   "idf.port": "/dev/ttyACM1"
