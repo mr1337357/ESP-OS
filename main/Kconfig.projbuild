@@ -1,5 +1,14 @@
 menu "Board Specific Stuff"
-    config TESTPARAM
-        string "Test Parameter"
-        default "Foo"
+    config NUM_SPI
+        int "Number of SPI ports accessible to the OS"
+        default 1
+    config PIN_MOSI_0
+        int "asdf"
+        default -1
+    config PIN_MISO_0
+        int "asdf"
+        default -1
+    config PIN_SCLK_0
+        int "asdf"
+        default -1
 endmenu

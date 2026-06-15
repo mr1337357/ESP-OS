@@ -13,5 +13,4 @@ void app_main(void)
     }
     size_t size = esp_psram_get_size();
     printf("mem size %d\n" ,size);
-    printf("test message %s\n",CONFIG_TESTPARAM);
 }

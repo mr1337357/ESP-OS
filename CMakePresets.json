@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "tlora_pager",
+            "binaryDir": "build/tlora_pager",
+            "displayName": "T-Lora Pager",
+            "description": "",
+            "cacheVariables": {
+                "IDF_TARGET": "esp32s3",
+                "SDKCONFIG_DEFAULTS": "sdkconfig.tlora_pager;sdkconfig.defaults.esp32s3;sdkconfig.defaults",
+                "SDKCONFIG": "build/tlora_pager/sdkconfig"
+            }
+        }
+    ]
+}
