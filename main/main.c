@@ -1,9 +1,11 @@
 #include <stdio.h>
-
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "esp_psram.h"
 
 void app_main(void)
 {
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
     printf("test\n");
     esp_err_t mem_err = esp_psram_init();
     if(mem_err != ESP_OK)

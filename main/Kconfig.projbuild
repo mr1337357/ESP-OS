@@ -1,14 +1,75 @@
 menu "Board Specific Stuff"
+    config NUM_I2C
+        int "Number of I2C controllers accessible to the OS"
+        default 1
+    menu "I2C ports"
+        visible if NUM_I2C > 0
+        config I2C_0_SDA
+            int "SDA pin for I2C 0"
+            default -1
+        config I2C_0_SCL
+            int "SCL pin for I2C 0"
+            default -1
+    endmenu
+        
     config NUM_SPI
         int "Number of SPI ports accessible to the OS"
         default 1
-    config PIN_MOSI_0
-        int "asdf"
-        default -1
-    config PIN_MISO_0
-        int "asdf"
-        default -1
-    config PIN_SCLK_0
-        int "asdf"
-        default -1
+    menu "SPI ports"
+        visible if NUM_SPI > 0
+        menu "SPI 0"
+            config SPI_0_NUMCS
+                int "number of cs pins"
+                default 0
+            config SPI_0_MOSI
+                int "MOSI pin"
+                default -1
+            config SPI_0_MISO
+                int "MISO pin"
+                default -1
+            config SPI_0_SCLK
+                int "SCLK pin"
+                default -1
+            config SPI_0_CS_0
+                int "CS 0"
+                default -1
+                depends on SPI_0_NUMCS > 0
+            config SPI_0_CS_1
+                int "CS 1"
+                default -1
+                depends on SPI_0_NUMCS > 1
+            config SPI_0_CS_2
+                int "CS 2"
+                default -1
+                depends on SPI_0_NUMCS > 2
+        endmenu
+        menu "SPI 1"
+            visible if NUM_SPI > 1
+            config SPI_1_NUMCS
+                int "number of cs pins"
+                default 0
+            config SPI_1_MOSI
+                int "MOSI pin"
+                default -1
+            config SPI_1_MISO
+                int "MISO pin"
+                default -1
+            config SPI_1_SCLK
+                int "SCLK pin"
+                default -1
+            config SPI_1_CS_0
+                int "CS 0"
+                default -1
+                depends on SPI_1_NUMCS > 0
+            config SPI_1_CS_1
+                int "CS 1"
+                default -1
+                depends on SPI_1_NUMCS > 1
+            config SPI_1_CS_2
+                int "CS 2"
+                default -1
+                depends on SPI_1_NUMCS > 2
+        endmenu
+    endmenu
+    
 endmenu

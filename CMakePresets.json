@@ -11,6 +11,17 @@
                 "SDKCONFIG_DEFAULTS": "sdkconfig.tlora_pager;sdkconfig.defaults.esp32s3;sdkconfig.defaults",
                 "SDKCONFIG": "build/tlora_pager/sdkconfig"
             }
+        },
+        {
+            "name": "esp32s3_zero",
+            "binaryDir": "build/esp32s3_zero",
+            "displayName": "Waveshare ESP32S3 Zero",
+            "description": "",
+            "cacheVariables": {
+                "IDF_TARGET": "esp32s3",
+                "SDKCONFIG_DEFAULTS": "sdkconfig.esp32s3_zero;sdkconfig.defaults.esp32s3;sdkconfig.defaults",
+                "SDKCONFIG": "build/esp32s3_zero/sdkconfig"
+            }
         }
     ]
 }
