@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_psram.h"
+
+
+#include "os_hal.h"
+#include "os_vfs.h"
 
 void app_main(void)
 {
+    esp_err_t ret;
     vTaskDelay(5000 / portTICK_PERIOD_MS);
     printf("test\n");
-    esp_err_t mem_err = esp_psram_init();
-    if(mem_err != ESP_OK)
-    {
-        printf("mem err %d\n",mem_err);
-        return;
-    }
-    size_t size = esp_psram_get_size();
-    printf("mem size %d\n" ,size);
+
+    os_hal_spi_init();
+    os_vfs_init();
 }

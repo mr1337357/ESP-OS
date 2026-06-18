@@ -1,16 +1,16 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
 
-void spi_init();
+#include "os_hal.h"
 
-void sd_init()
+void os_hal_sd_init()
 {
     static bool sd_is_init = false;
     if(sd_is_init)
     {
         return;
     }
-    spi_init();
+    os_hal_spi_init();
 
 }
 
@@ -48,7 +48,7 @@ const uint8_t spi0_cspins[CONFIG_SPI_1_NUMCS] =
 
 spi_device_handle_t *spi_devices[CONFIG_NUM_SPI];
 
-void spi_init()
+void os_hal_spi_init()
 {
     int i;
     esp_err_t ret;

@@ -71,5 +71,18 @@ menu "Board Specific Stuff"
                 depends on SPI_1_NUMCS > 2
         endmenu
     endmenu
-    
+    menu "SDCard"
+        config USE_SDCARD
+            bool "enable sd card support"
+            default n
+            depends on NUM_SPI > 0
+        config SD_SPIBUS
+            int "Select which SPI bus has a SD card"
+            default -1
+            depends on USE_SDCARD = y
+        config SD_CSPIN
+            int "sdcard chip select pin"
+            default -1
+            depends on USE_SDCARD = y
+    endmenu
 endmenu
