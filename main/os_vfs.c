@@ -40,5 +40,9 @@ void os_vfs_init()
     {
         printf("Failed to mount SDCARD (%s)", esp_err_to_name(err));
     }
+    else
+    {
+        printf("mounted sdcard\n");
+    }
 #endif
 }
