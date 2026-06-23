@@ -17,5 +17,6 @@
     "--compile-commands-dir=c:\\Users\\misspapaya\\projects\\ESP-OS\\build"
   ],
   "idf.flashType": "UART",
-  "idf.port": "/dev/ttyACM1"
+  "idf.port": "/dev/ttyACM1",
+  "C_Cpp.errorSquiggles": "disabled"
 }
