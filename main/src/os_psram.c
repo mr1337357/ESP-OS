@@ -24,7 +24,7 @@ void *os_psram_code_malloc(int size)
 {
     alloc_chain_t *temp;
     alloc_chain_t *newmem;
-    os_thread *thread = os_threads_get_thread();
+    os_thread *thread = os_threads_get_current_thread();
     newmem = heap_caps_malloc(size + 8, MALLOC_CAP_SPIRAM);
     newmem->next = 0;
     newmem->thread_map = (1<<os_threads_getpid());
@@ -42,7 +42,7 @@ void *os_psram_heap_malloc(int size)
 {
     alloc_chain_t *temp;
     alloc_chain_t *newmem;
-    os_thread *thread = os_threads_get_thread();
+    os_thread *thread = os_threads_get_current_thread();
     newmem = heap_caps_malloc(size + 8, MALLOC_CAP_SPIRAM);
     newmem->next = 0;
     newmem->thread_map = (1<<os_threads_getpid());
@@ -54,4 +54,66 @@ void *os_psram_heap_malloc(int size)
     for(temp = thread->heap;temp->next; temp = temp->next);
     temp->next = newmem;
     return &newmem->buffer;
+}
+
+void os_psram_free(void *address)
+{
+    alloc_chain_t *temp;
+    alloc_chain_t *temp2;
+    os_thread *thread = os_threads_get_current_thread();
+    temp = thread->code;
+    if(temp && temp->buffer == address)
+    {
+        thread->code = temp->next;
+        free(temp);
+    }
+    for(temp = thread->code; temp; temp = temp->next)
+    {   
+        if(temp->next)
+        {
+            if(temp->next->buffer == address)
+            {
+                temp2 = temp->next;
+                temp->next = temp->next->next;
+                free(temp2);
+                return;
+            }
+        }
+    }
+}
+
+void os_psram_thread_free(int pid)
+{
+    os_thread *thread = os_threads_get_thread(pid);
+    alloc_chain_t *temp;
+    for(temp = thread->code;temp;temp = temp->next)
+    {
+        temp->thread_map &= ~(1 << pid);
+        if(temp->thread_map == 0)
+        {
+            free(temp); //use-after-free :o
+        }
+    }
+    for(temp = thread->heap;temp;temp = temp->next)
+    {
+        temp->thread_map &= ~(1 << pid);
+        if(temp->thread_map == 0)
+        {
+            free(temp); //use-after-free :o
+        }
+    }
+}
+
+void os_psram_duplicate_thread(int oldpid, int newpid)
+{
+    os_thread *oldthread = os_threads_get_thread(oldpid);
+    alloc_chain_t *temp;
+    for(temp = oldthread->code;temp;temp = temp->next)
+    {
+        temp->thread_map |= (1 << newpid);
+    }
+    for(temp = oldthread->heap;temp;temp = temp->next)
+    {
+        temp->thread_map |= (1 << newpid);
+    }
 }

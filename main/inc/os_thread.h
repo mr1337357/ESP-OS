@@ -24,6 +24,8 @@ typedef struct
 } os_thread;
 
 int os_threads_getpid();
-os_thread *os_threads_get_thread();
+os_thread *os_threads_get_current_thread();
+os_thread *os_threads_get_thread(int pid);
+os_thread *os_thread_create(void *entry);
 
 #endif
