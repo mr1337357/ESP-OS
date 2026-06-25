@@ -62,7 +62,7 @@ void _os_threads_launcher(void *arg)
     vTaskDelete(threads[pid].task);
 }
 
-os_thread *os_threads_create(void *entry)
+os_thread *os_threads_create(void *entry,void *threadarg)
 {
     int oldpid;
     int i;
@@ -83,4 +83,16 @@ os_thread *os_threads_create(void *entry)
 
     }
     return 0;
+}
+
+void os_threads_exec(char *filename)
+{
+    int pid = os_threads_getpid();
+    TaskHandle_t oldtask;
+    oldtask = threads[pid].task;
+    //unload memory
+    os_psram_thread_free(pid);
+    threads[pid].code = 0;
+    threads[pid].heap = 0;
+
 }
