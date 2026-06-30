@@ -1,20 +1,30 @@
 #include <elf.h>
 #include <stdio.h>
 
+void elf_file_seek(FILE *app, int offset)
+{
+  fseek(app,offset,SEEK_SET);
+}
+
+int elf_file_read(FILE *app, void *buffer, int len)
+{
+  return fread(buffer,len,1,app);
+}
+
 void elf_get_strtab(FILE *app, int e_shoff, int e_shstrndx, char *strtab)
 {
   Elf32_Shdr shdr;
-  app.seek(e_shoff + (sizeof(shdr) * e_shstrndx));
-  app.read((uint8_t *)&shdr,sizeof(shdr));
-  app.seek(shdr.sh_offset);
-  app.read((uint8_t *)strtab,shdr.sh_size);
+  elf_file_seek(app, e_shoff + sizeof(shdr) * e_shstrndx);
+  elf_file_read(app, &shdr, sizeof(shdr));
+  elf_file_seek(app, shdr.sh_offset);
+  elf_file_read(app, strtab, shdr.sh_size);
 }
 
-uint32_t elf_place_in_ram(FILE &app, int offset, int FILEsize, int ramsize)
+uint32_t elf_place_in_ram(FILE &app, int offset, int filesize, int ramsize)
 {
-  uint8_t *mem = (uint8_t *)psram_malloc(ramsize);
-  app.seek(offset);
-  app.read(mem,FILEsize);
+  uint8_t *mem = os_psram_code_malloc(ramsize);
+  elf_file_seek(app,offset);
+  elf_file_read(app,mem,filesize);
   return (uint32_t)mem;
 }
 
@@ -141,19 +151,19 @@ uint32_t elf_load_sections(FILE &app, uint32_t e_entry, int e_shoff, int e_shnum
   return e_entry;
 }
 
-uint32_t loadElf(const char *FILEname)
+uint32_t loadElf(const char *filename)
 {
   char strtab[256];
   uint32_t entry;
   Elf32_Ehdr e32_hdr;
-  FILE app = fs.open(FILEname);
+  FILE app = fs.open(filename);
 
   if(!app)
   {
     Serial.printf("App not found\n");
     return 0;
   }
-  if(fread(&e32_hdr,sizeof(e32_hdr),1,app)!=sizeof(e32_hdr))
+  if(elf_file_read(app,&e32_hdr,sizeof(e32_hdr)) != sizeof(e32_hdr))
   {
     Serial.printf("App not valid\n");
     goto FAILURE;
