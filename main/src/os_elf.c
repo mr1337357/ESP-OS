@@ -1,5 +1,8 @@
 #include <elf.h>
 #include <stdio.h>
+#include <string.h>
+
+#include "os_psram.h"
 
 void elf_file_seek(FILE *app, int offset)
 {
@@ -8,7 +11,7 @@ void elf_file_seek(FILE *app, int offset)
 
 int elf_file_read(FILE *app, void *buffer, int len)
 {
-  return fread(buffer,len,1,app);
+  return fread(buffer,1,len,app);
 }
 
 void elf_get_strtab(FILE *app, int e_shoff, int e_shstrndx, char *strtab)
@@ -20,45 +23,49 @@ void elf_get_strtab(FILE *app, int e_shoff, int e_shstrndx, char *strtab)
   elf_file_read(app, strtab, shdr.sh_size);
 }
 
-uint32_t elf_place_in_ram(FILE &app, int offset, int filesize, int ramsize)
+uint32_t elf_place_in_ram(FILE *app, int offset, int filesize, int ramsize)
 {
-  uint8_t *mem = os_psram_code_malloc(ramsize);
+  uint8_t *mem = os_psram_code_malloc((ramsize+3)&(~3));
+  while(((uint32_t)mem)&3)
+  {
+    mem++;
+  }
   elf_file_seek(app,offset);
   elf_file_read(app,mem,filesize);
   return (uint32_t)mem;
 }
 
-uint32_t elf_load_sections(FILE &app, uint32_t e_entry, int e_shoff, int e_shnum, char *strtab)
+uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum, char *strtab)
 {
   int i;
   Elf32_Shdr shdr;
   int offset;
 
   uint32_t *global_table;
-  int global_table_size;
+  int global_table_size = 0;
 
   uint32_t text = 0;
   uint32_t text_len = 0;
-  uint32_t text_vaddr;
+  uint32_t text_vaddr = 0;
 
   uint32_t rodata = 0;
   uint32_t rodata_len = 0;
-  uint32_t rodata_vaddr;
+  uint32_t rodata_vaddr = 0;
 
   uint32_t data = 0;
   uint32_t data_len = 0;
-  uint32_t data_vaddr;
+  uint32_t data_vaddr = 0;
 
   uint32_t bss = 0;
   uint32_t bss_len = 0;
-  uint32_t bss_vaddr;
+  uint32_t bss_vaddr = 0;
 
   offset = e_shoff;
   for(i=0;i<e_shnum;i++)
   {
-    app.seek(offset);
+    elf_file_seek(app, offset);
     offset += sizeof(shdr);
-    app.read((uint8_t *)&shdr,sizeof(shdr));
+    elf_file_read(app,&shdr,sizeof(shdr));
     if(!strcmp(&strtab[shdr.sh_name],".text"))
     {
       text = elf_place_in_ram(app,shdr.sh_offset,shdr.sh_size,shdr.sh_size);
@@ -88,15 +95,15 @@ uint32_t elf_load_sections(FILE &app, uint32_t e_entry, int e_shoff, int e_shnum
     {
       uint32_t got_meta[2];
       int j;
-      app.seek(shdr.sh_offset);
+      elf_file_seek(app, shdr.sh_offset);
       global_table_size = 0;
       for(j=0;j<shdr.sh_size;j+=8)
       {
-        app.read((uint8_t *)got_meta,8);
+        elf_file_read(app,got_meta,8);
         global_table_size += got_meta[1];
       }
       global_table_size /= 4;
-      Serial.printf("global table size %d\n",global_table_size);
+      printf("global table size %d\n",global_table_size);
     }
   }
   if(bss > 0)
@@ -106,74 +113,75 @@ uint32_t elf_load_sections(FILE &app, uint32_t e_entry, int e_shoff, int e_shnum
       ((uint8_t *)bss)[i] = 0;
     }
   }
-  Serial.printf("Text %08X => %08X\n",text_vaddr, text);
-  Serial.printf("size %d\n",text_len);
-  Serial.printf("Rodata %08X => %08X\n",rodata_vaddr, rodata);
-  Serial.printf("size %d end %08X\n",rodata_len,rodata_vaddr + rodata_len);
-  Serial.printf("Data %08X => %08X\n",data_vaddr, data);
-  Serial.printf("size %d end %08X\n",data_len,data_vaddr + data_len);
-  Serial.printf("Bss %08X => %08X\n",bss_vaddr,bss);
-  Serial.printf("size %d\n",bss_len);
+  printf("Text %08lX => %08lX\n",text_vaddr, text);
+  printf("size %ld\n",text_len);
+  printf("Rodata %08lX => %08lX\n",rodata_vaddr, rodata);
+  printf("size %ld end %08lX\n",rodata_len,rodata_vaddr + rodata_len);
+  printf("Data %08lX => %08lX\n",data_vaddr, data);
+  printf("size %ld end %08lX\n",data_len,data_vaddr + data_len);
+  printf("Bss %08lX => %08lX\n",bss_vaddr,bss);
+  printf("size %ld\n",bss_len);
   global_table = (uint32_t *)text;
   for(i=0;i<global_table_size;i++)
   {
     if(global_table[i] >= text_vaddr && global_table[i] <= text_vaddr + text_len)
     {
-      Serial.printf("function pointer %08X",global_table[i]);
+      printf("function pointer %08lX",global_table[i]);
       global_table[i] -= text_vaddr;
       global_table[i] += text;
       global_table[i] += 0x6000000; //hardware thing
     }
     if(global_table[i] >= rodata_vaddr && global_table[i] <= rodata_vaddr + rodata_len)
     {
-      Serial.printf("rodata pointer %08X",global_table[i]);
+      printf("rodata pointer %08lX",global_table[i]);
       global_table[i] -= rodata_vaddr;
       global_table[i] += rodata;
     }
     if(global_table[i] >= data_vaddr && global_table[i] <= data_vaddr + data_len)
     {
-      Serial.printf("data pointer %08X",global_table[i]);
+      printf("data pointer %08lX",global_table[i]);
       global_table[i] -= data_vaddr;
       global_table[i] += data;
     }
     if(global_table[i] >= bss_vaddr && global_table[i] <= bss_vaddr + bss_len)
     {
-      Serial.printf("bss pointer %08X",global_table[i]);
+      printf("bss pointer %08lX",global_table[i]);
       global_table[i] -= bss_vaddr;
       global_table[i] += bss;
     }
-    Serial.printf(" => %08X\n",global_table[i]);
+    printf(" => %08lX\n",global_table[i]);
   }
   e_entry -= text_vaddr;
   e_entry += text;
   e_entry += 0x6000000; //hardware thing
-  Serial.printf("new entry %08X\n",e_entry);
+  printf("new entry %08lX\n",e_entry);
   return e_entry;
 }
 
-uint32_t loadElf(const char *filename)
+uint32_t elf_load(const char *filename)
 {
   char strtab[256];
   uint32_t entry;
   Elf32_Ehdr e32_hdr;
-  FILE app = fs.open(filename);
+  size_t rv;
+  FILE *app = fopen(filename,"r");
 
   if(!app)
   {
-    Serial.printf("App not found\n");
+    printf("App not found\n");
     return 0;
   }
-  if(elf_file_read(app,&e32_hdr,sizeof(e32_hdr)) != sizeof(e32_hdr))
+  rv = elf_file_read(app,&e32_hdr,sizeof(e32_hdr));
+  if(rv != sizeof(e32_hdr))
   {
-    Serial.printf("App not valid\n");
-    goto FAILURE;
+    printf("rv %d\n",rv);
+    printf("App not valid\n");
+    fclose(app);
+    return 0;
   }
   elf_get_strtab(app,e32_hdr.e_shoff,e32_hdr.e_shstrndx,strtab);
   entry = elf_load_sections(app,e32_hdr.e_entry,e32_hdr.e_shoff,e32_hdr.e_shnum,strtab);
   //entry = elf_load_sections(app,e32_hdr.e_phoff,e32_hdr.e_phnum,e32_hdr.e_entry);
-  app.close();
+  fclose(app);
   return entry;
-FAILURE:
-  app.close();
-  return 0;
 }

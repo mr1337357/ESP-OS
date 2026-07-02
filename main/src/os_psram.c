@@ -108,10 +108,15 @@ void os_psram_duplicate_thread(int oldpid, int newpid)
 {
     os_thread *oldthread = os_threads_get_thread(oldpid);
     alloc_chain_t *temp;
-    for(temp = oldthread->code;temp;temp = temp->next)
+    if(!oldthread)
+    {
+        return;
+    }
+    for(temp = oldthread->code; temp; temp = temp->next)
     {
         temp->thread_map |= (1 << newpid);
     }
+
     for(temp = oldthread->heap;temp;temp = temp->next)
     {
         temp->thread_map |= (1 << newpid);

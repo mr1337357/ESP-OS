@@ -3,8 +3,10 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
 #include "os_thread.h"
 #include "os_psram.h"
+#include "os_elf.h"
 
 SemaphoreHandle_t os_thread_mutex;
 
@@ -50,12 +52,29 @@ os_thread *os_threads_get_thread(int pid)
     return 0;
 }
 
+struct thread_data
+{
+    void (*entry)(void *);
+    void *arg;
+};
+
+int syscall_dummy(int syscall, void *arg)
+{
+    //printf("syscalled %d\n",syscall);
+    return 0;
+}
+
 void _os_threads_launcher(void *arg)
 {
+    struct thread_data *thrd;
+    struct thread_data thrd_local;
     TaskHandle_t mytask;
     int pid = os_threads_getpid();
-    //(void)(*entry)(void)
-    //Thread returned. Cleanup.
+    thrd = arg;
+    thrd_local = *thrd;
+    free(thrd);
+    thrd_local.entry(thrd_local.arg);
+
     mytask = threads[pid].task;
     os_psram_thread_free(pid);
     threads[pid].task = 0;
@@ -64,6 +83,7 @@ void _os_threads_launcher(void *arg)
 
 os_thread *os_threads_create(void *entry,void *threadarg)
 {
+    struct thread_data *thrd;
     int oldpid;
     int i;
     for(i=0;i<OS_THREADS_MAX_THREADS;i++)
@@ -75,11 +95,14 @@ os_thread *os_threads_create(void *entry,void *threadarg)
     }
     if(i < OS_THREADS_MAX_THREADS)
     {
+        thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
+        thrd->entry = entry;
+        thrd->arg = threadarg;
         oldpid = os_threads_getpid();
         threads[i].code = threads[oldpid].code;
         threads[i].heap = threads[oldpid].heap;
         os_psram_duplicate_thread(oldpid,i);
-        xTaskCreate(_os_threads_launcher, "app", 4096, entry, tskIDLE_PRIORITY, &threads[i].task);
+        xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[i].task);
 
     }
     return 0;
@@ -87,6 +110,7 @@ os_thread *os_threads_create(void *entry,void *threadarg)
 
 void os_threads_exec(char *filename)
 {
+    struct thread_data *thrd;
     void *entry;
     int pid = os_threads_getpid();
     TaskHandle_t oldtask;
@@ -95,5 +119,13 @@ void os_threads_exec(char *filename)
     os_psram_thread_free(pid);
     threads[pid].code = 0;
     threads[pid].heap = 0;
-    entry =
+    entry = (void *)elf_load(filename);
+    if(entry)
+    {
+        thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
+        thrd->entry = entry;
+        thrd->arg = syscall_dummy;
+        xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);
+    }
+    vTaskDelete(oldtask);
 }

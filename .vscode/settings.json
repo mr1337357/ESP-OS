@@ -6,7 +6,7 @@
     "target/esp32s3.cfg"
   ],
   "idf.portWin": "COM19",
-  "idf.currentSetup": "C:\\esp\\v6.0.1\\esp-idf",
+  "idf.currentSetup": "/home/deck/.espressif/v6.0.1/esp-idf",
   "idf.customExtraVars": {
     "IDF_TARGET": "esp32s3"
   },

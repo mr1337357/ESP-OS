@@ -7,6 +7,7 @@
 #include "os_psram.h"
 #include "os_hal.h"
 #include "os_vfs.h"
+#include "os_thread.h"
 
 void list_dir(char *dirname, int indent)
 {
@@ -39,6 +40,12 @@ void list_dir(char *dirname, int indent)
     closedir(d);
 }
 
+void init_launcher(void *arg)
+{
+    printf("hello from init\n");
+    os_threads_exec("/sdcard/apps/hello.elf");
+}
+
 void app_main(void)
 {
     esp_err_t ret;
@@ -47,8 +54,15 @@ void app_main(void)
     os_psram_init();
     os_hal_spi_init();
     os_vfs_init();
+    os_threads_init();
     printf("asdf\n");
     list_dir("/internal",0);
     printf("\n\n");
     list_dir("/sdcard",0);
+    os_threads_create(init_launcher, 0);
+    while(1)
+    {
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+
 }
