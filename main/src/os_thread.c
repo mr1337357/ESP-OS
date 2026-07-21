@@ -3,6 +3,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_cache.h"
 
 #include "os_thread.h"
 #include "os_psram.h"
@@ -60,7 +61,8 @@ struct thread_data
 
 int syscall_dummy(int syscall, void *arg)
 {
-    //printf("syscalled %d\n",syscall);
+    printf("syscalled %d\n",syscall);
+    //while(1);
     return 0;
 }
 
@@ -69,10 +71,19 @@ void _os_threads_launcher(void *arg)
     struct thread_data *thrd;
     struct thread_data thrd_local;
     TaskHandle_t mytask;
+    uint32_t *instr;
     int pid = os_threads_getpid();
     thrd = arg;
     thrd_local = *thrd;
     free(thrd);
+    instr = (uint32_t *)thrd_local.entry;
+    if(((int)instr) >= 0x42000000)
+    {
+        instr = (uint32_t *)(((uint8_t *)instr) - 0x06000000);
+    }
+    printf("entry %p: ",instr);
+    printf("instr %08lX\n",*instr);
+    printf("arg %p\n",thrd_local.arg);
     thrd_local.entry(thrd_local.arg);
 
     mytask = threads[pid].task;
@@ -108,6 +119,8 @@ os_thread *os_threads_create(void *entry,void *threadarg)
     return 0;
 }
 
+void Cache_WriteBack_All();
+
 void os_threads_exec(char *filename)
 {
     struct thread_data *thrd;
@@ -120,11 +133,13 @@ void os_threads_exec(char *filename)
     threads[pid].code = 0;
     threads[pid].heap = 0;
     entry = (void *)elf_load(filename);
+    Cache_WriteBack_All();
+    //esp_cache_msync((void *)(((uint32_t)entry)&~0xFF), 0x1000000, 0);
     if(entry)
     {
         thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
         thrd->entry = entry;
-        thrd->arg = syscall_dummy;
+        thrd->arg = (void *)syscall_dummy;
         xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);
     }
     vTaskDelete(oldtask);
