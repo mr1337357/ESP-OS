@@ -71,21 +71,11 @@ void _os_threads_launcher(void *arg)
     struct thread_data *thrd;
     struct thread_data thrd_local;
     TaskHandle_t mytask;
-    uint32_t *instr;
     int pid = os_threads_getpid();
     thrd = arg;
     thrd_local = *thrd;
     free(thrd);
-    instr = (uint32_t *)thrd_local.entry;
-    if(((int)instr) >= 0x42000000)
-    {
-        instr = (uint32_t *)(((uint8_t *)instr) - 0x06000000);
-    }
-    printf("entry %p: ",instr);
-    printf("instr %08lX\n",*instr);
-    printf("arg %p\n",thrd_local.arg);
     thrd_local.entry(thrd_local.arg);
-
     mytask = threads[pid].task;
     os_psram_thread_free(pid);
     threads[pid].task = 0;

@@ -21,6 +21,7 @@ typedef struct
     TaskHandle_t task;
     alloc_chain_t *code;
     alloc_chain_t *heap;
+    int filedes_list[10];
 } os_thread;
 
 void os_threads_init();

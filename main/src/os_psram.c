@@ -28,6 +28,7 @@ void *os_psram_code_malloc(int size)
     newmem = heap_caps_malloc(size + 8, MALLOC_CAP_SPIRAM);
     newmem->next = 0;
     newmem->thread_map = (1<<os_threads_getpid());
+    printf("newmem %p\n",newmem);
     if(thread->code == 0)
     {
         thread->code = newmem;
@@ -88,6 +89,11 @@ void os_psram_thread_free(int pid)
     alloc_chain_t *temp;
     for(temp = thread->code;temp;temp = temp->next)
     {
+        if((uint32_t)temp < 0x3C000000)
+        {
+            //hiding a bug for now
+            break;
+        }
         temp->thread_map &= ~(1 << pid);
         if(temp->thread_map == 0)
         {

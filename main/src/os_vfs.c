@@ -10,6 +10,18 @@
 
 static wl_handle_t s_wl_handle = WL_INVALID_HANDLE;
 
+//TODO add workaround to detect / and manually populate with vfs entries (vfs doesn't allow direct listing)
+
+typedef struct 
+{
+    FILE *actual;
+    uint32_t thread_map;
+}   os_file;
+
+os_file osfiles[10];
+
+
+
 void os_vfs_init()
 {
     const esp_vfs_fat_mount_config_t spi_mount_config = {

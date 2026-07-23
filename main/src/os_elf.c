@@ -25,7 +25,14 @@ void elf_get_strtab(FILE *app, int e_shoff, int e_shstrndx, char *strtab)
 
 uint32_t elf_place_in_ram(FILE *app, int offset, int filesize, int ramsize)
 {
-  uint8_t *mem = os_psram_code_malloc((ramsize+3)&(~3));
+  if(filesize >= ramsize)
+  {
+    ramsize = filesize;
+  }
+  ramsize += 3;
+  ramsize &= ~3;
+
+  uint8_t *mem = os_psram_code_malloc(ramsize);
   while(((uint32_t)mem)&3)
   {
     mem++;
