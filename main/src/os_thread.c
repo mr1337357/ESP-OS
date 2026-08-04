@@ -13,6 +13,19 @@ SemaphoreHandle_t os_thread_mutex;
 
 os_thread threads[OS_THREADS_MAX_THREADS];
 
+struct thread_data
+{
+    void (*entry)(void *);
+    void *arg;
+};
+
+struct exec_args
+{
+    uint32_t (*syscall)(int, void*);
+    int argc;
+    char **argv;
+}
+
 void os_threads_init()
 {
     os_thread_mutex = xSemaphoreCreateMutex();
@@ -52,12 +65,6 @@ os_thread *os_threads_get_thread(int pid)
     }
     return 0;
 }
-
-struct thread_data
-{
-    void (*entry)(void *);
-    void *arg;
-};
 
 int syscall_dummy(int syscall, void *arg)
 {
@@ -111,7 +118,7 @@ os_thread *os_threads_create(void *entry,void *threadarg)
 
 void Cache_WriteBack_All();
 
-void os_threads_exec(char *filename)
+void os_threads_exec(char *filename, int argc, char **argv)
 {
     struct thread_data *thrd;
     void *entry;
