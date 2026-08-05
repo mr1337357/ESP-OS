@@ -29,6 +29,6 @@ int os_threads_getpid();
 os_thread *os_threads_get_current_thread();
 os_thread *os_threads_get_thread(int pid);
 os_thread *os_threads_create(void *entry,void *threadarg);
-void os_threads_exec(char *filename);
+void os_threads_exec(char *filename, int argc, char **argv);
 
 #endif

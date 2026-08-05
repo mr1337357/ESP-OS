@@ -24,7 +24,7 @@ struct exec_args
     uint32_t (*syscall)(int, void*);
     int argc;
     char **argv;
-}
+};
 
 void os_threads_init()
 {
@@ -66,7 +66,7 @@ os_thread *os_threads_get_thread(int pid)
     return 0;
 }
 
-int syscall_dummy(int syscall, void *arg)
+uint32_t syscall_dummy(int syscall, void *arg)
 {
     printf("syscalled %d\n",syscall);
     //while(1);
@@ -118,9 +118,24 @@ os_thread *os_threads_create(void *entry,void *threadarg)
 
 void Cache_WriteBack_All();
 
+void os_threads_argv_copy(int argc, char **old_argv, char ***new_argv)
+{
+    int malloc_size = 0;
+    int i;
+    char **temp_argv;
+    temp_argv = os_psram_heap_malloc(sizeof(char *)*argc);
+    for(i=0;i<argc;i++)
+    {
+        temp_argv[i] = os_psram_heap_malloc(strlen(old_argv[i])+1);
+        strcpy(temp_argv[i],old_argv[i]);
+    }
+    *new_argv = temp_argv;
+}
+
 void os_threads_exec(char *filename, int argc, char **argv)
 {
     struct thread_data *thrd;
+    struct exec_args *args;
     void *entry;
     int pid = os_threads_getpid();
     TaskHandle_t oldtask;
@@ -136,7 +151,11 @@ void os_threads_exec(char *filename, int argc, char **argv)
     {
         thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
         thrd->entry = entry;
-        thrd->arg = (void *)syscall_dummy;
+        args = os_psram_heap_malloc(sizeof(struct exec_args));
+        args->syscall = syscall_dummy;
+        args->argc = argc;
+        os_threads_argv_copy(argc,argv,&args->argv);
+        thrd->arg = args;
         xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);
     }
     vTaskDelete(oldtask);

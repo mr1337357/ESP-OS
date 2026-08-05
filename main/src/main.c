@@ -43,7 +43,7 @@ void list_dir(char *dirname, int indent)
 void init_launcher(void *arg)
 {
     printf("hello from init\n");
-    os_threads_exec("/sdcard/espos/bin/init.elf");
+    os_threads_exec("/sdcard/espos/bin/init.elf", 0, 0);
 }
 
 void app_main(void)
