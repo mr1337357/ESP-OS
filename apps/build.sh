@@ -13,6 +13,9 @@ ${CC} ${CFLAGS} lib.c string.c launcher.c -o launcher.elf
 ${CC} ${CFLAGS} lib.c string.c hello.c -o hello.elf
 ${CC} ${CFLAGS} lib.c string.c filetest.c -o filetest.elf
 
-${OBJDUMP} -S hello.elf > hello.src
-${OBJDUMP} -S launcher.elf > launcher.src
-${READELF} -a launcher.elf > launcher.readelf
+CFLAGS="-fPIE -g -static"
+${CC} ${CFLAGS} lib2.c init.c -o init.elf
+
+${OBJDUMP} -S init.elf > init.src
+#${OBJDUMP} -S launcher.elf > launcher.src
+#${READELF} -a launcher.elf > launcher.readelf

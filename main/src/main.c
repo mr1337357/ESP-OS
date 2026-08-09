@@ -42,8 +42,10 @@ void list_dir(char *dirname, int indent)
 
 void init_launcher(void *arg)
 {
-    printf("hello from init\n");
     os_threads_exec("/sdcard/espos/bin/init.elf", 0, 0);
+    printf("SD Init not found\r\n");
+    os_threads_exec("/internal/espos/bin/init.elf", 0, 0);
+    printf("PANIC: init not found\r\n");
 }
 
 void app_main(void)

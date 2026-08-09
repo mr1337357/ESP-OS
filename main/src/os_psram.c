@@ -87,6 +87,7 @@ void os_psram_thread_free(int pid)
 {
     os_thread *thread = os_threads_get_thread(pid);
     alloc_chain_t *temp;
+    /*
     for(temp = thread->code;temp;temp = temp->next)
     {
         if((uint32_t)temp < 0x3C000000)
@@ -99,9 +100,14 @@ void os_psram_thread_free(int pid)
         {
             free(temp); //use-after-free :o
         }
-    }
+    }*/
     for(temp = thread->heap;temp;temp = temp->next)
     {
+        if((uint32_t)temp < 0x3C000000)
+        {
+            //hiding a bug for now
+            break;
+        }
         temp->thread_map &= ~(1 << pid);
         if(temp->thread_map == 0)
         {

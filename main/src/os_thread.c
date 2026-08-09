@@ -8,6 +8,7 @@
 #include "os_thread.h"
 #include "os_psram.h"
 #include "os_elf.h"
+#include "os_syscall.h"
 
 SemaphoreHandle_t os_thread_mutex;
 
@@ -77,13 +78,13 @@ void _os_threads_launcher(void *arg)
 {
     struct thread_data *thrd;
     struct thread_data thrd_local;
-    TaskHandle_t mytask;
+    //TaskHandle_t mytask;
     int pid = os_threads_getpid();
     thrd = arg;
     thrd_local = *thrd;
     free(thrd);
     thrd_local.entry(thrd_local.arg);
-    mytask = threads[pid].task;
+    //mytask = threads[pid].task;
     os_psram_thread_free(pid);
     threads[pid].task = 0;
     vTaskDelete(threads[pid].task);
@@ -120,13 +121,12 @@ void Cache_WriteBack_All();
 
 void os_threads_argv_copy(int argc, char **old_argv, char ***new_argv)
 {
-    int malloc_size = 0;
     int i;
     char **temp_argv;
-    temp_argv = os_psram_heap_malloc(sizeof(char *)*argc);
+    temp_argv = os_psram_code_malloc(sizeof(char *)*argc);
     for(i=0;i<argc;i++)
     {
-        temp_argv[i] = os_psram_heap_malloc(strlen(old_argv[i])+1);
+        temp_argv[i] = os_psram_code_malloc(strlen(old_argv[i])+1);
         strcpy(temp_argv[i],old_argv[i]);
     }
     *new_argv = temp_argv;
@@ -140,23 +140,24 @@ void os_threads_exec(char *filename, int argc, char **argv)
     int pid = os_threads_getpid();
     TaskHandle_t oldtask;
     oldtask = threads[pid].task;
+
+    entry = (void *)elf_load(filename);
+    if(entry == 0)
+    {
+        return;
+    }
+    thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
+    thrd->entry = entry;
+    args = os_psram_code_malloc(sizeof(struct exec_args));
+    args->syscall = syscall_handler;
+    args->argc = argc;
+    os_threads_argv_copy(argc,argv,&args->argv);
+    thrd->arg = args;
     //unload memory
     os_psram_thread_free(pid);
-    threads[pid].code = 0;
-    threads[pid].heap = 0;
-    entry = (void *)elf_load(filename);
+    threads[pid].heap = threads[pid].code;
     Cache_WriteBack_All();
-    //esp_cache_msync((void *)(((uint32_t)entry)&~0xFF), 0x1000000, 0);
-    if(entry)
-    {
-        thrd = heap_caps_malloc(sizeof(struct thread_data), MALLOC_CAP_SPIRAM);
-        thrd->entry = entry;
-        args = os_psram_heap_malloc(sizeof(struct exec_args));
-        args->syscall = syscall_dummy;
-        args->argc = argc;
-        os_threads_argv_copy(argc,argv,&args->argv);
-        thrd->arg = args;
-        xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);
-    }
+
+    xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);
     vTaskDelete(oldtask);
 }

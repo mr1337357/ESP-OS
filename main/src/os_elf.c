@@ -175,7 +175,7 @@ uint32_t elf_load(const char *filename)
 
   if(!app)
   {
-    printf("App not found\n");
+    //printf("App not found\n");
     return 0;
   }
   rv = elf_file_read(app,&e32_hdr,sizeof(e32_hdr));
