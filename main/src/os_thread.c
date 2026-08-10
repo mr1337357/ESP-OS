@@ -22,7 +22,7 @@ struct thread_data
 
 struct exec_args
 {
-    uint32_t (*syscall)(int, void*);
+    int (*syscall)(int, void*);
     int argc;
     char **argv;
 };

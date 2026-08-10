@@ -9,12 +9,11 @@ OBJDUMP=${PREFIX}-objdump
 CFLAGS="-fPIE -nostdlib -g -static"
 #CFLAGS="-static-pie -nostdlib"
 
-${CC} ${CFLAGS} lib.c string.c launcher.c -o launcher.elf
-${CC} ${CFLAGS} lib.c string.c hello.c -o hello.elf
-${CC} ${CFLAGS} lib.c string.c filetest.c -o filetest.elf
+#${CC} ${CFLAGS} lib.c string.c launcher.c -o launcher.elf
+#${CC} ${CFLAGS} lib.c string.c hello.c -o hello.elf
+#${CC} ${CFLAGS} lib.c string.c filetest.c -o filetest.elf
 
-CFLAGS="-fPIE -g -static"
-${CC} ${CFLAGS} lib2.c init.c -o init.elf
+${CC} ${CFLAGS} lib.c init.c -o init.elf
 
 ${OBJDUMP} -S init.elf > init.src
 #${OBJDUMP} -S launcher.elf > launcher.src

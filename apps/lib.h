@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 extern int (*do_syscall)(int callnum, void *arg);
 
 #define FILEMODE_R 0
@@ -5,18 +7,16 @@ extern int (*do_syscall)(int callnum, void *arg);
 
 void print(char *message);
 
-int write(int fd, char *buff, int len);
+int write(int fd, const void *buff, size_t len);
 
-int read(int fd, char *buff, int len);
+int read(int fd, void *buff, size_t len);
 
 int open(char *name, int mode);
 
 int close(int fd);
 
-void delay(int ms);
+int execve(const char *path, char *const argv[], char *const envp[]);
 
-void *malloc(int len);
-
-void run(char *fname);
+int execv(const char *path, char *const argv[]);
 
 void event_handler(int event, void *arg);

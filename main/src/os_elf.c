@@ -4,6 +4,14 @@
 
 #include "os_psram.h"
 
+//#define ELF_DEBUG
+
+#ifdef ELF_DEBUG
+#define ELF_LOG(...) ELF_LOG(__VA_ARGS__)
+#else
+#define ELF_LOG(...)
+#endif
+
 void elf_file_seek(FILE *app, int offset)
 {
   fseek(app,offset,SEEK_SET);
@@ -110,7 +118,7 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
         global_table_size += got_meta[1];
       }
       global_table_size /= 4;
-      printf("global table size %d\n",global_table_size);
+      ELF_LOG("global table size %d\n",global_table_size);
     }
   }
   if(bss > 0)
@@ -120,48 +128,48 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       ((uint8_t *)bss)[i] = 0;
     }
   }
-  printf("Text %08lX => %08lX\n",text_vaddr, text);
-  printf("size %ld\n",text_len);
-  printf("Rodata %08lX => %08lX\n",rodata_vaddr, rodata);
-  printf("size %ld end %08lX\n",rodata_len,rodata_vaddr + rodata_len);
-  printf("Data %08lX => %08lX\n",data_vaddr, data);
-  printf("size %ld end %08lX\n",data_len,data_vaddr + data_len);
-  printf("Bss %08lX => %08lX\n",bss_vaddr,bss);
-  printf("size %ld\n",bss_len);
+  ELF_LOG("Text %08lX => %08lX\n",text_vaddr, text);
+  ELF_LOG("size %ld\n",text_len);
+  ELF_LOG("Rodata %08lX => %08lX\n",rodata_vaddr, rodata);
+  ELF_LOG("size %ld end %08lX\n",rodata_len,rodata_vaddr + rodata_len);
+  ELF_LOG("Data %08lX => %08lX\n",data_vaddr, data);
+  ELF_LOG("size %ld end %08lX\n",data_len,data_vaddr + data_len);
+  ELF_LOG("Bss %08lX => %08lX\n",bss_vaddr,bss);
+  ELF_LOG("size %ld\n",bss_len);
   global_table = (uint32_t *)text;
   for(i=0;i<global_table_size;i++)
   {
     if(global_table[i] >= text_vaddr && global_table[i] <= text_vaddr + text_len)
     {
-      printf("function pointer %08lX",global_table[i]);
+      ELF_LOG("function pointer %08lX",global_table[i]);
       global_table[i] -= text_vaddr;
       global_table[i] += text;
       global_table[i] += 0x6000000; //hardware thing
     }
     if(global_table[i] >= rodata_vaddr && global_table[i] <= rodata_vaddr + rodata_len)
     {
-      printf("rodata pointer %08lX",global_table[i]);
+      ELF_LOG("rodata pointer %08lX",global_table[i]);
       global_table[i] -= rodata_vaddr;
       global_table[i] += rodata;
     }
     if(global_table[i] >= data_vaddr && global_table[i] <= data_vaddr + data_len)
     {
-      printf("data pointer %08lX",global_table[i]);
+      ELF_LOG("data pointer %08lX",global_table[i]);
       global_table[i] -= data_vaddr;
       global_table[i] += data;
     }
     if(global_table[i] >= bss_vaddr && global_table[i] <= bss_vaddr + bss_len)
     {
-      printf("bss pointer %08lX",global_table[i]);
+      ELF_LOG("bss pointer %08lX",global_table[i]);
       global_table[i] -= bss_vaddr;
       global_table[i] += bss;
     }
-    printf(" => %08lX\n",global_table[i]);
+    ELF_LOG(" => %08lX\n",global_table[i]);
   }
   e_entry -= text_vaddr;
   e_entry += text;
   e_entry += 0x6000000; //hardware thing
-  printf("new entry %08lX\n",e_entry);
+  ELF_LOG("new entry %08lX\n",e_entry);
   return e_entry;
 }
 
@@ -175,14 +183,14 @@ uint32_t elf_load(const char *filename)
 
   if(!app)
   {
-    //printf("App not found\n");
+    //ELF_LOG("App not found\n");
     return 0;
   }
   rv = elf_file_read(app,&e32_hdr,sizeof(e32_hdr));
   if(rv != sizeof(e32_hdr))
   {
-    printf("rv %d\n",rv);
-    printf("App not valid\n");
+    ELF_LOG("rv %d\n",rv);
+    ELF_LOG("App not valid\n");
     fclose(app);
     return 0;
   }
