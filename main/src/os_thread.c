@@ -9,6 +9,7 @@
 #include "os_psram.h"
 #include "os_elf.h"
 #include "os_syscall.h"
+#include "os_filedes.h"
 
 SemaphoreHandle_t os_thread_mutex;
 
@@ -88,6 +89,23 @@ void _os_threads_launcher(void *arg)
     os_psram_thread_free(pid);
     threads[pid].task = 0;
     vTaskDelete(threads[pid].task);
+}
+
+void os_threads_copyfiles(int newpid, int oldpid)
+{
+    int i;
+    for(i=0;i<10;i++)
+    {
+        if(threads[oldpid].filedes_list[i] >= 0)
+        {
+            threads[newpid].filedes_list[i] = threads[oldpid].filedes_list[i];
+            os_file_claim(threads[newpid].filedes_list[i]);
+        }
+        else
+        {
+            threads[newpid].filedes_list[i] = -1;
+        }
+    }
 }
 
 os_thread *os_threads_create(void *entry,void *threadarg)
