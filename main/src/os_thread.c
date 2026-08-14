@@ -30,8 +30,16 @@ struct exec_args
 
 void os_threads_init()
 {
+    int i,j;
     os_thread_mutex = xSemaphoreCreateMutex();
     memset(threads,0,sizeof(threads));
+    for(i=0;i<OS_THREADS_MAX_THREADS;i++)
+    {
+        for(j=0;j<10;j++)
+        {
+            threads[i].filedes_list[j] = -1;
+        }
+    }
     threads[0].task = xTaskGetCurrentTaskHandle();
 }
 

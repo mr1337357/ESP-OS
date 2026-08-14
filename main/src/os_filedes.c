@@ -99,6 +99,7 @@ int os_file_write(int fd, void *buffer, int len)
     {
         return -1;
     }
+    printf("os_file_write(%d, %p, %d)\n",fd,buffer,len);
     return fwrite(buffer, 1, len, files[fd].filep);
 }
 
