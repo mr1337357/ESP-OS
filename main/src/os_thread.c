@@ -85,6 +85,7 @@ uint32_t syscall_dummy(int syscall, void *arg)
 
 void _os_threads_launcher(void *arg)
 {
+    int fd;
     struct thread_data *thrd;
     struct thread_data thrd_local;
     //TaskHandle_t mytask;
@@ -94,6 +95,14 @@ void _os_threads_launcher(void *arg)
     free(thrd);
     thrd_local.entry(thrd_local.arg);
     //mytask = threads[pid].task;
+    for(fd = 0; fd < 10; fd++)
+    {
+      if(threads[pid].filedes_list[fd] >= 0)
+      {
+         os_file_close(threads[pid].filedes_list[fd]);
+      }
+      threads[pid].filedes_list[fd] = -1;
+    }  
     os_psram_thread_free(pid);
     threads[pid].task = 0;
     vTaskDelete(threads[pid].task);
@@ -116,7 +125,7 @@ void os_threads_copyfiles(int newpid, int oldpid)
     }
 }
 
-os_thread *os_threads_create(void *entry,void *threadarg)
+int os_threads_create(void *entry,void *threadarg)
 {
     struct thread_data *thrd;
     int oldpid;
@@ -137,10 +146,11 @@ os_thread *os_threads_create(void *entry,void *threadarg)
         threads[i].code = threads[oldpid].code;
         threads[i].heap = threads[oldpid].heap;
         os_psram_duplicate_thread(oldpid,i);
+        os_threads_copyfiles(i,oldpid);
         xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[i].task);
-
+        return i;
     }
-    return 0;
+    return -1;
 }
 
 void Cache_WriteBack_All();
@@ -179,9 +189,11 @@ void os_threads_exec(char *filename, int argc, char **argv)
     args->argc = argc;
     os_threads_argv_copy(argc,argv,&args->argv);
     thrd->arg = args;
+    
     //unload memory
     os_psram_thread_free(pid);
     threads[pid].heap = threads[pid].code;
+    threads[pid].code = 0;
     Cache_WriteBack_All();
 
     xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[pid].task);

@@ -1,20 +1,15 @@
 #include "lib.h"
 
-int i;
-int j;
-
-void event_handler(int event, void *arg)
-{
-   print("asdf\n");
-}
-
 void print_loop()
 {
+   int i;
+   char *num = "  \n";
    for(i = 0; i < 10; i ++)
    {
-      print("hello world\n");
-      delay(1000);
+      print("hello world");
    }
+   num[1] = '0' + i;
+   print(num);
 }
 
 int main(int argc, char **argv)

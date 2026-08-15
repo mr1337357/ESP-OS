@@ -78,6 +78,11 @@ void print(char *message)
    write(1,message,strlen(message));
 }
 
+int thread_create(void *entry, void *threadargs)
+{
+   struct {void *entry; void *args;} threadcall = {.entry = entry, .args = threadargs};
+   return do_syscall(SYSCALL_CLONE, &threadcall);
+}
 
 int execve(const char *path, char *const argv[], char *const envp[])
 {

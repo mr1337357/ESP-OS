@@ -104,11 +104,13 @@ void os_psram_thread_free(int pid)
     }*/
     for(temp = thread->heap;temp;temp = temp_next)
     {
+        printf("(%d)freeing(%p,%lX)\n", pid, temp,temp->thread_map);
         temp_next = temp->next;
         temp->thread_map &= ~(1 << pid);
         if(temp->thread_map == 0)
         {
-            free(temp); //use-after-free :o
+            printf("freed\n");
+            free(temp);
         }
     }
 }

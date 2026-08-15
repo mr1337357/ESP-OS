@@ -17,6 +17,10 @@ void list_dir(char *dirname, int indent)
     DIR *d = opendir(dirname);
     if(!d)
     {
+        if(indent == 0)
+        {
+          printf("not a dir %s\n",dirname);
+        }
         return;
     }
     f = readdir(d);
@@ -45,14 +49,14 @@ void init_launcher(void *arg)
 {
     int fd;
     os_thread *current = os_threads_get_current_thread();
-    fd = os_file_open("/dev/console", 1);
+    fd = os_file_adopt(stdin);
     current->filedes_list[0] = fd;
+    fd = os_file_adopt(stdout);
     current->filedes_list[1] = fd;
     current->filedes_list[2] = fd;
-    printf("/dev/console %d\n", fd);
-    os_threads_exec("/sdcard/espos/bin/init.elf", 0, 0);
+    os_threads_exec("/sdcard/espos/bin/init", 0, 0);
     printf("SD Init not found\r\n");
-    os_threads_exec("/internal/espos/bin/init.elf", 0, 0);
+    os_threads_exec("/internal/espos/bin/init", 0, 0);
     printf("PANIC: init not found\r\n");
 }
 
@@ -65,7 +69,9 @@ void app_main(void)
     os_hal_spi_init();
     os_vfs_init();
     os_threads_init();
+    printf("before dev\n");
     list_dir("/dev/",0);
+    printf("after dev\n");
     os_threads_create(init_launcher, 0);
     while(1)
     {

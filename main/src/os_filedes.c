@@ -20,6 +20,25 @@ void filedes_init()
     }
 }
 
+int os_file_adopt(FILE *adopted)
+{
+    int fd;
+    for(fd=0;fd<OS_MAX_FILES;fd++)
+    {
+        if(files[fd].opencount == 0)
+        {
+            break;
+        }
+    }
+    if(fd == OS_MAX_FILES)
+    {
+        return -1;
+    }
+    files[fd].opencount = 1;
+    files[fd].filep = adopted;
+    return fd;
+}
+
 int os_file_open(char *filename, int mode)
 {
     int fd;
@@ -99,7 +118,6 @@ int os_file_write(int fd, void *buffer, int len)
     {
         return -1;
     }
-    printf("os_file_write(%d, %p, %d)\n",fd,buffer,len);
     return fwrite(buffer, 1, len, files[fd].filep);
 }
 

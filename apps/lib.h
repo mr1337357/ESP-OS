@@ -15,6 +15,8 @@ int open(char *name, int mode);
 
 int close(int fd);
 
+int thread_create(void *entry, void *threadargs);
+
 int execve(const char *path, char *const argv[], char *const envp[]);
 
 int execv(const char *path, char *const argv[]);

@@ -5,6 +5,8 @@
 
 void filedes_init();
 
+int os_file_adopt(FILE *adopted);
+
 int os_file_open(char *filename, int mode);
 
 int os_file_claim(int fd);
