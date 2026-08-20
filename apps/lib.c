@@ -11,6 +11,7 @@
 #define SYSCALL_CLOSE 3
 #define SYSCALL_CLONE 4
 #define SYSCALL_EXEC 5
+#define SYSCALL_WAITPID 6
 
 typedef struct
 {
@@ -51,17 +52,20 @@ int write(int fd, const void *buff, size_t len)
 
 int read(int fd, void *buff, size_t len)
 {
-   return -1;
+   fileop fop = { .fd = fd, .buffer = (void *)buff, .len = len}; //drop the const (the kernel won't write here so it should be ok)
+   return do_syscall(SYSCALL_READ,&fop);
 }
 
 int open(char *name, int mode)
 {
-   return -1;
+   fileop fop = { .fd = mode, .buffer = (void *)name, .len = 0}; //drop the const (the kernel won't write here so it should be ok)
+   return do_syscall(SYSCALL_OPEN,&fop);
 }
 
 int close(int fd)
 {
-   return -1;
+   fileop fop = { .fd = fd, .buffer = 0, .len = 0}; //drop the const (the kernel won't write here so it should be ok)
+   return do_syscall(SYSCALL_CLOSE,&fop);
 }
 
 size_t strlen(const char *msg)
@@ -93,6 +97,12 @@ int execve(const char *path, char *const argv[], char *const envp[])
 int execv(const char *path, char *const argv[])
 {
    return execve(path, argv, __environ);
+}
+
+int waitpid(int pid, int *status, int options)
+{
+   struct {int pid;  int *status; int options;} waitpidcall = {.pid = pid, .status = status, .options = options};
+   return do_syscall(SYSCALL_WAITPID, &waitpidcall);
 }
 
 __attribute((weak)) void event_handler(int event, void *arg)

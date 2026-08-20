@@ -23,6 +23,7 @@ typedef struct
     alloc_chain_t *heap;
     char cwd[256];
     int filedes_list[10];
+    SemaphoreHandle_t close_sem;
 } os_thread;
 
 void os_threads_init();

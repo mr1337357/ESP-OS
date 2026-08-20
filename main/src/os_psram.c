@@ -28,7 +28,7 @@ void *os_psram_code_malloc(int size)
     newmem = heap_caps_malloc(size + 8, MALLOC_CAP_SPIRAM);
     newmem->next = 0;
     newmem->thread_map = (1<<os_threads_getpid());
-    printf("newmem %p\n",newmem);
+    //printf("newmem %p\n",newmem);
     if(thread->code == 0)
     {
         thread->code = newmem;
@@ -104,12 +104,12 @@ void os_psram_thread_free(int pid)
     }*/
     for(temp = thread->heap;temp;temp = temp_next)
     {
-        printf("(%d)freeing(%p,%lX)\n", pid, temp,temp->thread_map);
+        //printf("(%d)freeing(%p,%lX)\n", pid, temp,temp->thread_map);
         temp_next = temp->next;
         temp->thread_map &= ~(1 << pid);
         if(temp->thread_map == 0)
         {
-            printf("freed\n");
+            //printf("freed\n");
             free(temp);
         }
     }

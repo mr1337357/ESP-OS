@@ -21,4 +21,6 @@ int execve(const char *path, char *const argv[], char *const envp[]);
 
 int execv(const char *path, char *const argv[]);
 
+int waitpid(int pid, int *status, int options);
+
 void event_handler(int event, void *arg);

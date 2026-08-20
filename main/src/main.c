@@ -69,9 +69,6 @@ void app_main(void)
     os_hal_spi_init();
     os_vfs_init();
     os_threads_init();
-    printf("before dev\n");
-    list_dir("/dev/",0);
-    printf("after dev\n");
     os_threads_create(init_launcher, 0);
     while(1)
     {

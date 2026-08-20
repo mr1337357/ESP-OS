@@ -23,7 +23,14 @@ typedef struct
    char *fname;
    char **argv;
    char **env;
-} exec_args; //lol we just un-consted their memory 
+} exec_args; //lol we just un-consted their memory
+
+typedef struct
+{
+    int pid;
+    int *status;
+    int options;
+} waitpid_args;
 
 int syscall_file_read(fileop *fop)
 {
@@ -53,6 +60,42 @@ int syscall_file_write(fileop *fop)
     return os_file_write(current->filedes_list[fop->fd],fop->buffer,fop->len);
 }
 
+int syscall_file_open(fileop *fop)
+{
+    os_thread *current = os_threads_get_current_thread();
+    int fd;
+    for(fd = 0; fd < 10; fd++)
+    {
+        if(current->filedes_list[fd] < 0)
+        {
+            break;
+        }
+    }
+    if(fd == 10)
+    {
+        return -1;
+    }
+    current->filedes_list[fd] = os_file_open((char *)fop->buffer,fop->fd);
+    return current->filedes_list[fd];
+}
+
+int syscall_file_close(fileop *fop)
+{
+    int tempfd = fop->fd;
+    os_thread *current = os_threads_get_current_thread();
+    if(tempfd < 0 || tempfd >= 10)
+    {
+        return -1;
+    }
+    if(current->filedes_list[tempfd] < 0)
+    {
+        return -1;
+    }
+    tempfd = current->filedes_list[tempfd];
+    current->filedes_list[fop->fd] = -1;
+    return os_file_close(tempfd);
+}
+
 int syscall_clone(clone_args *args)
 {
    return os_threads_create(args->entry,args->threadarg);
@@ -72,6 +115,17 @@ int syscall_exec(exec_args *args)
    return -1;
 }
 
+int syscall_waitpid(waitpid_args *args)
+{
+    if(args->pid < 1)
+    {
+        return -1;
+    }
+    //ignore status and flags for now
+    xSemaphoreTake(os_threads_get_thread(args->pid)->close_sem, portMAX_DELAY);
+    return args->pid;
+}
+
 
 int syscall_handler(int syscall, void *args)
 {
@@ -84,11 +138,20 @@ int syscall_handler(int syscall, void *args)
         case SYSCALL_WRITE:
             return syscall_file_write(args);
             break;
+        case SYSCALL_OPEN:
+            return syscall_file_open(args);
+            break;
+        case SYSCALL_CLOSE:
+            return syscall_file_close(args);
+            break;
         case SYSCALL_CLONE:
             return syscall_clone(args);
             break;
         case SYSCALL_EXEC:
             return syscall_exec(args);
+            break;
+        case SYSCALL_WAITPID:
+            return syscall_waitpid(args);
             break;
     }
     return 0;

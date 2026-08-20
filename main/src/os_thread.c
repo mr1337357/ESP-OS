@@ -39,6 +39,7 @@ void os_threads_init()
         {
             threads[i].filedes_list[j] = -1;
         }
+        threads[i].close_sem = xSemaphoreCreateBinary();
     }
     threads[0].task = xTaskGetCurrentTaskHandle();
 }
@@ -106,6 +107,7 @@ void _os_threads_launcher(void *arg)
     os_psram_thread_free(pid);
     threads[pid].task = 0;
     vTaskDelete(threads[pid].task);
+    xSemaphoreGive(threads[pid].close_sem);
 }
 
 void os_threads_copyfiles(int newpid, int oldpid)
