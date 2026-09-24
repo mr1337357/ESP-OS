@@ -4,7 +4,7 @@
 
 #include "os_psram.h"
 
-//#define ELF_DEBUG
+#define ELF_DEBUG
 
 #ifdef ELF_DEBUG
 #define ELF_LOG(...) printf(__VA_ARGS__)
@@ -88,25 +88,25 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       text_vaddr = shdr.sh_addr;
       //relocate entry to new address
     }
-    if(!strcmp(&strtab[shdr.sh_name],".rodata"))
+    else if(!strcmp(&strtab[shdr.sh_name],".rodata"))
     {
       rodata = elf_place_in_ram(app,shdr.sh_offset,shdr.sh_size,shdr.sh_size);
       rodata_len = shdr.sh_size;
       rodata_vaddr = shdr.sh_addr;
     }
-    if(!strcmp(&strtab[shdr.sh_name],".data"))
+    else if(!strcmp(&strtab[shdr.sh_name],".data"))
     {
       data = elf_place_in_ram(app,shdr.sh_offset,shdr.sh_size,shdr.sh_size);
       data_len = shdr.sh_size;
       data_vaddr = shdr.sh_addr;
     }
-    if(!strcmp(&strtab[shdr.sh_name],".bss"))
+    else if(!strcmp(&strtab[shdr.sh_name],".bss"))
     {
       bss = elf_place_in_ram(app,shdr.sh_offset,shdr.sh_size,shdr.sh_size);
       bss_len = shdr.sh_size;
       bss_vaddr = shdr.sh_addr;
     }
-    if(!strcmp(&strtab[shdr.sh_name],".xt.lit"))
+    else if(!strcmp(&strtab[shdr.sh_name],".xt.lit"))
     {
       uint32_t got_meta[2];
       int j;
@@ -120,6 +120,10 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       global_table_size /= 4;
       ELF_LOG("global table size %d\n",global_table_size);
     }
+    else
+    {
+      ELF_LOG("segment not used %s\n",&strtab[shdr.sh_name]);
+    }
   }
   if(bss > 0)
   {
@@ -132,6 +136,10 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
   ELF_LOG("TEXT to   (%08lX - %08lX)\n", text, text + text_len);
   ELF_LOG("RODA from (%08lX - %08lX)\n", rodata_vaddr, rodata_vaddr + rodata_len);
   ELF_LOG("RODA to   (%08lX - %08lX)\n", rodata, rodata + rodata_len);
+  ELF_LOG("DATA from (%08lX - %08lX)\n", data_vaddr, data_vaddr + data_len);
+  ELF_LOG("DATA to   (%08lX - %08lX)\n", data, data + data_len);
+  ELF_LOG("BSS  from (%08lX - %08lX)\n", bss_vaddr, bss_vaddr + bss_len);
+  ELF_LOG("BSS  to   (%08lX - %08lX)\n", bss, bss + bss_len);
   //ELF_LOG("Text %08lX => %08lX\n",text_vaddr, text);
   //ELF_LOG("size %ld\n",text_len);
   //ELF_LOG("Rodata %08lX => %08lX\n",rodata_vaddr, rodata);
@@ -150,19 +158,19 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       global_table[i] += text;
       global_table[i] += 0x6000000; //hardware thing
     }
-    if(global_table[i] >= rodata_vaddr && global_table[i] < rodata_vaddr + rodata_len)
+    else if(global_table[i] >= rodata_vaddr && global_table[i] < rodata_vaddr + rodata_len)
     {
       ELF_LOG("rodata pointer %08lX",global_table[i]);
       global_table[i] -= rodata_vaddr;
       global_table[i] += rodata;
     }
-    if(global_table[i] >= data_vaddr && global_table[i] < data_vaddr + data_len)
+    else if(global_table[i] >= data_vaddr && global_table[i] < data_vaddr + data_len)
     {
       ELF_LOG("data pointer %08lX",global_table[i]);
       global_table[i] -= data_vaddr;
       global_table[i] += data;
     }
-    if(global_table[i] >= bss_vaddr && global_table[i] < bss_vaddr + bss_len)
+    else if(global_table[i] >= bss_vaddr && global_table[i] < bss_vaddr + bss_len)
     {
       ELF_LOG("bss pointer %08lX",global_table[i]);
       global_table[i] -= bss_vaddr;

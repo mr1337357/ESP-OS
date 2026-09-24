@@ -17,6 +17,4 @@ int os_file_read(int fd, void *buffer, int len);
 
 int os_file_write(int fd, void *buffer, int len);
 
-FILE *os_get_filep(int fd);
-
 #endif

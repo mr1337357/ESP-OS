@@ -12,3 +12,4 @@ ${CC} ${CFLAGS} lib.c hello.c -o hello
 
 ${CC} ${CFLAGS} lib.c init.c -o init
 ${CC} ${CFLAGS} lib.c sh.c -o sh
+${OBJDUMP} -s -S sh > sh.dis

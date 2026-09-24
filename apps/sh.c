@@ -1,5 +1,7 @@
 #include "lib.h"
 
+char *msg = "readlen 0\n";
+
 int main(int argc, char **argv)
 {
    int readlen;
@@ -14,7 +16,8 @@ int main(int argc, char **argv)
       }
       else if(readlen > 0)
       {
-         print("read success\n");
+         msg[8] = '0' + readlen;
+         print(msg);
       }
       else
       {
