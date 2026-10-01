@@ -1,6 +1,7 @@
 #include <elf.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "os_psram.h"
 
@@ -10,6 +11,12 @@
 #define ELF_LOG(...) printf(__VA_ARGS__)
 #else
 #define ELF_LOG(...)
+#endif
+
+//WORKAROUND
+#ifndef R_XTENSA_NONE
+#define R_XTENSA_NONE           0
+#define R_XTENSA_32             1
 #endif
 
 void elf_file_seek(FILE *app, int offset)
@@ -56,8 +63,11 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
   Elf32_Shdr shdr;
   int offset;
 
-  uint32_t *global_table;
+  uint32_t *global_table = 0;
   int global_table_size = 0;
+
+  uint32_t *global_table_2 = 0;
+  int global_table_size_2 = 0;
 
   uint32_t text = 0;
   uint32_t text_len = 0;
@@ -120,6 +130,53 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       global_table_size /= 4;
       ELF_LOG("global table size %d\n",global_table_size);
     }
+    else if(!strcmp(&strtab[shdr.sh_name],".rela.text"))
+    {
+      ELF_LOG("relocation %s\n",&strtab[shdr.sh_name]);
+      Elf32_Rela reloc;
+      int j;
+      elf_file_seek(app, shdr.sh_offset);
+      for(j=0;j<shdr.sh_size;j+=sizeof(reloc))
+      {
+        elf_file_read(app,&reloc,sizeof(reloc));
+        ELF_LOG("DUMP: %08lX %08lX %08lX\n",reloc.r_offset,reloc.r_info,reloc.r_addend);
+      }
+    }
+    else if(!strcmp(&strtab[shdr.sh_name],".rela.data"))
+    {
+      ELF_LOG("relocation %s\n",&strtab[shdr.sh_name]);
+      Elf32_Rela reloc;
+      int j;
+      elf_file_seek(app, shdr.sh_offset);
+      for(j=0;j<shdr.sh_size;j+=sizeof(reloc))
+      {
+        elf_file_read(app,&reloc,sizeof(reloc));
+        if(ELF32_R_TYPE(reloc.r_info) == R_XTENSA_32)
+        {
+          ELF_LOG("relocating data pointer\n");
+          reloc.r_offset += data;
+          reloc.r_offset -= data_vaddr;
+          global_table_2 = realloc(global_table_2,++global_table_size_2);
+          global_table_2[global_table_size_2-1] = reloc.r_offset;
+        }
+        
+        ELF_LOG("DUMP: %08lX %08lX %08lX\n",reloc.r_offset,reloc.r_info,reloc.r_addend);
+      }
+    }
+    else if(!strncmp(&strtab[shdr.sh_name],".rel",4))
+    {
+      /*
+      ELF_LOG("relocation %s\n",&strtab[shdr.sh_name]);
+      uint32_t reloc_data[3];
+      int j;
+      elf_file_seek(app, shdr.sh_offset);
+      for(j=0;j<shdr.sh_size;j+=12)
+      {
+        elf_file_read(app,reloc_data,12);
+        ELF_LOG("DUMP: %08lX %08lX %08lX\n",reloc_data[0],reloc_data[1],reloc_data[2]);
+      }
+      */
+    }
     else
     {
       ELF_LOG("segment not used %s\n",&strtab[shdr.sh_name]);
@@ -177,6 +234,39 @@ uint32_t elf_load_sections(FILE *app, uint32_t e_entry, int e_shoff, int e_shnum
       global_table[i] += bss;
     }
     ELF_LOG(" => %08lX\n",global_table[i]);
+  }
+  for(i=0;i<global_table_size_2;i++)
+  {
+    uint32_t *temp_ptr;
+    ELF_LOG("global table 2 %08lX\n",global_table_2[i]);
+    temp_ptr = (uint32_t *)global_table_2[i];
+    ELF_LOG("ptr to relocate %08lX\n",temp_ptr[0]);
+    if(temp_ptr[0] >= text_vaddr && temp_ptr[0] < text_vaddr + text_len)
+    {
+      temp_ptr[0] -= text_vaddr;
+      temp_ptr[0] += text;
+      temp_ptr[0] += 0x6000000; //hardware thing
+    }
+    else if(temp_ptr[0] >= rodata_vaddr && temp_ptr[0] < rodata_vaddr + rodata_len)
+    {
+      temp_ptr[0] -= rodata_vaddr;
+      temp_ptr[0] += rodata;
+    }
+    else if(temp_ptr[0] >= data_vaddr && temp_ptr[0] < data_vaddr + data_len)
+    {
+      temp_ptr[0] -= data_vaddr;
+      temp_ptr[0] += data;
+    }
+    else if(temp_ptr[0] >= bss_vaddr && temp_ptr[0] < bss_vaddr + bss_len)
+    {
+      temp_ptr[0] -= bss_vaddr;
+      temp_ptr[0] += bss;
+    }
+    ELF_LOG("ptr to relocate %08lX\n",temp_ptr[0]);
+  }
+  if(global_table_2)
+  {
+    free(global_table_2);
   }
   e_entry -= text_vaddr;
   e_entry += text;
