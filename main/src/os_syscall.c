@@ -129,7 +129,7 @@ int syscall_waitpid(waitpid_args *args)
 
 int syscall_handler(int syscall, void *args)
 {
-    printf("syscall_handler(%d, %p)\r\n",syscall, args);
+    //printf("syscall_handler(%d, %p)\r\n",syscall, args);
     switch(syscall)
     {
         case SYSCALL_READ:

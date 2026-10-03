@@ -50,8 +50,10 @@ void init_launcher(void *arg)
     int fd;
     os_thread *current = os_threads_get_current_thread();
     fd = os_file_adopt(stdin);
+    printf("stdin fileno %d\n",fileno(stdin));
     current->filedes_list[0] = fd;
     fd = os_file_adopt(stdout);
+    printf("stdout fileno %d\n",fileno(stdin));
     current->filedes_list[1] = fd;
     current->filedes_list[2] = fd;
     os_threads_exec("/sdcard/espos/bin/init", 0, 0);

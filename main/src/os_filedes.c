@@ -10,6 +10,7 @@ typedef struct
 {
     int opencount;
     int fd;
+    uint32_t flags;
 } os_filedes;
 
 os_filedes files[OS_MAX_FILES];
@@ -21,6 +22,7 @@ void filedes_init()
     {
         files[fd].fd = -1;
         files[fd].opencount = 0;
+        files[fd].flags = 0;
     }
 }
 
@@ -40,6 +42,7 @@ int os_file_adopt(FILE *adopted)
     }
     files[fd].opencount = 1;
     files[fd].fd = fileno(adopted);
+    files[fd].flags = 1;
     return fd;
 }
 
@@ -63,6 +66,7 @@ int os_file_open(char *filename, int mode)
         return -1;
     }
     files[fd].opencount = 1;
+    files[fd].flags = 0;
     return fd;
 }
 
@@ -123,7 +127,6 @@ int os_file_block_until_read(int fd)
 
 int os_file_read(int fd, void *buffer, int len)
 {
-    int actual_fd;
     int blockstatus;
     if(fd < 0 || fd >= OS_MAX_FILES)
     {
@@ -133,16 +136,27 @@ int os_file_read(int fd, void *buffer, int len)
     {
         return -1;
     }
-    blockstatus = os_file_block_until_read(files[fd].fd);
-    if(blockstatus < 1)
+    if(files[fd].flags & 1)
     {
-        return blockstatus;
+        blockstatus = os_file_block_until_read(files[fd].fd);
+        if(blockstatus < 1)
+        {
+            return blockstatus;
+        }
+        int rv = read(files[fd].fd, buffer, len);
+        if(rv > 0)
+        {
+            write(files[fd].fd, buffer, rv);
+            fsync(files[fd].fd);
+        }
+        return rv;
     }
     return read(files[fd].fd, buffer, len);
 }
 
 int os_file_write(int fd, void *buffer, int len)
 {
+    int rv;
     if(fd < 0 || fd >= OS_MAX_FILES)
     {
         return -1;
@@ -151,5 +165,10 @@ int os_file_write(int fd, void *buffer, int len)
     {
         return -1;
     }
-    return write(files[fd].fd, buffer, len);
+    rv = write(files[fd].fd, buffer, len);
+    if(files[fd].flags & 1)
+    {
+        fsync(files[fd].fd);
+    }
+    return rv;
 }

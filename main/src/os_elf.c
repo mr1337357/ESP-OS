@@ -5,7 +5,7 @@
 
 #include "os_psram.h"
 
-#define ELF_DEBUG
+//#define ELF_DEBUG
 
 #ifdef ELF_DEBUG
 #define ELF_LOG(...) printf(__VA_ARGS__)
