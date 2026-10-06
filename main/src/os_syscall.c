@@ -153,6 +153,9 @@ int syscall_handler(int syscall, void *args)
         case SYSCALL_WAITPID:
             return syscall_waitpid(args);
             break;
+        case SYSCALL_CHDIR:
+            //return syscall_chdir(args);
+            break;
     }
     return 0;
 }

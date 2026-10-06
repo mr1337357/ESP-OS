@@ -10,5 +10,6 @@ int syscall_handler(int syscall, void *args);
 #define SYSCALL_CLONE 4
 #define SYSCALL_EXEC 5
 #define SYSCALL_WAITPID 6
+#define SYSCALL_CHDIR 7
 
 #endif

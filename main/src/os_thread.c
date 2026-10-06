@@ -149,6 +149,7 @@ int os_threads_create(void *entry,void *threadarg)
         threads[i].heap = threads[oldpid].heap;
         os_psram_duplicate_thread(oldpid,i);
         os_threads_copyfiles(i,oldpid);
+        strcpy(threads[i].cwd,threads[oldpid].cwd);
         xTaskCreate(_os_threads_launcher, "app", 4096, thrd, tskIDLE_PRIORITY, &threads[i].task);
         return i;
     }
