@@ -77,13 +77,6 @@ os_thread *os_threads_get_thread(int pid)
     return 0;
 }
 
-uint32_t syscall_dummy(int syscall, void *arg)
-{
-    printf("syscalled %d\n",syscall);
-    //while(1);
-    return 0;
-}
-
 void _os_threads_launcher(void *arg)
 {
     int fd;
@@ -106,8 +99,8 @@ void _os_threads_launcher(void *arg)
     }  
     os_psram_thread_free(pid);
     threads[pid].task = 0;
-    vTaskDelete(threads[pid].task);
     xSemaphoreGive(threads[pid].close_sem);
+    vTaskDelete(threads[pid].task);
 }
 
 void os_threads_copyfiles(int newpid, int oldpid)

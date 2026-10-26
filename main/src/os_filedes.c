@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <sys/select.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define OS_MAX_FILES 20
 
@@ -14,6 +16,8 @@ typedef struct
 } os_filedes;
 
 os_filedes files[OS_MAX_FILES];
+
+static char combined_path[1024];
 
 void filedes_init()
 {
@@ -48,6 +52,7 @@ int os_file_adopt(FILE *adopted)
 
 int os_file_open(char *filename, int mode)
 {
+    
     int fd;
     for(fd=0;fd<OS_MAX_FILES;fd++)
     {
@@ -171,4 +176,24 @@ int os_file_write(int fd, void *buffer, int len)
         fsync(files[fd].fd);
     }
     return rv;
+}
+
+
+
+char *os_file_rel2abs(const char *base, char *filename)
+{
+    char temp_path[1024];
+    temp_path[0] = 0;
+    temp_path[1023] = 0;
+    if(!filename)
+    {
+        return 0;
+    }
+    if(filename[0] != '/')
+    {
+        strcpy(temp_path,base);
+        strcat(temp_path,"/");
+    }
+    strcat(temp_path,filename);
+    return realpath(temp_path,combined_path);
 }

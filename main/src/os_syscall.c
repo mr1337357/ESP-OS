@@ -1,5 +1,9 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <dirent.h>
 
 #include "os_syscall.h"
 #include "os_thread.h"
@@ -31,6 +35,12 @@ typedef struct
     int *status;
     int options;
 } waitpid_args;
+
+typedef struct
+{
+    char *buffer;
+    int length;
+} getcwd_args;
 
 int syscall_file_read(fileop *fop)
 {
@@ -75,7 +85,8 @@ int syscall_file_open(fileop *fop)
     {
         return -1;
     }
-    current->filedes_list[fd] = os_file_open((char *)fop->buffer,fop->fd);
+    char *abspath = os_file_rel2abs(current->cwd,(char *)fop->buffer);
+    current->filedes_list[fd] = os_file_open((char *)abspath,fop->fd);
     return current->filedes_list[fd];
 }
 
@@ -126,6 +137,39 @@ int syscall_waitpid(waitpid_args *args)
     return args->pid;
 }
 
+int syscall_chdir(char *args)
+{
+    char *newpath;
+    os_thread *current = os_threads_get_current_thread();
+    if(!args)
+    {
+        return -1;
+    }
+    printf("chdir current %s request %s\n",current->cwd,args);
+    newpath = os_file_rel2abs(current->cwd, args);
+    printf("newpath %s\n",newpath);
+    if(newpath)
+    {
+        DIR *testdir = opendir(newpath);
+        if(testdir == 0)
+        {
+            printf("testfd failed\n");
+            return -1;
+        }
+        closedir(testdir);
+        strcpy(current->cwd,newpath);
+        return 0;
+    }
+    return -1;
+}
+
+int syscall_getcwd(getcwd_args *args)
+{
+    os_thread *current = os_threads_get_current_thread();
+    strncpy(args->buffer,current->cwd,args->length);
+    return 0;
+}
+
 
 int syscall_handler(int syscall, void *args)
 {
@@ -154,8 +198,12 @@ int syscall_handler(int syscall, void *args)
             return syscall_waitpid(args);
             break;
         case SYSCALL_CHDIR:
-            //return syscall_chdir(args);
+            return syscall_chdir(args);
             break;
+        case SYSCALL_GETCWD:
+            return syscall_getcwd(args);
+            break;
+
     }
     return 0;
 }

@@ -9,9 +9,10 @@ CFLAGS="-Wl,-q -fPIE -nostdlib -static"
 #CFLAGS="-static-pie -nostdlib"
 
 ${CC} ${CFLAGS} lib.c hello.c -o hello
-
+${CC} ${CFLAGS} lib.c pwd.c -o pwd
 ${CC} ${CFLAGS} lib.c init.c -o init
 ${CC} ${CFLAGS} lib.c sh.c -o sh
-${OBJDUMP} -x -r -R -s -S sh > sh.dis
+
+#${OBJDUMP} -x -r -R -s -S sh > sh.dis
 
 read

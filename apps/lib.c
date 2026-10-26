@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include <string.h>
+//#include <string.h>
 #include <stddef.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "lib.h"
 
@@ -12,6 +12,9 @@
 #define SYSCALL_CLONE 4
 #define SYSCALL_EXEC 5
 #define SYSCALL_WAITPID 6
+#define SYSCALL_CHDIR 7
+#define SYSCALL_GETCWD 8
+
 
 typedef struct
 {
@@ -77,6 +80,35 @@ size_t strlen(const char *msg)
    return i;
 }
 
+int strcmp(char *a, char *b)
+{
+   while(1)
+   {
+      if(!*a && !*b)
+      {
+         return 0;
+      }
+      if(!*a)
+      {
+         return -1;
+      }
+      if(!*b)
+      {
+         return 1;
+      }
+      if(*a < *b)
+      {
+         return -1;
+      }
+      if(*a > *b)
+      {
+         return 1;
+      }
+      a++;b++;
+   }
+   return -2;
+}
+
 void print(char *message)
 {
    write(1,message,strlen(message));
@@ -103,6 +135,17 @@ int waitpid(int pid, int *status, int options)
 {
    struct {int pid;  int *status; int options;} waitpidcall = {.pid = pid, .status = status, .options = options};
    return do_syscall(SYSCALL_WAITPID, &waitpidcall);
+}
+
+int chdir(char *path)
+{
+   return do_syscall(SYSCALL_CHDIR, path);
+}
+
+int getcwd(char *path, int len)
+{
+   struct {char *path; int len;} getcwdcall = {.path = path, .len = len};
+   return do_syscall(SYSCALL_GETCWD, &getcwdcall);
 }
 
 __attribute((weak)) void event_handler(int event, void *arg)

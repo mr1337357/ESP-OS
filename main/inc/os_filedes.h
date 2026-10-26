@@ -17,4 +17,6 @@ int os_file_read(int fd, void *buffer, int len);
 
 int os_file_write(int fd, void *buffer, int len);
 
+char *os_file_rel2abs(const char *base, char *filename);
+
 #endif

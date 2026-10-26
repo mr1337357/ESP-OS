@@ -11,5 +11,6 @@ int syscall_handler(int syscall, void *args);
 #define SYSCALL_EXEC 5
 #define SYSCALL_WAITPID 6
 #define SYSCALL_CHDIR 7
+#define SYSCALL_GETCWD 8
 
 #endif
