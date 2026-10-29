@@ -26,6 +26,7 @@ struct exec_args
     int (*syscall)(int, void*);
     int argc;
     char **argv;
+    char **envp;
 };
 
 void os_threads_init()
@@ -164,7 +165,31 @@ void os_threads_argv_copy(int argc, char **old_argv, char ***new_argv)
     *new_argv = temp_argv;
 }
 
-void os_threads_exec(char *filename, int argc, char **argv)
+void os_threads_envp_copy(char ***new_envp, char **old_envp)
+{
+    char **temp_envp;
+    int count;
+    int i;
+    if(!old_envp)
+    {
+        *new_envp = 0;
+        return;
+    }
+    count = 0;
+    while(old_envp[count] != 0)
+    {
+        count++;
+    }
+    temp_envp = os_psram_code_malloc(sizeof(char *)*count);
+    for(i=0;i<count;i++)
+    {
+        temp_envp[i] = os_psram_code_malloc(strlen(old_envp[i])+1);
+        strcpy(temp_envp[i],old_envp[i]);
+    }
+    *new_envp = temp_envp;
+}
+
+void os_threads_exec(char *filename, int argc, char **argv, char **envp)
 {
     struct thread_data *thrd;
     struct exec_args *args;
@@ -184,6 +209,7 @@ void os_threads_exec(char *filename, int argc, char **argv)
     args->syscall = syscall_handler;
     args->argc = argc;
     os_threads_argv_copy(argc,argv,&args->argv);
+    os_threads_envp_copy(&args->envp, envp);
     thrd->arg = args;
     
     //unload memory

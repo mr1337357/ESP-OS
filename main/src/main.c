@@ -57,9 +57,9 @@ void init_launcher(void *arg)
     current->filedes_list[1] = fd;
     current->filedes_list[2] = fd;
     strcpy(current->cwd,"/");
-    os_threads_exec("/sdcard/espos/bin/init", 0, 0);
+    os_threads_exec("/sdcard/espos/bin/init", 0, 0, 0);
     printf("SD Init not found\r\n");
-    os_threads_exec("/internal/espos/bin/init", 0, 0);
+    os_threads_exec("/internal/espos/bin/init", 0, 0, 0);
     printf("PANIC: init not found\r\n");
 }
 

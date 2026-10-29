@@ -8,6 +8,7 @@
 #include "os_syscall.h"
 #include "os_thread.h"
 #include "os_filedes.h"
+#include "os_psram.h"
 
 typedef struct
 {
@@ -41,6 +42,12 @@ typedef struct
     char *buffer;
     int length;
 } getcwd_args;
+
+typedef struct
+{
+    void **retp;
+    int len;
+}   malloc_args;
 
 int syscall_file_read(fileop *fop)
 {
@@ -122,7 +129,7 @@ int syscall_exec(exec_args *args)
    for(argc = 0; args->argv[argc] != 0; argc++)
    {
    }
-   os_threads_exec(args->fname, argc, args->argv);
+   os_threads_exec(args->fname, argc, args->argv, args->env);
    return -1;
 }
 
@@ -170,6 +177,18 @@ int syscall_getcwd(getcwd_args *args)
     return 0;
 }
 
+int syscall_malloc(malloc_args *args)
+{
+    *args->retp = os_psram_heap_malloc(args->len);
+    return 0;
+}
+
+int syscall_free(void *ptr)
+{
+    os_psram_free(ptr);
+    return 0;
+}
+
 
 int syscall_handler(int syscall, void *args)
 {
@@ -202,6 +221,12 @@ int syscall_handler(int syscall, void *args)
             break;
         case SYSCALL_GETCWD:
             return syscall_getcwd(args);
+            break;
+        case SYSCALL_MALLOC:
+            return syscall_malloc(args);
+            break;
+        case SYSCALL_FREE:
+            return syscall_free(args);
             break;
 
     }
