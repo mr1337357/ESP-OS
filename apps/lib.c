@@ -83,6 +83,19 @@ size_t strlen(const char *msg)
    return i;
 }
 
+char *strchr(const char *s, int c)
+{
+   while(*s)
+   {
+      if(*s == c)
+      {
+         return s;
+      }
+      s++;
+   }
+   return 0;
+}
+
 int strncmp(char *a, char *b, int n)
 {
    int i;
@@ -172,19 +185,42 @@ void free(void *ptr)
    do_syscall(SYSCALL_FREE,ptr);
 }
 
-char *getenv(char *key)
+char *ggetenv(char *key)
 {
    char **tempenv;
    char *varp;
+   int len;
    if(!__environ)
    {
       return 0;
    }
+   len = strlen(key);
    tempenv = __environ;
    for(varp = *tempenv++; varp; varp = *tempenv++)
    {
-      if(!strcmp())
+      if(!strncmp(varp,key,len))
+      {
+         if(varp[len]=='=')
+         {
+            return varp;
+         }
+      }
    }
+   return 0;
+}
+
+char *getenv(char *key)
+{
+   char *res = ggetenv(key);
+   if(res)
+   {
+      res = strchr(res,'=');
+      if(res)
+      {
+         return res+1;
+      }
+   }
+   return 0;
 }
 
 __attribute((weak)) void event_handler(int event, void *arg)
