@@ -114,6 +114,11 @@ int syscall_file_close(fileop *fop)
     return os_file_close(tempfd);
 }
 
+int syscall_readdir(struct dirent *dent)
+{
+    return os_file_readdir(dent);
+}
+
 int syscall_clone(clone_args *args)
 {
    return os_threads_create(args->entry,args->threadarg);
@@ -227,6 +232,9 @@ int syscall_handler(int syscall, void *args)
             break;
         case SYSCALL_FREE:
             return syscall_free(args);
+            break;
+        case SYSCALL_READDIR:
+            return syscall_readdir(args);
             break;
 
     }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <dirent.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/select.h>
@@ -8,10 +9,16 @@
 
 #define OS_MAX_FILES 20
 
+#define OS_FILE_ISDIR               (1<<0)
+#define OS_FILE_BLOCK_WORKAROUND    (1<<1)
+#define OS_FILE_FSYNC_WORKAROUND    (1<<2)
+#define OS_FILE_ECHO                (1<<3)
+
 typedef struct 
 {
     int opencount;
     int fd;
+    DIR *fdir;
     uint32_t flags;
 } os_filedes;
 
@@ -24,8 +31,9 @@ void filedes_init()
     int fd;
     for(fd = 0; fd < OS_MAX_FILES; fd++)
     {
-        files[fd].fd = -1;
         files[fd].opencount = 0;
+        files[fd].fd = -1;
+        files[fd].fdir = 0;        
         files[fd].flags = 0;
     }
 }
@@ -46,7 +54,7 @@ int os_file_adopt(FILE *adopted)
     }
     files[fd].opencount = 1;
     files[fd].fd = fileno(adopted);
-    files[fd].flags = 1;
+    files[fd].flags = OS_FILE_BLOCK_WORKAROUND | OS_FILE_FSYNC_WORKAROUND | OS_FILE_ECHO;
     return fd;
 }
 
@@ -66,12 +74,17 @@ int os_file_open(char *filename, int mode)
         return -1;
     }
     files[fd].fd = open(filename,mode);
-    if(files[fd].fd == 0)
+    files[fd].flags = 0;
+    if(files[fd].fd < 0)
     {
-        return -1;
+        files[fd].fdir = opendir(filename);
+        if(!files[fd].fdir)
+        {
+            return -1;
+        }
+        files[fd].flags = OS_FILE_ISDIR;
     }
     files[fd].opencount = 1;
-    files[fd].flags = 0;
     return fd;
 }
 
@@ -102,8 +115,16 @@ int os_file_close(int fd)
     files[fd].opencount--;
     if(files[fd].opencount == 0)
     {
-        close(files[fd].fd);
-        files[fd].fd = -1;
+        if(!(files[fd].flags & OS_FILE_ISDIR))
+        {
+            close(files[fd].fd);
+            files[fd].fd = -1;
+        }
+        else
+        {
+            closedir(files[fd].fdir);
+            files[fd].fdir = 0;
+        }
     }
     return 0;
 }
@@ -141,22 +162,28 @@ int os_file_read(int fd, void *buffer, int len)
     {
         return -1;
     }
-    if(files[fd].flags & 1)
+    if(files[fd].flags & OS_FILE_ISDIR)
+    {
+        return -1;
+    }
+    if(files[fd].flags & OS_FILE_BLOCK_WORKAROUND)
     {
         blockstatus = os_file_block_until_read(files[fd].fd);
         if(blockstatus < 1)
         {
             return blockstatus;
         }
-        int rv = read(files[fd].fd, buffer, len);
+    }
+    int rv = read(files[fd].fd, buffer, len);
+    if(files[fd].flags & OS_FILE_ECHO)
+    {
         if(rv > 0)
         {
             write(files[fd].fd, buffer, rv);
             fsync(files[fd].fd);
         }
-        return rv;
     }
-    return read(files[fd].fd, buffer, len);
+    return rv;
 }
 
 int os_file_write(int fd, void *buffer, int len)
@@ -170,15 +197,42 @@ int os_file_write(int fd, void *buffer, int len)
     {
         return -1;
     }
+    if(files[fd].flags & OS_FILE_ISDIR)
+    {
+        return -1;
+    }
     rv = write(files[fd].fd, buffer, len);
-    if(files[fd].flags & 1)
+    if(files[fd].flags & OS_FILE_FSYNC_WORKAROUND)
     {
         fsync(files[fd].fd);
     }
     return rv;
 }
 
-
+int os_file_readdir(int fd, struct dirent *dent)
+{
+    struct dirent *d2;
+    int rv;
+    if(fd < 0 || fd >= OS_MAX_FILES)
+    {
+        return -1;
+    }
+    if(files[fd].opencount < 1)
+    {
+        return -1;
+    }
+    if(!(files[fd].flags & OS_FILE_ISDIR))
+    {
+        return -1;
+    }
+    d2 = readdir(files[fd].fdir);
+    if(!d2)
+    {
+        return -1;
+    }
+    memcpy(dent,d2,sizeof(struct dirent));
+    return 0;
+}
 
 char *os_file_rel2abs(const char *base, char *filename)
 {

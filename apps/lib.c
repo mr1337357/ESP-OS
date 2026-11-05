@@ -1,6 +1,7 @@
 #include <stdint.h>
 //#include <string.h>
 #include <stddef.h>
+#include <sys/types.h>
 //#include <unistd.h>
 
 #include "lib.h"
@@ -16,7 +17,14 @@
 #define SYSCALL_GETCWD 8
 #define SYSCALL_MALLOC 9
 #define SYSCALL_FREE 10
+#define SYSCALL_READDIR 11
 
+struct dirent
+{
+    ino_t d_ino;
+    unsigned char d_type;
+    char d_name[256];
+};
 
 typedef struct
 {
@@ -89,7 +97,7 @@ char *strchr(const char *s, int c)
    {
       if(*s == c)
       {
-         return s;
+         return (char *)s;
       }
       s++;
    }
@@ -219,6 +227,27 @@ char *getenv(char *key)
       {
          return res+1;
       }
+   }
+   return 0;
+}
+
+int setenv(const char *name, const char *value, int overwrite)
+{
+   return -1;
+}
+
+int unsetenv(const char *name)
+{
+   return -1;
+}
+
+struct dirent dmem;
+
+struct dirent *readdir(int fd)
+{
+   if(do_syscall(SYSCALL_READDIR,&dmem)==0)
+   {
+      return &dmem;
    }
    return 0;
 }

@@ -17,6 +17,8 @@ int os_file_read(int fd, void *buffer, int len);
 
 int os_file_write(int fd, void *buffer, int len);
 
+int os_file_readdir(int fd, struct dirent *dent);
+
 char *os_file_rel2abs(const char *base, char *filename);
 
 #endif
