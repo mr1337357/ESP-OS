@@ -1,0 +1,711 @@
+In archive esplibc.a:
+
+dirent.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   2104 Dec 31 16:00 1969 dirent.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      0000001c  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         0000009a  00000000  00000000  00000050  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  000000ea  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000104  00000000  00000000  000000ec  2**2
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  000000ec  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  0000011c  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  00000154  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      000000b4  00000000  00000000  0000015c  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 dirent.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l     O .bss	00000104 dmem$0
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000         *UND*	00000000 open
+00000000         *UND*	00000000 malloc
+00000000         *UND*	00000000 close
+00000000 g     F .text	00000046 opendir
+00000000         *UND*	00000000 do_syscall
+00000048 g     F .text	0000002a readdir
+00000000         *UND*	00000000 free
+00000074 g     F .text	00000026 closedir
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_PLT      open
+00000004 R_XTENSA_PLT      malloc
+00000008 R_XTENSA_PLT      close
+0000000c R_XTENSA_32       do_syscall
+00000010 R_XTENSA_32       .bss
+00000014 R_XTENSA_PLT      close
+00000018 R_XTENSA_PLT      free
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+0000000b R_XTENSA_SLOT0_OP  .literal
+0000001a R_XTENSA_SLOT0_OP  .text+0x00000042
+0000001f R_XTENSA_SLOT0_OP  .literal+0x00000004
+0000002f R_XTENSA_SLOT0_OP  .literal+0x00000008
+00000037 R_XTENSA_SLOT0_OP  .text+0x00000042
+00000053 R_XTENSA_SLOT0_OP  .literal+0x0000000c
+00000058 R_XTENSA_SLOT0_OP  .literal+0x00000010
+00000066 R_XTENSA_SLOT0_OP  .literal+0x00000010
+00000069 R_XTENSA_SLOT0_OP  .text+0x0000006e
+00000086 R_XTENSA_SLOT0_OP  .literal+0x00000014
+0000008e R_XTENSA_SLOT0_OP  .literal+0x00000018
+00000015 R_XTENSA_SLOT0_OP  .text+0x0000001d
+0000002b R_XTENSA_SLOT0_OP  .text+0x0000003a
+00000064 R_XTENSA_SLOT0_OP  .text+0x0000006c
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .text
+00000054 R_XTENSA_32       .text
+00000060 R_XTENSA_32       .text
+0000006c R_XTENSA_32       .text
+00000078 R_XTENSA_32       .text
+00000084 R_XTENSA_32       .text
+00000090 R_XTENSA_32       .text
+0000009c R_XTENSA_32       .text
+000000a8 R_XTENSA_32       .bss
+
+
+
+env.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   2308 Dec 31 16:00 1969 env.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000018  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         000000d9  00000000  00000000  0000004c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  00000125  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000004  00000000  00000000  00000128  2**2
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  00000128  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  00000158  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  00000190  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      000000e4  00000000  00000000  00000198  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 env.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000 g     O .bss	00000004 __environ
+00000000         *UND*	00000000 strlen
+00000000         *UND*	00000000 strncmp
+00000000 g     F .text	0000006e ggetenv
+00000000         *UND*	00000000 strchr
+00000070 g     F .text	0000002f getenv
+00000000         *UND*	00000000 malloc
+000000a0 g     F .text	0000002a setenv
+000000cc g     F .text	0000000d unsetenv
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       __environ
+00000004 R_XTENSA_PLT      strlen
+00000008 R_XTENSA_PLT      strncmp
+0000000c R_XTENSA_PLT      strchr
+00000010 R_XTENSA_32       __environ
+00000014 R_XTENSA_PLT      malloc
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+00000007 R_XTENSA_SLOT0_OP  .literal
+00000010 R_XTENSA_SLOT0_OP  .text+0x0000006a
+00000016 R_XTENSA_SLOT0_OP  .literal+0x00000004
+00000020 R_XTENSA_SLOT0_OP  .literal
+00000031 R_XTENSA_SLOT0_OP  .text+0x00000063
+0000003c R_XTENSA_SLOT0_OP  .literal+0x00000008
+00000056 R_XTENSA_SLOT0_OP  .text+0x0000006a
+00000086 R_XTENSA_SLOT0_OP  .literal+0x0000000c
+00000096 R_XTENSA_SLOT0_OP  .text+0x0000009b
+000000ab R_XTENSA_SLOT0_OP  .literal+0x00000010
+000000b4 R_XTENSA_SLOT0_OP  .literal+0x00000014
+000000be R_XTENSA_SLOT0_OP  .literal+0x00000010
+0000000c R_XTENSA_SLOT0_OP  .text+0x00000014
+00000044 R_XTENSA_SLOT0_OP  .text+0x00000059
+00000051 R_XTENSA_SLOT0_OP  .text+0x00000059
+00000065 R_XTENSA_SLOT0_OP  .text+0x00000034
+00000079 R_XTENSA_SLOT0_OP  ggetenv
+00000080 R_XTENSA_SLOT0_OP  .text+0x00000099
+00000090 R_XTENSA_SLOT0_OP  .text+0x00000099
+000000b0 R_XTENSA_SLOT0_OP  .text+0x000000c4
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .text
+00000054 R_XTENSA_32       .text
+00000060 R_XTENSA_32       .text
+0000006c R_XTENSA_32       .text
+00000078 R_XTENSA_32       .text
+00000084 R_XTENSA_32       .text
+00000090 R_XTENSA_32       .text
+0000009c R_XTENSA_32       .text
+000000a8 R_XTENSA_32       .text
+000000b4 R_XTENSA_32       .text
+000000c0 R_XTENSA_32       .text
+000000cc R_XTENSA_32       .text
+000000d8 R_XTENSA_32       .text
+
+
+
+fcntl.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   1732 Dec 31 16:00 1969 fcntl.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000010  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         000000a6  00000000  00000000  00000044  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  000000ea  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000000  00000000  00000000  000000ea  2**0
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  000000ea  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  0000011a  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  00000152  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      00000078  00000000  00000000  0000015a  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 fcntl.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000         *UND*	00000000 do_syscall
+00000000 g     F .text	0000002a write
+0000002c g     F .text	0000002a read
+00000058 g     F .text	00000027 open
+00000080 g     F .text	00000026 close
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       do_syscall
+00000004 R_XTENSA_32       do_syscall
+00000008 R_XTENSA_32       do_syscall
+0000000c R_XTENSA_32       do_syscall
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+00000017 R_XTENSA_SLOT0_OP  .literal
+00000043 R_XTENSA_SLOT0_OP  .literal+0x00000004
+0000006d R_XTENSA_SLOT0_OP  .literal+0x00000008
+00000093 R_XTENSA_SLOT0_OP  .literal+0x0000000c
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .text
+00000054 R_XTENSA_32       .text
+00000060 R_XTENSA_32       .text
+0000006c R_XTENSA_32       .text
+
+
+
+lib.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   2616 Dec 31 16:00 1969 lib.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000028  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         0000014d  00000000  00000000  0000005c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  000001a9  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000004  00000000  00000000  000001ac  2**2
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  000001ac  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  000001dc  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  00000214  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      00000108  00000000  00000000  0000021c  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 lib.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000 g     O .bss	00000004 do_syscall
+00000000         *UND*	00000000 __environ
+00000000         *UND*	00000000 main
+00000000 g     F .text	00000030 _start
+00000030 g     F .text	00000023 thread_create
+00000054 g     F .text	0000002a execve
+00000080 g     F .text	0000001e execv
+000000a0 g     F .text	0000002a waitpid
+000000cc g     F .text	00000022 malloc
+00000000         *UND*	00000000 memcpy
+000000f0 g     F .text	00000036 realloc
+00000128 g     F .text	00000018 free
+00000140  w    F .text	0000000d event_handler
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       do_syscall
+00000004 R_XTENSA_32       __environ
+00000008 R_XTENSA_PLT      main
+0000000c R_XTENSA_32       do_syscall
+00000010 R_XTENSA_32       do_syscall
+00000014 R_XTENSA_32       __environ
+00000018 R_XTENSA_32       do_syscall
+0000001c R_XTENSA_32       do_syscall
+00000020 R_XTENSA_PLT      memcpy
+00000024 R_XTENSA_32       do_syscall
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+0000000b R_XTENSA_SLOT0_OP  .literal
+00000014 R_XTENSA_SLOT0_OP  .literal+0x00000004
+00000026 R_XTENSA_SLOT0_OP  .literal+0x00000008
+00000041 R_XTENSA_SLOT0_OP  .literal+0x0000000c
+0000006b R_XTENSA_SLOT0_OP  .literal+0x00000010
+00000089 R_XTENSA_SLOT0_OP  .literal+0x00000014
+000000b7 R_XTENSA_SLOT0_OP  .literal+0x00000018
+000000d9 R_XTENSA_SLOT0_OP  .literal+0x0000001c
+0000011a R_XTENSA_SLOT0_OP  .literal+0x00000020
+0000012f R_XTENSA_SLOT0_OP  .literal+0x00000024
+00000095 R_XTENSA_SLOT0_OP  execve
+000000ff R_XTENSA_SLOT0_OP  .text+0x0000010c
+00000105 R_XTENSA_SLOT0_OP  malloc
+0000010e R_XTENSA_SLOT0_OP  .text+0x00000120
+00000112 R_XTENSA_SLOT0_OP  .text+0x00000120
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .text
+00000054 R_XTENSA_32       .text
+00000060 R_XTENSA_32       .text
+0000006c R_XTENSA_32       .text
+00000078 R_XTENSA_32       .text
+00000084 R_XTENSA_32       .text
+00000090 R_XTENSA_32       .text
+0000009c R_XTENSA_32       .text
+000000a8 R_XTENSA_32       .text
+000000b4 R_XTENSA_32       .text
+000000c0 R_XTENSA_32       .text
+000000cc R_XTENSA_32       .text
+000000d8 R_XTENSA_32       .text
+000000e4 R_XTENSA_32       .text
+000000f0 R_XTENSA_32       .text
+000000fc R_XTENSA_32       .text
+
+
+
+stdio.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   1708 Dec 31 16:00 1969 stdio.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000014  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         0000006c  00000000  00000000  00000048  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  000000b4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000000  00000000  00000000  000000b4  2**0
+                  ALLOC
+  4 .rodata       00000002  00000000  00000000  000000b4  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  5 .comment      00000030  00000000  00000000  000000b6  2**0
+                  CONTENTS, READONLY
+  6 .xtensa.info  00000038  00000000  00000000  000000e6  2**0
+                  CONTENTS, READONLY
+  7 .xt.lit       00000008  00000000  00000000  0000011e  2**0
+                  CONTENTS, RELOC, READONLY
+  8 .xt.prop      00000054  00000000  00000000  00000126  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 stdio.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .rodata	00000000 .rodata
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000         *UND*	00000000 strlen
+00000000         *UND*	00000000 write
+00000000 g     F .text	0000003e puts
+00000040 g     F .text	0000002c printf
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_PLT      strlen
+00000004 R_XTENSA_PLT      write
+00000008 R_XTENSA_32       .rodata
+0000000c R_XTENSA_PLT      strlen
+00000010 R_XTENSA_PLT      write
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+0000000a R_XTENSA_SLOT0_OP  .literal
+0000001b R_XTENSA_SLOT0_OP  .literal+0x00000004
+00000021 R_XTENSA_SLOT0_OP  .literal+0x00000008
+0000002a R_XTENSA_SLOT0_OP  .literal+0x00000004
+00000032 R_XTENSA_SLOT0_OP  .literal
+0000004a R_XTENSA_SLOT0_OP  .literal+0x0000000c
+00000058 R_XTENSA_SLOT0_OP  .literal+0x00000010
+00000060 R_XTENSA_SLOT0_OP  .literal+0x0000000c
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .rodata
+
+
+
+string.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   2916 Dec 31 16:00 1969 string.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000008  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         000001d5  00000000  00000000  0000003c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  00000211  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000000  00000000  00000000  00000211  2**0
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  00000211  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  00000241  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  00000279  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      000001a4  00000000  00000000  00000281  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 string.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000 g     F .text	00000026 strlen
+00000028 g     F .text	0000003f mempcpy
+00000068 g     F .text	0000003f memcpy
+000000a8 g     F .text	00000028 stpcpy
+000000d0 g     F .text	0000001a strcpy
+000000ec g     F .text	00000024 strcat
+00000110 g     F .text	0000005f strncmp
+00000170 g     F .text	00000022 strcmp
+00000194 g     F .text	00000041 strchr
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_PLT      strcpy
+00000004 R_XTENSA_PLT      strcpy
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+0000000b R_XTENSA_SLOT0_OP  .text+0x00000014
+0000003f R_XTENSA_SLOT0_OP  .text+0x0000005a
+0000007f R_XTENSA_SLOT0_OP  .text+0x0000009a
+000000de R_XTENSA_SLOT0_OP  .literal
+00000104 R_XTENSA_SLOT0_OP  .literal+0x00000004
+0000011f R_XTENSA_SLOT0_OP  .text+0x00000162
+00000159 R_XTENSA_SLOT0_OP  .text+0x0000016b
+000001a1 R_XTENSA_SLOT0_OP  .text+0x000001c3
+000001ba R_XTENSA_SLOT0_OP  .text+0x000001d1
+0000001d R_XTENSA_SLOT0_OP  .text+0x0000000e
+0000005e R_XTENSA_SLOT0_OP  .text+0x00000042
+0000009e R_XTENSA_SLOT0_OP  .text+0x00000082
+000000b3 R_XTENSA_SLOT0_OP  strlen
+000000be R_XTENSA_SLOT0_OP  mempcpy
+000000f7 R_XTENSA_SLOT0_OP  strlen
+0000012b R_XTENSA_SLOT0_OP  .text+0x00000142
+0000013f R_XTENSA_SLOT0_OP  .text+0x0000015c
+00000166 R_XTENSA_SLOT0_OP  .text+0x00000122
+0000017b R_XTENSA_SLOT0_OP  strlen
+00000189 R_XTENSA_SLOT0_OP  strncmp
+000001b1 R_XTENSA_SLOT0_OP  .text+0x000001bd
+000001cc R_XTENSA_SLOT0_OP  .text+0x000001a4
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+00000048 R_XTENSA_32       .text
+00000054 R_XTENSA_32       .text
+00000060 R_XTENSA_32       .text
+0000006c R_XTENSA_32       .text
+00000078 R_XTENSA_32       .text
+00000084 R_XTENSA_32       .text
+00000090 R_XTENSA_32       .text
+0000009c R_XTENSA_32       .text
+000000a8 R_XTENSA_32       .text
+000000b4 R_XTENSA_32       .text
+000000c0 R_XTENSA_32       .text
+000000cc R_XTENSA_32       .text
+000000d8 R_XTENSA_32       .text
+000000e4 R_XTENSA_32       .text
+000000f0 R_XTENSA_32       .text
+000000fc R_XTENSA_32       .text
+00000108 R_XTENSA_32       .text
+00000114 R_XTENSA_32       .text
+00000120 R_XTENSA_32       .text
+0000012c R_XTENSA_32       .text
+00000138 R_XTENSA_32       .text
+00000144 R_XTENSA_32       .text
+00000150 R_XTENSA_32       .text
+0000015c R_XTENSA_32       .text
+00000168 R_XTENSA_32       .text
+00000174 R_XTENSA_32       .text
+00000180 R_XTENSA_32       .text
+0000018c R_XTENSA_32       .text
+00000198 R_XTENSA_32       .text
+
+
+
+unistd.o:     file format elf32-xtensa-le
+rw-r--r-- 0/0   1436 Dec 31 16:00 1969 unistd.o
+architecture: xtensa, flags 0x00000011:
+HAS_RELOC, HAS_SYMS
+start address 0x00000000
+
+Xtensa header:
+
+Machine     = Base
+Insn tables = true
+Literal tables = true
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .literal      00000008  00000000  00000000  00000034  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  1 .text         0000003f  00000000  00000000  0000003c  2**2
+                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
+  2 .data         00000000  00000000  00000000  0000007b  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .bss          00000000  00000000  00000000  0000007b  2**0
+                  ALLOC
+  4 .comment      00000030  00000000  00000000  0000007b  2**0
+                  CONTENTS, READONLY
+  5 .xtensa.info  00000038  00000000  00000000  000000ab  2**0
+                  CONTENTS, READONLY
+  6 .xt.lit       00000008  00000000  00000000  000000e3  2**0
+                  CONTENTS, RELOC, READONLY
+  7 .xt.prop      00000048  00000000  00000000  000000eb  2**0
+                  CONTENTS, RELOC, READONLY
+SYMBOL TABLE:
+00000000 l    df *ABS*	00000000 unistd.c
+00000000 l    d  .text	00000000 .text
+00000000 l    d  .data	00000000 .data
+00000000 l    d  .bss	00000000 .bss
+00000000 l    d  .literal	00000000 .literal
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .xtensa.info	00000000 .xtensa.info
+00000000 l    d  .xt.lit	00000000 .xt.lit
+00000000 l    d  .xt.prop	00000000 .xt.prop
+00000000         *UND*	00000000 do_syscall
+00000000 g     F .text	0000001a chdir
+0000001c g     F .text	00000023 getcwd
+
+
+RELOCATION RECORDS FOR [.literal]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       do_syscall
+00000004 R_XTENSA_32       do_syscall
+
+
+RELOCATION RECORDS FOR [.text]:
+OFFSET   TYPE              VALUE
+00000007 R_XTENSA_SLOT0_OP  .literal
+0000002d R_XTENSA_SLOT0_OP  .literal+0x00000004
+
+
+RELOCATION RECORDS FOR [.xt.lit]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+
+
+RELOCATION RECORDS FOR [.xt.prop]:
+OFFSET   TYPE              VALUE
+00000000 R_XTENSA_32       .literal
+0000000c R_XTENSA_32       .text
+00000018 R_XTENSA_32       .text
+00000024 R_XTENSA_32       .text
+00000030 R_XTENSA_32       .text
+0000003c R_XTENSA_32       .text
+
+

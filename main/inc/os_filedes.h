@@ -2,6 +2,7 @@
 #define __OS_FILEDES_H__
 
 #include <stdio.h>
+#include <dirent.h>
 
 void filedes_init();
 

@@ -49,6 +49,12 @@ typedef struct
     int len;
 }   malloc_args;
 
+typedef struct
+{
+    int fd;
+    struct dirent *de;
+} readdir_args;
+
 int syscall_file_read(fileop *fop)
 {
     os_thread *current = os_threads_get_current_thread();
@@ -114,9 +120,9 @@ int syscall_file_close(fileop *fop)
     return os_file_close(tempfd);
 }
 
-int syscall_readdir(struct dirent *dent)
+int syscall_readdir(readdir_args *args)
 {
-    return os_file_readdir(dent);
+    return os_file_readdir(args->fd, args->de);
 }
 
 int syscall_clone(clone_args *args)

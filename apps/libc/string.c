@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdint.h>
 
 size_t strlen(const char *msg)
 {
@@ -11,8 +10,8 @@ size_t strlen(const char *msg)
 void *mempcpy(void *restrict dest, const void *restrict src, size_t n)
 {
    int i;
-   uint8_t *dstp = dest;
-   const uint8_t *srcp = src;
+   unsigned char *dstp = dest;
+   const unsigned char *srcp = src;
    for(i=0;i<n;i++)
    {
       *dstp++ = srcp[i];
@@ -23,8 +22,8 @@ void *mempcpy(void *restrict dest, const void *restrict src, size_t n)
 void *memcpy (void *restrict dest, const void *restrict src, size_t len)
 {
    int i;
-   uint8_t *dstp = dest;
-   const uint8_t *srcp = src;
+   unsigned char *dstp = dest;
+   const unsigned char *srcp = src;
    for(i=0;i<len;i++)
    {
       dstp[i] = srcp[i];
@@ -52,4 +51,35 @@ char *strcat(char *restrict dst, const char *restrict src)
 {
     stpcpy(dst + strlen(dst), src);
     return dst;
+}
+
+int strncmp(const char *a, const char *b, size_t n)
+{
+   int i;
+   for(i=0;i<n;i++)
+   {
+      if(a[i] == 0 || a[i] != b[i])
+      {
+         return a[i] - b[i];
+      }
+   }
+   return 0;
+}
+
+int strcmp(const char *a, const char *b)
+{
+   return strncmp(a,b,strlen(a)+1);
+}
+
+char *strchr(const char *s, int c)
+{
+   int i;
+   for(i=0;s[i];i++)
+   {
+      if(s[i] == c)
+      {
+         return (char *)&s[i];
+      }
+   }
+   return 0;
 }

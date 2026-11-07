@@ -1,17 +1,26 @@
-PREFIX=xtensa-esp32s3-elf
-CC=${PREFIX}-gcc
-STRIP=${PREFIX}-strip
-ELFEDIT=${PREFIX}-elfedit
-READELF=${PREFIX}-readelf
-OBJDUMP=${PREFIX}-objdump
+export PREFIX=xtensa-esp32s3-elf
+export CC=${PREFIX}-gcc
+export STRIP=${PREFIX}-strip
+export ELFEDIT=${PREFIX}-elfedit
+export READELF=${PREFIX}-readelf
+export OBJDUMP=${PREFIX}-objdump
+export AR=${PREFIX}-ar
 
-CFLAGS="-Wl,-q -fPIE -nostdlib -static"
+export CFLAGS="-Wl,-q -fPIE -nostdlib -static"
 #CFLAGS="-static-pie -nostdlib"
 
-${CC} ${CFLAGS} lib.c hello.c -o hello
-${CC} ${CFLAGS} lib.c pwd.c -o pwd
-${CC} ${CFLAGS} lib.c init.c -o init
-${CC} ${CFLAGS} lib.c sh.c -o sh
+pushd libc
+echo "BUILDING LIBC"
+make
+popd
+echo
+
+echo "BULIDING APPS"
+
+${CC} ${CFLAGS} -o hello hello.c libc/esplibc.a
+${CC} ${CFLAGS} pwd.c -o pwd libc/esplibc.a
+${CC} ${CFLAGS} init.c -o init libc/esplibc.a
+${CC} ${CFLAGS} sh.c -o sh libc/esplibc.a
 
 #${OBJDUMP} -x -r -R -s -S sh > sh.dis
 

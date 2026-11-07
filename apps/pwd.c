@@ -1,10 +1,11 @@
-#include "lib.h"
+#include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char **argv)
 {
     char cwd[1024];
     getcwd(cwd, 1024);
-    print(cwd);
-    print("\n");
+    printf(cwd);
+    printf("\n");
     return 0;
 }

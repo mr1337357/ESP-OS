@@ -1,4 +1,9 @@
-#include "lib.h"
+#include <stdio.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+
+#include "libc.h"
 
 typedef struct
 {
@@ -20,11 +25,11 @@ int echo_handler(char **args)
    args++;
    while(*args)
    {
-      print(*args);
-      print(" ");
+      printf(*args);
+      printf(" ");
       args++;
    }
-   print("\n");
+   printf("\n");
 }
 
 sh_builtin builtins[] = 
@@ -43,7 +48,7 @@ void hexdump(char c)
    buff[0] = hex[(uc>>4)];
    buff[1] = hex[(uc&0x0F)];
    buff[2] = 0;
-   print(buff);
+   printf(buff);
 }
 
 char *strtoke(char *input, char *delim)
@@ -100,9 +105,9 @@ int handle_builtins(char **cmd)
 void sh_program_runner(char **args)
 {
    execv(args[0],args);
-   print("failed to run program ");
-   print(args[0]);
-   print("\n");
+   printf("failed to run program ");
+   printf(args[0]);
+   printf("\n");
 }
 
 int run_program(char **cmd)
@@ -142,13 +147,13 @@ int main(int argc, char **argv)
    while(1)
    {
       cmdoffset = 0;
-      print("sh> ");
+      printf("sh> ");
       while(1)
       {
          readlen = read(0, &inchar, 1);
          if(readlen < 0)
          {
-            print("read error\n");
+            printf("read error\n");
             return 1;
          }
          else
