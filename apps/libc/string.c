@@ -33,12 +33,14 @@ void *memcpy (void *restrict dest, const void *restrict src, size_t len)
 
 char *stpcpy(char *restrict dst, const char *restrict src)
 {
-    char  *p;
-
-    p = mempcpy(dst, src, strlen(src));
-    *p = '\0';
-
-    return p;
+   char *dstp = dst;
+   const char *srcp = src;
+   while(*srcp != 0)
+   {
+      *dstp++ = *srcp++;
+   }
+   *dstp = 0;
+   return dstp;
 }
 
 char *strcpy(char *restrict dst, const char *restrict src)

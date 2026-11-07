@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 
 #include "libc.h"
@@ -7,7 +8,9 @@
 void sh_launcher(void *arg)
 {
    char *args[] = { "sh", 0 };
+   setenv("PATH","/sdcard/espos/bin/",1);
    execv("/sdcard/espos/bin/sh", args);
+   setenv("PATH","/internal/espos/bin",1);
    execv("/internal/espos/bin/sh", args);
    printf("sh not found\n");
 }

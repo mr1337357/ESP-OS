@@ -73,6 +73,7 @@ void *realloc(void *p, size_t size)
    {
       memcpy(newbuff,p,size);
    }
+   return newbuff;
 }
 
 void free(void *ptr)
