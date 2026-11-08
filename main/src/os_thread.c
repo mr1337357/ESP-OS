@@ -180,12 +180,13 @@ void os_threads_envp_copy(char ***new_envp, char **old_envp)
     {
         count++;
     }
-    temp_envp = os_psram_code_malloc(sizeof(char *)*count);
+    temp_envp = os_psram_code_malloc(sizeof(char *)*(count+1));
     for(i=0;i<count;i++)
     {
         temp_envp[i] = os_psram_code_malloc(strlen(old_envp[i])+1);
         strcpy(temp_envp[i],old_envp[i]);
     }
+    temp_envp[count] = 0;
     *new_envp = temp_envp;
 }
 

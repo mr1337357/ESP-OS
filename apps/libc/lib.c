@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "lib.h"
 
@@ -48,13 +49,37 @@ int execv(const char *path, char *const argv[])
    return execve(path, argv, __environ);
 }
 
+int execvpe(const char *file, char *const argv[], char *const envp[])
+{
+   char pathbuff[256];
+   char *path = getenv("PATH");
+   if(strchr(file,'/'))
+   {
+      return execvpe(file,argv,envp);
+   }
+   if(!path)
+   {
+      return -1;
+   }
+   strcpy(pathbuff,path);
+   strcat(pathbuff,"/");
+   strcat(pathbuff,file);
+   return execve(pathbuff,argv,envp);
+}
+
+int execvp(const char *file, char *const argv[])
+{
+   return execvpe(file, argv, __environ);
+}
+
+
 int waitpid(int pid, int *status, int options)
 {
    struct {int pid;  int *status; int options;} waitpidcall = {.pid = pid, .status = status, .options = options};
    return do_syscall(SYSCALL_WAITPID, &waitpidcall);
 }
 
-void *malloc(int size)
+void *malloc(size_t size)
 {
    void *retp;
    struct {void **retp; int size;} malloccall = {.retp = &retp, .size = size};

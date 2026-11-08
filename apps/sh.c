@@ -2,6 +2,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "libc.h"
 
@@ -32,10 +33,42 @@ int echo_handler(char **args)
    printf("\n");
 }
 
+extern char **__environ;
+int env_handler(char **args)
+{
+   int i;
+   char *var;
+   args++;
+   if(!__environ)
+   {
+      return 0;
+   }
+   if(args[0])
+   {
+      var = getenv(args[0]);
+      if(var)
+      {
+         printf(var);
+         printf("\n");
+      }
+   }
+   else
+   {
+      for(i=0;__environ[i];i++)
+      {
+         printf(__environ[i]);
+         printf("\n");
+      }
+   }
+   return 0;
+}
+
+
 sh_builtin builtins[] = 
 {
    "cd", cd_handler,
    "echo", echo_handler,
+   "env", env_handler,
 };
 
 #define NUM_BUILTINS (sizeof(builtins)/sizeof(builtins[0]))
@@ -104,7 +137,7 @@ int handle_builtins(char **cmd)
 
 void sh_program_runner(char **args)
 {
-   execv(args[0],args);
+   execvp(args[0],args);
    printf("failed to run program ");
    printf(args[0]);
    printf("\n");

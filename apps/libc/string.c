@@ -45,8 +45,14 @@ char *stpcpy(char *restrict dst, const char *restrict src)
 
 char *strcpy(char *restrict dst, const char *restrict src)
 {
-    stpcpy(dst, src);
-    return dst;
+   char *dstp = dst;
+   const char *srcp = src;
+   while(*srcp != 0)
+   {
+      *dstp++ = *srcp++;
+   }
+   *dstp = 0;
+   return dst;
 }
 
 char *strcat(char *restrict dst, const char *restrict src)

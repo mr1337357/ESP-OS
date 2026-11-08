@@ -7,37 +7,36 @@
 char **__environ;
 
 //returns the relevant entry in __environ
-char **ggetenv(const char *key)
+int ggetenv(const char *key)
 {
-   char **tempenv;
    char *varp;
    int len;
+   int index;
    if(!__environ)
    {
-      return 0;
+      return -1;
    }
    len = strlen(key);
-   //tempenv = __environ;
-   for(tempenv = __environ; *tempenv; tempenv++)
+   for(index = 0; __environ[index]; index++)
    {
-      if(!strncmp(*tempenv,key,len))
+      if(!strncmp(__environ[index],key,len))
       {
-         if(tempenv[0][len] == '=')
+         if(__environ[index][len] == '=')
          {
-            return tempenv;
+            return index;
          }
       }
    }
-   return 0;
+   return -1;
 }
 
 char *getenv (const char *__string)
 {
-   char **envp = ggetenv(__string);
    char *res;
-   if(envp && *envp)
+   int index = ggetenv(__string);
+   if(index >= 0)
    {
-      res = strchr(*envp,'=');
+      res = strchr(__environ[index],'=');
       if(res)
       {
          return res+1;
@@ -49,53 +48,40 @@ char *getenv (const char *__string)
 #define XSTR(a) STR(a)
 #define STR(a) #a
 
+//      printf("line " XSTR(__LINE__) "\n");
+
 int setenv(const char *name, const char *value, int overwrite)
 {
    char *newentry;
-   int numenv;
-   char **entry;
+   int index;
    if(!__environ)
    {
       __environ = malloc(sizeof(char *));
       __environ[0] = 0;
-      printf("line " XSTR(__LINE__) "\n");
    }
-   printf("line " XSTR(__LINE__) "\n");
-   entry = ggetenv(name);
-   if(entry)
+   index = ggetenv(name);
+   if(index >= 0)
    {
-      printf("line " XSTR(__LINE__) "\n");
+
       if(!overwrite)
       {
          return 0;
       }
-      free(*entry);
+      free(__environ[index]);
    }
    else
    {
-      printf("line " XSTR(__LINE__) "\n");
-      for(numenv=0;__environ[numenv];numenv++);
-      printf("line " XSTR(__LINE__) "\n");
-      __environ = realloc(__environ, sizeof(char *) * (numenv+2));
-      printf("line " XSTR(__LINE__) "\n");
-      entry = &__environ[numenv];
-      printf("line " XSTR(__LINE__) "\n");
-      __environ[numenv+1]=0;
-      printf("line " XSTR(__LINE__) "\n");
+      for(index = 0; __environ[index]; index++);
+
+      __environ = realloc(__environ, sizeof(char *) * (index+2));
+      __environ[index+1]=0;
    }
-   printf("line " XSTR(__LINE__) "\n");
    newentry = malloc(strlen(name)+strlen(value)+2);
-   printf("line " XSTR(__LINE__) "\n");
    newentry[0] = 0;
-   printf("line " XSTR(__LINE__) "\n");
-   printf("line " XSTR(__LINE__) "\n");
    strcpy(newentry,name);
-   printf("line " XSTR(__LINE__) "\n");
    strcat(newentry,"=");
-   printf("line " XSTR(__LINE__) "\n");
    strcat(newentry,value);
-   printf("line " XSTR(__LINE__) "\n");
-   *entry = newentry;
+   __environ[index] = newentry;
    return 0;
 }
 

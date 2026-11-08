@@ -100,7 +100,11 @@ int syscall_file_open(fileop *fop)
     }
     char *abspath = os_file_rel2abs(current->cwd,(char *)fop->buffer);
     current->filedes_list[fd] = os_file_open((char *)abspath,fop->fd);
-    return current->filedes_list[fd];
+    if(current->filedes_list[fd] < 0)
+    {
+        return -1;
+    }
+    return fd;
 }
 
 int syscall_file_close(fileop *fop)
@@ -122,7 +126,8 @@ int syscall_file_close(fileop *fop)
 
 int syscall_readdir(readdir_args *args)
 {
-    return os_file_readdir(args->fd, args->de);
+    os_thread *current = os_threads_get_current_thread();
+    return os_file_readdir(current->filedes_list[args->fd], args->de);
 }
 
 int syscall_clone(clone_args *args)
@@ -163,15 +168,15 @@ int syscall_chdir(char *args)
     {
         return -1;
     }
-    printf("chdir current %s request %s\n",current->cwd,args);
+    //printf("chdir current %s request %s\n",current->cwd,args);
     newpath = os_file_rel2abs(current->cwd, args);
-    printf("newpath %s\n",newpath);
+    //printf("newpath %s\n",newpath);
     if(newpath)
     {
         DIR *testdir = opendir(newpath);
         if(testdir == 0)
         {
-            printf("testfd failed\n");
+            //printf("testfd failed\n");
             return -1;
         }
         closedir(testdir);

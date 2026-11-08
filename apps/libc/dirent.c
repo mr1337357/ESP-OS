@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "lib.h"
 
@@ -33,7 +34,8 @@ struct dirent *readdir(DIR *dirp)
 {
     static struct dirent dmem;
     struct dir_internal *dp = (struct dir_internal *)dirp;
-    if(do_syscall(SYSCALL_READDIR,&dmem)==0)
+    struct { int fd; struct dirent *de; } readdircall = { .fd = dp->fd, .de = &dmem};
+    if(do_syscall(SYSCALL_READDIR,&readdircall)==0)
     {
         return &dmem;
     }
