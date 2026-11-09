@@ -13,3 +13,9 @@ char *getcwd(char *path, size_t len)
    do_syscall(SYSCALL_GETCWD, &getcwdcall);
    return path;
 }
+
+int dup2(int oldfd, int newfd)
+{
+   struct {int oldfd; int newfd;} dup2call = {.oldfd = oldfd, .newfd = newfd};
+   return do_syscall(SYSCALL_DUP2, &dup2call);
+}

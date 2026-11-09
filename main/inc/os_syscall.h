@@ -15,5 +15,6 @@ int syscall_handler(int syscall, void *args);
 #define SYSCALL_MALLOC 9
 #define SYSCALL_FREE 10
 #define SYSCALL_READDIR 11
+#define SYSCALL_DUP2 12
 
 #endif

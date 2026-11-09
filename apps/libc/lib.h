@@ -13,6 +13,7 @@
 #define SYSCALL_MALLOC 9
 #define SYSCALL_FREE 10
 #define SYSCALL_READDIR 11
+#define SYSCALL_DUP2 12
 
 extern int (*do_syscall)(int callnum, void *arg);
 

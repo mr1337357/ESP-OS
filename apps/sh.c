@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 #include "libc.h"
 
@@ -18,19 +19,14 @@ int cd_handler(char **args)
    {
       chdir(args[1]);
    }
-   //else implement environment variables and get home
-}
-
-int echo_handler(char **args)
-{
-   args++;
-   while(*args)
+   else
    {
-      printf(*args);
-      printf(" ");
-      args++;
+      char *home = getenv("HOME");
+      if(home)
+      {
+         chdir(home);
+      }
    }
-   printf("\n");
 }
 
 extern char **__environ;
@@ -67,7 +63,6 @@ int env_handler(char **args)
 sh_builtin builtins[] = 
 {
    "cd", cd_handler,
-   "echo", echo_handler,
    "env", env_handler,
 };
 
@@ -135,8 +130,33 @@ int handle_builtins(char **cmd)
    return 0;
 }
 
+char *redir_out;
+char *redir_in;
+
 void sh_program_runner(char **args)
 {
+   int outfd;
+   int infd;
+   if(redir_out)
+   {
+      outfd = open(redir_out,O_WRONLY|O_CREAT);
+      if(outfd < 0)
+      {
+         printf("couldn't open outfd\n");
+         return;
+      }
+      dup2(outfd,1);
+   }
+   if(redir_in)
+   {
+      infd = open(redir_in,O_RDONLY|O_CREAT);
+      if(infd < 0)
+      {
+         printf("couldn't open infd\n");
+         return;
+      }
+      dup2(infd,0);
+   }
    execvp(args[0],args);
    printf("failed to run program ");
    printf(args[0]);
@@ -145,7 +165,34 @@ void sh_program_runner(char **args)
 
 int run_program(char **cmd)
 {
-   int pid = thread_create(sh_program_runner,cmd);
+   int i;
+   int pid;
+   redir_out = 0;
+   redir_in = 0;
+   for(i=0;cmd[i];i++)
+   {
+      if(!strcmp(cmd[i],">"))
+      {
+         cmd[i] = 0;
+         i++;
+         if(!cmd[i])
+         {
+            return -1;
+         }
+         redir_out = cmd[i];
+      }
+      if(!strcmp(cmd[i],"<"))
+      {
+         cmd[i] = 0;
+         i++;
+         if(!cmd[i])
+         {
+            return -1;
+         }
+         redir_in = cmd[i];
+      }
+   }
+   pid = thread_create(sh_program_runner,cmd);
    waitpid(pid,0,0);
    return 0;
 }

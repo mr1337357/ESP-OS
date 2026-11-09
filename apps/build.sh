@@ -22,7 +22,10 @@ ${CC} ${CFLAGS} pwd.c -o pwd libc/esplibc.a
 ${CC} ${CFLAGS} init.c -o init libc/esplibc.a
 ${CC} ${CFLAGS} sh.c -o sh libc/esplibc.a
 ${CC} ${CFLAGS} ls.c -o ls libc/esplibc.a
+${CC} ${CFLAGS} cat.c -o cat libc/esplibc.a
+${CC} ${CFLAGS} echo.c -o echo libc/esplibc.a
 
 #${OBJDUMP} -x -r -R -s -S sh > sh.dis
 
+echo done
 read

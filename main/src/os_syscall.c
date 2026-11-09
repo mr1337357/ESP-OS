@@ -55,6 +55,12 @@ typedef struct
     struct dirent *de;
 } readdir_args;
 
+typedef struct
+{
+    int oldfd;
+    int newfd;
+} dup2_args;
+
 int syscall_file_read(fileop *fop)
 {
     os_thread *current = os_threads_get_current_thread();
@@ -205,6 +211,37 @@ int syscall_free(void *ptr)
     return 0;
 }
 
+int syscall_dup2(dup2_args *args)
+{
+    os_thread *current = os_threads_get_current_thread();
+    if(args->oldfd < 0 || args->oldfd >= 10)
+    {
+        return -1;
+    }
+    if(args->newfd >= 10)
+    {
+        return -1;
+    }
+    if(args->newfd < 0)
+    {
+        for(args->newfd = 0; args->newfd < 10; args->newfd++)
+        {
+            if(current->filedes_list[args->newfd] < 0)
+            {
+                break;
+            }
+        }
+        if(args->newfd == 10)
+        {
+            return -1;
+        }
+    }
+    os_file_close(current->filedes_list[args->newfd]);
+    os_file_claim(current->filedes_list[args->oldfd]);
+    current->filedes_list[args->newfd] = current->filedes_list[args->oldfd];
+    return args->newfd;
+}
+
 
 int syscall_handler(int syscall, void *args)
 {
@@ -247,7 +284,9 @@ int syscall_handler(int syscall, void *args)
         case SYSCALL_READDIR:
             return syscall_readdir(args);
             break;
-
+        case SYSCALL_DUP2:
+            return syscall_dup2(args);
+            break;
     }
     return 0;
 }

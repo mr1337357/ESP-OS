@@ -73,7 +73,12 @@ int os_file_open(char *filename, int mode)
     {
         return -1;
     }
-    files[fd].fd = open(filename,mode);
+    if(mode & 0x200)
+    {
+        mode &= ~0x200;
+        mode |= O_CREAT;
+    }
+    files[fd].fd = open(filename, mode, 0777);
     files[fd].flags = 0;
     if(files[fd].fd < 0)
     {
@@ -212,7 +217,6 @@ int os_file_write(int fd, void *buffer, int len)
 int os_file_readdir(int fd, struct dirent *dent)
 {
     struct dirent *d2;
-    int rv;
     if(fd < 0 || fd >= OS_MAX_FILES)
     {
         return -1;
