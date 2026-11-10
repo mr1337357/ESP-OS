@@ -1,0 +1,1 @@
+void os_devfs_init(char *where);

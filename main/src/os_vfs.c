@@ -7,6 +7,7 @@
 #include "sdkconfig.h"
 
 #include "os_vfs.h"
+#include "os_devfs.h"
 
 static wl_handle_t s_wl_handle = WL_INVALID_HANDLE;
 
@@ -57,4 +58,5 @@ void os_vfs_init()
         printf("mounted sdcard\n");
     }
 #endif
+    os_devfs_init("/dev");
 }

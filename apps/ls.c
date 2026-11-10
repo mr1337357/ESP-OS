@@ -13,6 +13,10 @@ int main(int argc, char **argv)
     for(d = readdir(here); d; d = readdir(here))
     {
         printf(d->d_name);
+        if(d->d_type & DT_DIR)
+        {
+            printf("/");
+        }
         printf("\n");
     }
     return 0;

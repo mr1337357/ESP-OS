@@ -1,4 +1,8 @@
 menu "Board Specific Stuff"
+    config NUM_GPIO
+        int "number of gpio pins"
+        default 20
+        
     config NUM_I2C
         int "Number of I2C controllers accessible to the OS"
         default 1
