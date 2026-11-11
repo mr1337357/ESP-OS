@@ -33,7 +33,7 @@ extern char **__environ;
 int env_handler(char **args)
 {
    int i;
-   char *var;
+   char *value;
    args++;
    if(!__environ)
    {
@@ -41,11 +41,14 @@ int env_handler(char **args)
    }
    if(args[0])
    {
-      var = getenv(args[0]);
-      if(var)
+      if(args[1])
       {
-         printf(var);
-         printf("\n");
+         setenv(args[0],args[1],1);
+      }
+      value = getenv(args[0]);
+      if(value)
+      {
+         printf("%s = %s\n",args[0],value);
       }
    }
    else
@@ -59,25 +62,20 @@ int env_handler(char **args)
    return 0;
 }
 
+int exit_handler(char **args)
+{
+   //todo (no system call for this yet)
+   //exit(0);
+}
 
 sh_builtin builtins[] = 
 {
    "cd", cd_handler,
    "env", env_handler,
+   "exit", exit_handler,
 };
 
 #define NUM_BUILTINS (sizeof(builtins)/sizeof(builtins[0]))
-
-void hexdump(char c)
-{
-   char buff[3];
-   char *hex = "0123456789ABCDEF";
-   unsigned char uc = (unsigned char)c;
-   buff[0] = hex[(uc>>4)];
-   buff[1] = hex[(uc&0x0F)];
-   buff[2] = 0;
-   printf(buff);
-}
 
 char *strtoke(char *input, char *delim)
 {
@@ -142,7 +140,7 @@ void sh_program_runner(char **args)
       outfd = open(redir_out,O_WRONLY|O_CREAT);
       if(outfd < 0)
       {
-         printf("couldn't open outfd\n");
+         printf("could not open %s\n",redir_out);
          return;
       }
       dup2(outfd,1);
@@ -152,14 +150,13 @@ void sh_program_runner(char **args)
       infd = open(redir_in,O_RDONLY|O_CREAT);
       if(infd < 0)
       {
-         printf("couldn't open infd\n");
+         printf("could not open %s\n",redir_out);
          return;
       }
       dup2(infd,0);
    }
    execvp(args[0],args);
-   printf("failed to run program ");
-   printf(args[0]);
+   printf("failed to run program %s",args[0]);
    printf("\n");
 }
 

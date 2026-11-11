@@ -6,7 +6,12 @@
 
 #include "lib.h"
 
+struct _reent _re;
 
+struct _reent *__getreent()
+{
+   return &_re;
+}
 
 struct exec_args
 {
@@ -21,6 +26,8 @@ int (*do_syscall)(int callnum, void *arg);
 
 void main(int argc, char **argv);
 
+void stdio_init();
+
 void _start(struct exec_args *startargs)//void *syscall_handle, int argc, char **argv)
 {
    do_syscall = startargs->syscall;
@@ -28,6 +35,7 @@ void _start(struct exec_args *startargs)//void *syscall_handle, int argc, char *
    //do_syscall = syscall_handle;
    //do_syscall(0, &eventcall);
    __environ = startargs->envp;
+   stdio_init();
    main(startargs->argc,startargs->argv);
 }
 
