@@ -3,10 +3,12 @@
 #include "esp_vfs.h"
 #include "driver/gpio.h"
 
-#define HANDLE_IS_BASE 0
+#define CONFIG_NUM_GPIOCHIP ((CONFIG_NUM_GPIO+31)>>5)
+
+#define HANDLE_IS_NONE 0
 #define HANDLE_IS_GPIO 1
-#define HANDLE_IS_SPI  2
-#define HANDLE_IS_I2C  3
+#define HANDLE_IS_I2C  2
+#define HANDLE_IS_SPI  3
 
 #define NUM_BASEDIRS 3
 
@@ -33,34 +35,6 @@ typedef struct
     int index;
 }   expanded_dirp;
 
-int path_is_valid(const char *path)
-{
-    char temp_path[256];
-    int i;
-    char *slash;
-    strcpy(temp_path,path);
-    slash = strrchr(temp_path,'/');
-    if(slash && slash != temp_path)
-    {
-        slash[0] = 0;
-    }
-    if(!strcmp(temp_path,"/"))
-    {
-        return 0;
-    }
-    if(temp_path[0] == '/')
-    {
-        for(i=0;i<NUM_BASEDIRS;i++)
-        {
-            if(!strcmp(&temp_path[1],basedirs[i]))
-            {
-                return i+1;
-            }
-        }
-    }
-    return -1;
-}
-
 int os_devfs_fd_nextcontext()
 {
     int i;
@@ -78,18 +52,9 @@ int os_devfs_gpio_open(const char *name, int flags, int mode)
 {
     int gpionum = 0;
     int fd;
-    char *filename = strrchr(name,'/');
-    if(!filename || filename == name)
-    {
-        return -1;
-    }
-    filename++;
-    if(strncmp(filename,"gpio",4))
-    {
-        return -1;
-    }
-    sscanf(&filename[4],"%d",&gpionum);
-    if(gpionum < 0 || gpionum >= CONFIG_NUM_GPIO)
+
+    sscanf(&name[9],"%d",&gpionum);
+    if(gpionum < 0 || gpionum >= CONFIG_NUM_GPIOCHIP)
     {
         return -1;
     }
@@ -189,22 +154,12 @@ ssize_t os_devfs_read(void* ctx, int fd, void * dst, size_t size)
 int os_devfs_open(void* ctx, const char * path, int flags, int mode)
 {
     int fd = -1;
-    int flag;
-    flag = path_is_valid(path);
-    switch(flag)
+
+    if(!strncmp(path,"/gpiochip",strlen("/gpiochip")))
     {
-        case HANDLE_IS_BASE:
-            break;
-        case HANDLE_IS_GPIO:
-            fd = os_devfs_gpio_open(path, flags, mode);
-            break;
-        case HANDLE_IS_SPI:
-            fd = -1;
-            break;
-        case HANDLE_IS_I2C:
-            fd = -1;
-            break;
+        fd = os_devfs_gpio_open(path, flags, mode);
     }
+    
     return fd;
 }
 
@@ -220,70 +175,18 @@ int os_devfs_close(void* ctx, int fd)
 
 DIR *os_devfs_opendir(void* ctx, const char* name)
 {
-    int flag;
     expanded_dirp *pdir;
     char *filename;
-    flag = path_is_valid(name);
-    if(flag < 0)
-    {
-        return 0;
-    }
-    filename = strrchr(name,'/');
-    if(filename && filename != name)
+    if(strcmp(name,"/"))
     {
         return 0;
     }
     pdir = malloc(sizeof(expanded_dirp));
     pdir->index = 0;
-    pdir->flags = flag;
+    pdir->flags = HANDLE_IS_GPIO;
     return (DIR *)pdir;
 }
 
-int os_devfs_readdir_base(struct dirent *de, expanded_dirp *pdir)
-{
-    if(pdir->index < 0 || pdir->index >= NUM_BASEDIRS)
-    {
-        return 0;
-    }
-    de->d_ino = 0;
-    de->d_type = DT_DIR;
-    strcpy(de->d_name, basedirs[pdir->index]);
-    pdir->index++;
-    return 1;
-}
-
-int os_devfs_readdir_gpio(struct dirent *de, expanded_dirp *pdir)
-{
-    if(pdir->index < 0 || pdir->index >= CONFIG_NUM_GPIO)
-    {
-        return 0;
-    }
-    de->d_ino = 0;
-    de->d_type = DT_REG;
-    sprintf(de->d_name,"gpio%d",pdir->index);
-    pdir->index++;
-    return 1;
-}
-
-int os_devfs_readdir_spi(struct dirent *de, expanded_dirp *pdir)
-{
-    if(pdir->index < 0 || pdir->index >= (CONFIG_SPI_0_NUMCS + CONFIG_SPI_1_NUMCS))
-    {
-        return 0;
-    }
-    de->d_ino = 0;
-    de->d_type = DT_REG;
-    if(pdir->index < CONFIG_SPI_0_NUMCS)
-    {
-        sprintf(de->d_name,"spi0.%d",pdir->index);
-    }
-    else
-    {
-        sprintf(de->d_name,"spi1.%d",pdir->index-CONFIG_SPI_0_NUMCS);
-    }
-    pdir->index++;
-    return 1;
-}
 
 struct dirent *os_devfs_readdir(void *ctx, DIR *pdir)
 {
@@ -291,20 +194,57 @@ struct dirent *os_devfs_readdir(void *ctx, DIR *pdir)
     expanded_dirp *epdir;
     static struct dirent dent;
     epdir = (expanded_dirp *)pdir;
-    switch(epdir->flags)
+
+    dent.d_ino = 0;
+    dent.d_type = DT_REG;
+    if(epdir->flags == HANDLE_IS_GPIO)
     {
-        case HANDLE_IS_BASE:
-            rv = os_devfs_readdir_base(&dent,epdir);
-            break;
-        case HANDLE_IS_GPIO:
-            rv = os_devfs_readdir_gpio(&dent,epdir);
-            break;
-        case HANDLE_IS_SPI:
-            rv = os_devfs_readdir_spi(&dent,epdir);
-            break;
-        case HANDLE_IS_I2C:
-            rv = 0;
-            break;
+        if(epdir->index >= CONFIG_NUM_GPIOCHIP)
+        {
+            epdir->index = 0;
+            epdir->flags = HANDLE_IS_I2C;
+        }
+        else
+        {
+            sprintf(dent.d_name,"gpiochip%d",epdir->index);
+            epdir->index++;
+            rv = 1;
+        }
+    }
+    if(epdir->flags == HANDLE_IS_I2C)
+    {
+        if(epdir->index == CONFIG_NUM_I2C)
+        {
+            epdir->index = 0;
+            epdir->flags = HANDLE_IS_SPI;
+        }
+        else
+        {
+            sprintf(dent.d_name,"i2c-%d",epdir->index);
+            epdir->index++;
+            rv = 1;
+        }
+    }
+    if(epdir->flags == HANDLE_IS_SPI)
+    {
+        if(epdir->index == CONFIG_SPI_0_NUMCS + CONFIG_SPI_1_NUMCS)
+        {
+            epdir->index = 0;
+            epdir->flags = HANDLE_IS_NONE;
+        }
+        else
+        {
+            if(epdir->index < CONFIG_SPI_0_NUMCS)
+            {
+                sprintf(dent.d_name,"spidev0.%d",epdir->index);
+            }
+            else
+            {
+                sprintf(dent.d_name,"spidev1.%d",epdir->index-CONFIG_SPI_0_NUMCS);
+            }
+            epdir->index++;
+            rv = 1;
+        }
     }
     if(rv > 0)
     {
