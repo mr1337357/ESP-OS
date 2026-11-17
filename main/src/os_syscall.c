@@ -61,6 +61,13 @@ typedef struct
     int newfd;
 } dup2_args;
 
+typedef struct
+{
+    int fd;
+    int cmd;
+    va_list args;
+} ioctl_args;
+
 int syscall_file_read(fileop *fop)
 {
     os_thread *current = os_threads_get_current_thread();
@@ -242,6 +249,19 @@ int syscall_dup2(dup2_args *args)
     return args->newfd;
 }
 
+int syscall_ioctl(ioctl_args *args)
+{
+    os_thread *current = os_threads_get_current_thread();
+    if(args->fd < 0 || args->fd >= 10)
+    {
+        return -1;
+    }
+    if(current->filedes_list[args->fd] < 0)
+    {
+        return -1;
+    }
+    return os_file_ioctl(current->filedes_list[args->fd],args->cmd,args->args);
+}
 
 int syscall_handler(int syscall, void *args)
 {
@@ -286,6 +306,9 @@ int syscall_handler(int syscall, void *args)
             break;
         case SYSCALL_DUP2:
             return syscall_dup2(args);
+            break;
+        case SYSCALL_IOCTL:
+            return syscall_ioctl(args);
             break;
     }
     return 0;

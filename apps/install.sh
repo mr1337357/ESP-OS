@@ -5,3 +5,4 @@ cp pwd ../FATFS/espos/bin/
 cp ls ../FATFS/espos/bin/
 cp cat ../FATFS/espos/bin/
 cp echo ../FATFS/espos/bin/
+cp gpio ../FATFS/espos/bin/

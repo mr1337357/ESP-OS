@@ -27,6 +27,7 @@ int cd_handler(char **args)
          chdir(home);
       }
    }
+   return 0;
 }
 
 extern char **__environ;
@@ -66,13 +67,14 @@ int exit_handler(char **args)
 {
    //todo (no system call for this yet)
    //exit(0);
+   return 1;
 }
 
 sh_builtin builtins[] = 
 {
-   "cd", cd_handler,
-   "env", env_handler,
-   "exit", exit_handler,
+   {"cd", cd_handler,},
+   {"env", env_handler,},
+   {"exit", exit_handler,},
 };
 
 #define NUM_BUILTINS (sizeof(builtins)/sizeof(builtins[0]))
@@ -199,7 +201,6 @@ void handle_command(char *cmd)
    char *temp;
    int numtokens = 0;
    char *tokens[10];
-   int i;
    for(temp = strtoke(cmd," "); temp; temp = strtoke(0," "))
    {
       if(numtokens >= 9)
@@ -244,7 +245,13 @@ int main(int argc, char **argv)
             }
             else
             {
-               if(cmdoffset < 80)
+               if(cmdoffset > 0 && inchar == '\b')
+               {
+                  cmd[--cmdoffset] = 0;
+                  write(1," ",1);
+                  write(1,"\b",1);
+               }
+               else if(cmdoffset < 80)
                {
                   cmd[cmdoffset] = inchar;
                   cmdoffset++;

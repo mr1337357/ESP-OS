@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include "lib.h"
 
@@ -118,4 +119,15 @@ __attribute((weak)) void event_handler(int event, void *arg)
 {
    (void) event;
    (void) arg;
+}
+
+int ioctl(int fd, int op, ...)
+{
+   int rv;
+   va_list vp;
+   va_start(vp, op);
+   struct { int fd; int op; va_list args; } ioctlcall = { .fd = fd, .op = op, .args = vp };
+   rv = do_syscall(SYSCALL_IOCTL,&ioctlcall);
+   va_end(vp);
+   return rv;
 }

@@ -116,3 +116,16 @@ void os_hal_spi_init()
     spi_is_init = true;
 }
 
+void os_hal_i2c_init()
+{
+    static bool i2c_is_init = false;
+    if(i2c_is_init)
+    {
+        return;
+    }
+#if CONFIG_NUM_I2C == 0
+    return;
+#elif CONFIG_NUM_I2C >= 1
+
+#endif
+}

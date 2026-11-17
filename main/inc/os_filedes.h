@@ -20,6 +20,8 @@ int os_file_write(int fd, void *buffer, int len);
 
 int os_file_readdir(int fd, struct dirent *dent);
 
+int os_file_ioctl(int fd, int cmd, va_list args);
+
 char *os_file_rel2abs(const char *base, char *filename);
 
 #endif

@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
+#include <sys/ioctl.h>
 
 #define OS_MAX_FILES 20
 
@@ -236,6 +238,23 @@ int os_file_readdir(int fd, struct dirent *dent)
     }
     memcpy(dent,d2,sizeof(struct dirent));
     return 0;
+}
+
+int os_file_ioctl(int fd, int cmd, va_list args)
+{
+    if(fd < 0 || fd >= OS_MAX_FILES)
+    {
+        return -1;
+    }
+    if(files[fd].opencount < 1)
+    {
+        return -1;
+    }
+    if(files[fd].flags & OS_FILE_ISDIR)
+    {
+        return -1;
+    }
+    return ioctl(files[fd].fd,cmd,va_arg(args,void *));
 }
 
 char *os_file_rel2abs(const char *base, char *filename)

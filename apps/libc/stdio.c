@@ -174,13 +174,26 @@ int vsprintf(char *restrict str, const char *restrict format, va_list ap)
                 case 's':
                     append_str(va_arg(ap,char *),&outp);
                     break;
+                case 'c':
+                    *outp++ = va_arg(ap,int);
+                    break;
             }
         }
     }
     *outp = 0;
+    return outp - str;
 }
 
-int	printf (const char *__restrict format, ...)
+int	sprintf(char *str, const char *format, ...)
+{
+    va_list args;
+    va_start(args,format);
+    vsprintf(str,format,args);
+    va_end(args);
+    return strlen(format);
+}
+
+int	printf(const char *__restrict format, ...)
 {
     char buffer[1024];
     va_list args;
