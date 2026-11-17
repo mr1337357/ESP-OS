@@ -6,8 +6,8 @@
 #define IOC_OUT         0x40000000UL    /* copy out parameters */
 #define IOC_IN          0x80000000UL    /* copy in parameters */
 #define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
+/* 0x20000000 distinguishes new &
+   old ioctl's */
 #define _IO(x,y)        ((long)(IOC_VOID|((x)<<8)|(y)))
 #define _IOR(x,y,t)     ((long)(IOC_OUT|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
 #define _IOW(x,y,t)     ((long)(IOC_IN|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
@@ -56,7 +56,7 @@ typedef struct
     {
         gpio_info ginfo;
     };
-    
+
 } fd_ctx;
 
 fd_ctx fd_context[20];
@@ -186,6 +186,12 @@ int os_devfs_gpio_open(const char *name, int flags, int mode)
     return fd;
 }
 
+int os_devfs_spi_open(const char *path, int flags, int mode)
+{
+
+    return 0;
+}
+
 int os_devfs_open(void* ctx, const char * path, int flags, int mode)
 {
     int fd = -1;
@@ -193,7 +199,7 @@ int os_devfs_open(void* ctx, const char * path, int flags, int mode)
     {
         fd = os_devfs_gpio_open(path, flags, mode);
     }
-    
+
     return fd;
 }
 
@@ -349,7 +355,7 @@ int os_devfs_gpio_ioctl(int fd, int cmd, va_list args)
         default:
             return -1;
             break;
-        
+
     }
     return 0;
 }
@@ -375,7 +381,7 @@ int os_devfs_ioctl(void* ctx, int fd, int cmd, va_list args)
 }
 
 static esp_err_t os_devfs_start_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
-                                   esp_vfs_select_sem_t select_sem, void **end_select_args)
+        esp_vfs_select_sem_t select_sem, void **end_select_args)
 {
     int i;
     for(i=0;i<nfds;i++)

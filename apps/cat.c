@@ -20,7 +20,7 @@ int main(int argc, char **argv)
         printf("could not open file\n");
         return 1;
     }
-    
+
     while((readlen = read(fd,&buffer,128))>0)
     {
         write(1,&buffer,readlen);

@@ -92,11 +92,11 @@ void _os_threads_launcher(void *arg)
     //mytask = threads[pid].task;
     for(fd = 0; fd < 10; fd++)
     {
-      if(threads[pid].filedes_list[fd] >= 0)
-      {
-         os_file_close(threads[pid].filedes_list[fd]);
-      }
-      threads[pid].filedes_list[fd] = -1;
+        if(threads[pid].filedes_list[fd] >= 0)
+        {
+            os_file_close(threads[pid].filedes_list[fd]);
+        }
+        threads[pid].filedes_list[fd] = -1;
     }  
     os_psram_thread_free(pid);
     threads[pid].task = 0;
@@ -212,7 +212,7 @@ void os_threads_exec(char *filename, int argc, char **argv, char **envp)
     os_threads_argv_copy(argc,argv,&args->argv);
     os_threads_envp_copy(&args->envp, envp);
     thrd->arg = args;
-    
+
     //unload memory
     os_psram_thread_free(pid);
     threads[pid].heap = threads[pid].code;

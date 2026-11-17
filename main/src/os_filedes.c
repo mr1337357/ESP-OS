@@ -62,7 +62,7 @@ int os_file_adopt(FILE *adopted)
 
 int os_file_open(char *filename, int mode)
 {
-    
+
     int fd;
     for(fd=0;fd<OS_MAX_FILES;fd++)
     {

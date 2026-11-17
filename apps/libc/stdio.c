@@ -11,9 +11,9 @@ FILE _stderr = { ._file = 2 };
 
 void stdio_init()
 {
-stdin = &_stdin;
-stdout = &_stdout;
-stderr = &_stderr;
+    stdin = &_stdin;
+    stdout = &_stdout;
+    stderr = &_stderr;
 
 }
 

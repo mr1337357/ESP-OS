@@ -12,22 +12,22 @@
 
 typedef struct
 {
-  int fd;
-  int len;
-  uint8_t *buffer;
+    int fd;
+    int len;
+    uint8_t *buffer;
 } fileop;
 
 typedef struct 
 {
-   void *entry;
-   void *threadarg;
+    void *entry;
+    void *threadarg;
 } clone_args;
 
 typedef struct
 {
-   char *fname;
-   char **argv;
-   char **env;
+    char *fname;
+    char **argv;
+    char **env;
 } exec_args; //lol we just un-consted their memory
 
 typedef struct
@@ -145,21 +145,21 @@ int syscall_readdir(readdir_args *args)
 
 int syscall_clone(clone_args *args)
 {
-   return os_threads_create(args->entry,args->threadarg);
+    return os_threads_create(args->entry,args->threadarg);
 }
 
 int syscall_exec(exec_args *args)
 {
-   int argc;
-   if(args == 0 || args->argv == 0)
-   {
-      return -1;
-   }
-   for(argc = 0; args->argv[argc] != 0; argc++)
-   {
-   }
-   os_threads_exec(args->fname, argc, args->argv, args->env);
-   return -1;
+    int argc;
+    if(args == 0 || args->argv == 0)
+    {
+        return -1;
+    }
+    for(argc = 0; args->argv[argc] != 0; argc++)
+    {
+    }
+    os_threads_exec(args->fname, argc, args->argv, args->env);
+    return -1;
 }
 
 int syscall_waitpid(waitpid_args *args)

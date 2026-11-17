@@ -19,7 +19,7 @@ void list_dir(char *dirname, int indent)
     {
         if(indent == 0)
         {
-          printf("not a dir %s\n",dirname);
+            printf("not a dir %s\n",dirname);
         }
         return;
     }
