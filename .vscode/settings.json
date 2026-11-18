@@ -17,5 +17,8 @@
   ],
   "idf.flashType": "UART",
   "idf.port": "/dev/ttyACM1",
-  "C_Cpp.errorSquiggles": "disabled"
+  "C_Cpp.errorSquiggles": "disabled",
+  "files.associations": {
+    "ioctl.h": "c"
+  }
 }

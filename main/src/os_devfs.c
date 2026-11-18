@@ -1,6 +1,20 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 
+struct i2c_msg
+{
+    uint16_t addr;
+    uint16_t flags;
+    uint16_t len;
+    uint8_t *buf;
+};
+
+struct i2c_rdwr_ioctl_data
+{
+	struct i2c_msg *msgs;	/* pointers to i2c_msgs */
+	int nmsgs;			/* number of i2c_msgs */
+};
+
 #define IOCPARM_MASK    0x7fUL          /* parameters must be < 128 bytes */
 #define IOC_VOID        0x20000000UL    /* no parameters */
 #define IOC_OUT         0x40000000UL    /* copy out parameters */
@@ -11,6 +25,7 @@
 #define _IO(x,y)        ((long)(IOC_VOID|((x)<<8)|(y)))
 #define _IOR(x,y,t)     ((long)(IOC_OUT|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
 #define _IOW(x,y,t)     ((long)(IOC_IN|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
+#define _IOWR(x,y,t)    ((long)(IOC_INOUT((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
 
 #define GPIO_IOCTL 'g'
 
@@ -19,6 +34,10 @@
 #define GPIO_IOCTL_SET_PUPD _IOW(GPIO_IOCTL, 3, unsigned int)
 #define GPIO_IOCTL_GET_PUPD _IOR(GPIO_IOCTL, 4, unsigned int)
 #define GPIO_IOCTL_EDGEMODE _IOW(GPIO_IOCTL, 5, unsigned int)
+
+#define I2C_IOCTL 'i'
+#define I2C_IOCTL_SET_SLAVE _IOW(I2C_IOCTL, 1, unsigned int)
+#define I2C_IOCTL_RDWR      _IOWR(I2C_IOCTL, 2, struct i2c_rdwr_ioctl_data)
 
 #include "esp_vfs.h"
 #include "driver/gpio.h"
@@ -30,22 +49,23 @@
 #define HANDLE_IS_I2C  2
 #define HANDLE_IS_SPI  3
 
-#define NUM_BASEDIRS 3
-
-
-
-char *basedirs[NUM_BASEDIRS] = 
-{
-    "gpio",
-    "spi",
-    "i2c",
-};
-
 typedef struct
 {
     int edgeMode;
     SemaphoreHandle_t mtx;
 } gpio_info;
+
+typedef struct
+{
+    char spimode;
+    uint32_t khz;
+} spi_info;
+
+typedef struct
+{
+    uint16_t address;
+} i2c_info;
+
 
 typedef struct 
 {
@@ -55,6 +75,8 @@ typedef struct
     union 
     {
         gpio_info ginfo;
+        spi_info sinfo;
+        i2c_info iinfo;
     };
 
 } fd_ctx;
@@ -161,6 +183,9 @@ ssize_t os_devfs_read(void* ctx, int fd, void * dst, size_t size)
         case HANDLE_IS_GPIO:
             return os_devfs_gpio_read(fd, dst, size);
             break;
+        case HANDLE_IS_I2C:
+            //return os_devfs_i2c_read(fd, dst, size);
+            break;
     }
     return 0;
 }
@@ -220,6 +245,23 @@ int os_devfs_spi_open(const char *path, int flags, int mode)
     return fd;
 }
 
+int os_devfs_i2c_open(const char *path, int flags, int mode)
+{
+    int fd;
+    int device;
+    sscanf(&path[5],"%d",&device);
+    if(device < 0 || device >= CONFIG_NUM_I2C)
+    {
+        return -1;
+    }
+    fd = os_devfs_fd_nextcontext();
+    fd_context[fd].inuse = 1;
+    fd_context[fd].index = device;
+    fd_context[fd].type = HANDLE_IS_I2C;
+    fd_context[fd].iinfo.address = 0;
+    return fd;
+}
+
 int os_devfs_open(void* ctx, const char * path, int flags, int mode)
 {
     int fd = -1;
@@ -230,6 +272,10 @@ int os_devfs_open(void* ctx, const char * path, int flags, int mode)
     if(!strncmp(path,"/spidev",strlen("/spidev")))
     {
         fd = os_devfs_spi_open(path, flags, mode);
+    }
+    if(!strncmp(path,"/i2c-",strlen("/i2c-")))
+    {
+        fd = os_devfs_i2c_open(path, flags, mode);
     }
     return fd;
 }
@@ -350,14 +396,6 @@ void gpio_isr_handler(void* arg)
 int os_devfs_gpio_ioctl(int fd, int cmd, va_list args)
 {
     unsigned int *arg;
-    if(fd < 0 || fd >= 20)
-    {
-        return -1;
-    }
-    if(fd_context[fd].inuse == 0)
-    {
-        return -1;
-    }
     arg = va_arg(args, unsigned int *);
     switch(cmd)
     {
@@ -391,6 +429,29 @@ int os_devfs_gpio_ioctl(int fd, int cmd, va_list args)
     return 0;
 }
 
+int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
+{
+    int i;
+    struct i2c_rdwr_ioctl_data *data;
+    unsigned int *arg;
+    switch(cmd)
+    {
+        case I2C_IOCTL_SET_SLAVE:
+            arg = va_arg(args, unsigned int *);
+            fd_context[fd].iinfo.address = *arg;
+            break;
+        case I2C_IOCTL_RDWR:
+            data = va_arg(args, struct i2c_rdwr_ioctl_data *);
+            for(i=0;i<data->nmsgs;i++)
+            {
+                //i2c transact data->msgs
+                
+            }
+            break;
+    }
+
+}
+
 int os_devfs_ioctl(void* ctx, int fd, int cmd, va_list args)
 {
     if(fd < 0 || fd >= 20)
@@ -405,6 +466,9 @@ int os_devfs_ioctl(void* ctx, int fd, int cmd, va_list args)
     {
         case HANDLE_IS_GPIO:
             return os_devfs_gpio_ioctl(fd, cmd, args);
+            break;
+        case HANDLE_IS_I2C:
+            return os_devfs_i2c_ioctl(fd, cmd, args);
             break;
     }
     return 0;
