@@ -15,29 +15,29 @@ struct i2c_rdwr_ioctl_data
 	int nmsgs;			/* number of i2c_msgs */
 };
 
-#define IOCPARM_MASK    0x7fUL          /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000UL    /* no parameters */
-#define IOC_OUT         0x40000000UL    /* copy out parameters */
-#define IOC_IN          0x80000000UL    /* copy in parameters */
-#define IOC_INOUT       (IOC_IN|IOC_OUT)
-/* 0x20000000 distinguishes new &
-   old ioctl's */
-#define _IO(x,y)        ((long)(IOC_VOID|((x)<<8)|(y)))
-#define _IOR(x,y,t)     ((long)(IOC_OUT|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
-#define _IOW(x,y,t)     ((long)(IOC_IN|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
-#define _IOWR(x,y,t)    ((long)(IOC_INOUT((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
+
+#define _IOCTL(x,y) (long)((x<<8)|(y<<0))
 
 #define GPIO_IOCTL 'g'
 
-#define GPIO_IOCTL_SET_MODE _IOW(GPIO_IOCTL, 1, unsigned int)
-#define GPIO_IOCTL_GET_MODE _IOR(GPIO_IOCTL, 2, unsigned int)
-#define GPIO_IOCTL_SET_PUPD _IOW(GPIO_IOCTL, 3, unsigned int)
-#define GPIO_IOCTL_GET_PUPD _IOR(GPIO_IOCTL, 4, unsigned int)
-#define GPIO_IOCTL_EDGEMODE _IOW(GPIO_IOCTL, 5, unsigned int)
+#define GPIO_IOCTL_SET_MODE _IOCTL(GPIO_IOCTL,1)
+#define GPIO_IOCTL_GET_MODE _IOCTL(GPIO_IOCTL,2)
+#define GPIO_IOCTL_SET_PUPD _IOCTL(GPIO_IOCTL,3)
+#define GPIO_IOCTL_GET_PUPD _IOCTL(GPIO_IOCTL,4)
+#define GPIO_IOCTL_EDGEMODE _IOCTL(GPIO_IOCTL,5)
 
 #define I2C_IOCTL 'i'
-#define I2C_IOCTL_SET_SLAVE _IOW(I2C_IOCTL, 1, unsigned int)
-#define I2C_IOCTL_RDWR      _IOWR(I2C_IOCTL, 2, struct i2c_rdwr_ioctl_data)
+#define I2C_IOCTL_SET_SLAVE _IOCTL(I2C_IOCTL,1)
+#define I2C_IOCTL_RDWR      _IOCTL(I2C_IOCTL,2)
+
+#define I2C_M_TEN       0x0010  /* this is a ten bit chip address */
+#define I2C_M_RD        0x0001  /* read data, from slave to master */
+#define I2C_M_STOP      0x8000  /* if I2C_FUNC_PROTOCOL_MANGLING */
+#define I2C_M_NOSTART       0x4000  /* if I2C_FUNC_NOSTART */
+#define I2C_M_REV_DIR_ADDR  0x2000  /* if I2C_FUNC_PROTOCOL_MANGLING */
+#define I2C_M_IGNORE_NAK    0x1000  /* if I2C_FUNC_PROTOCOL_MANGLING */
+#define I2C_M_NO_RD_ACK     0x0800  /* if I2C_FUNC_PROTOCOL_MANGLING */
+#define I2C_M_RECV_LEN      0x0400  /* length will be first received byte */
 
 #include "esp_vfs.h"
 #include "driver/gpio.h"
@@ -140,7 +140,7 @@ ssize_t os_devfs_write(void* p, int fd, const void *data, size_t size)
             return os_devfs_gpio_write(fd, data, size);
             break;
     }
-    return 0;
+    return 0;k
 }
 
 ssize_t os_devfs_gpio_read(int fd, void *dst, size_t size)
@@ -433,7 +433,10 @@ int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
 {
     int i;
     struct i2c_rdwr_ioctl_data *data;
+    struct i2c_msg *msg;
     unsigned int *arg;
+    i2c_operation_job_t i2c_ops[3];
+    int op;
     switch(cmd)
     {
         case I2C_IOCTL_SET_SLAVE:
@@ -444,6 +447,10 @@ int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
             data = va_arg(args, struct i2c_rdwr_ioctl_data *);
             for(i=0;i<data->nmsgs;i++)
             {
+                op = 0;
+                msg = data->msgs[i];
+                if(!(msg->flags & I2C_FUNC_NOSTART))
+                i2c_ops[op++].command = I2C_MASTER_CMD_START;
                 //i2c transact data->msgs
                 
             }

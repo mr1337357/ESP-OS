@@ -1,22 +1,14 @@
 int ioctl(int fd, int op, ...); 
 
-#define IOCPARM_MASK    0x7fUL          /* parameters must be < 128 bytes */
-#define IOC_VOID        0x20000000UL    /* no parameters */
-#define IOC_OUT         0x40000000UL    /* copy out parameters */
-#define IOC_IN          0x80000000UL    /* copy in parameters */
-#define IOC_INOUT       (IOC_IN|IOC_OUT)
-                                        /* 0x20000000 distinguishes new &
-                                           old ioctl's */
-#define _IO(x,y)        ((long)(IOC_VOID|((x)<<8)|(y)))
-#define _IOR(x,y,t)     ((long)(IOC_OUT|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
-#define _IOW(x,y,t)     ((long)(IOC_IN|((sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y)))
+#define _IOCTL(x,y) (long)((x<<8)|(y<<0))
 
 #define GPIO_IOCTL 'g'
 
-#define GPIO_IOCTL_SET_MODE _IOW(GPIO_IOCTL, 1, unsigned int)
-#define GPIO_IOCTL_GET_MODE _IOR(GPIO_IOCTL, 2, unsigned int)
-#define GPIO_IOCTL_SET_PUPD _IOW(GPIO_IOCTL, 3, unsigned int)
-#define GPIO_IOCTL_GET_PUPD _IOR(GPIO_IOCTL, 4, unsigned int)
+#define GPIO_IOCTL_SET_MODE _IOCTL(GPIO_IOCTL,1)
+#define GPIO_IOCTL_GET_MODE _IOCTL(GPIO_IOCTL,2)
+#define GPIO_IOCTL_SET_PUPD _IOCTL(GPIO_IOCTL,3)
+#define GPIO_IOCTL_GET_PUPD _IOCTL(GPIO_IOCTL,4)
+#define GPIO_IOCTL_EDGEMODE _IOCTL(GPIO_IOCTL,5)
 
 /** @cond */
 #define GPIO_MODE_DEF_DISABLE         (0)
