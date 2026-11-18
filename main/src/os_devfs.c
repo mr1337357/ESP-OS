@@ -188,8 +188,36 @@ int os_devfs_gpio_open(const char *name, int flags, int mode)
 
 int os_devfs_spi_open(const char *path, int flags, int mode)
 {
-
-    return 0;
+    int device;
+    int cs;
+    int fd;
+    sscanf(&path[7],"%d.%d",&device,&cs);
+    if(device < 0 || device > CONFIG_NUM_SPI)
+    {
+        return -1;
+    }
+#if CONFIG_NUM_SPI >= 1
+    if(device == 0 && (cs < 0 || cs > CONFIG_SPI_0_NUMCS))
+    {
+        return -1;
+    }
+#endif
+#if CONFIG_NUM_SPI >= 2
+    if(device == 1 && (cs < 0 || cs > CONFIG_SPI_1_NUMCS))
+    {
+        return -1;
+    }
+#endif
+    fd = os_devfs_fd_nextcontext();
+    if(fd < 0)
+    {
+        return -1;
+    }
+    fd_context[fd].inuse = 1;
+    fd_context[fd].type = HANDLE_IS_SPI;
+    fd_context[fd].index = (device << 4) | cs;
+    printf("spidev %d.%d\n",device,cs);
+    return fd;
 }
 
 int os_devfs_open(void* ctx, const char * path, int flags, int mode)
@@ -199,7 +227,10 @@ int os_devfs_open(void* ctx, const char * path, int flags, int mode)
     {
         fd = os_devfs_gpio_open(path, flags, mode);
     }
-
+    if(!strncmp(path,"/spidev",strlen("/spidev")))
+    {
+        fd = os_devfs_spi_open(path, flags, mode);
+    }
     return fd;
 }
 
