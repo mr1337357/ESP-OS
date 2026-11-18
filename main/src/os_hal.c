@@ -1,5 +1,6 @@
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
+#include "driver/i2c_master.h"
 
 #include "os_hal.h"
 
@@ -116,6 +117,9 @@ void os_hal_spi_init()
     spi_is_init = true;
 }
 
+i2c_master_bus_handle_t i2c_handle_0;
+i2c_master_bus_handle_t i2c_handle_1;
+
 void os_hal_i2c_init()
 {
     static bool i2c_is_init = false;
@@ -126,6 +130,27 @@ void os_hal_i2c_init()
 #if CONFIG_NUM_I2C == 0
     return;
 #elif CONFIG_NUM_I2C >= 1
+    i2c_master_bus_config_t i2c_mst_config0 = {
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .i2c_port = I2C_PORT_NUM_0,
+        .scl_io_num = CONFIG_I2C_0_SCL,
+        .sda_io_num = CONFIG_I2C_0_SDA,
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = true,
+    };
 
+
+    ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_mst_config0, &i2c_handle_0));
+#if CONFIG_NUM_I2C >= 2
+    i2c_master_bus_config_t i2c_mst_config1 = {
+        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .i2c_port = I2C_PORT_NUM_1,
+        .scl_io_num = CONFIG_I2C_1_SCL,
+        .sda_io_num = CONFIG_I2C_1_SDA,
+        .glitch_ignore_cnt = 7,
+        .flags.enable_internal_pullup = true,
+    };
+    ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_mst_config1, &i2c_handle_1));
+#endif
 #endif
 }
