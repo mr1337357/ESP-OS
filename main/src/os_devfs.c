@@ -41,6 +41,7 @@ struct i2c_rdwr_ioctl_data
 
 #include "esp_vfs.h"
 #include "driver/gpio.h"
+#include "driver/i2c_master.h"
 
 #define CONFIG_NUM_GPIOCHIP ((CONFIG_NUM_GPIO+31)>>5)
 
@@ -48,6 +49,9 @@ struct i2c_rdwr_ioctl_data
 #define HANDLE_IS_GPIO 1
 #define HANDLE_IS_I2C  2
 #define HANDLE_IS_SPI  3
+
+extern i2c_master_bus_handle_t i2c_handle_0;
+extern i2c_master_bus_handle_t i2c_handle_1;
 
 typedef struct
 {
@@ -140,7 +144,7 @@ ssize_t os_devfs_write(void* p, int fd, const void *data, size_t size)
             return os_devfs_gpio_write(fd, data, size);
             break;
     }
-    return 0;k
+    return 0;
 }
 
 ssize_t os_devfs_gpio_read(int fd, void *dst, size_t size)
@@ -448,15 +452,25 @@ int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
             for(i=0;i<data->nmsgs;i++)
             {
                 op = 0;
-                msg = data->msgs[i];
-                if(!(msg->flags & I2C_FUNC_NOSTART))
-                i2c_ops[op++].command = I2C_MASTER_CMD_START;
+                msg = &data->msgs[i];
+                if(!(msg->flags & I2C_M_NOSTART))
+                {
+                    i2c_ops[op++].command = I2C_MASTER_CMD_START;
+                }
+                if(msg->flags & I2C_M_RD)
+                {
+                    
+                }
+                if(fd_context[fd].index == 0)
+                {
+                    i2c_master_execute_defined_operations(i2c_handle_0, i2c_ops, op, -1);
+                }
                 //i2c transact data->msgs
                 
             }
             break;
     }
-
+    return 0;
 }
 
 int os_devfs_ioctl(void* ctx, int fd, int cmd, va_list args)
