@@ -51,7 +51,9 @@ struct i2c_rdwr_ioctl_data
 #define HANDLE_IS_SPI  3
 
 extern i2c_master_bus_handle_t i2c_handle_0;
+extern i2c_master_dev_handle_t i2c_dev_handle_0;
 extern i2c_master_bus_handle_t i2c_handle_1;
+extern i2c_master_dev_handle_t i2c_dev_handle_1;
 
 typedef struct
 {
@@ -433,14 +435,71 @@ int os_devfs_gpio_ioctl(int fd, int cmd, va_list args)
     return 0;
 }
 
+int os_devfs_i2c_rdwr(int fd, struct i2c_rdwr_ioctl_data *data)
+{
+    i2c_operation_job_t i2c_ops[5];
+    int op = 0;
+    int i;
+    i2c_master_dev_handle_t active_dev;
+    struct i2c_msg *msg;
+    uint8_t address;
+    if(fd_context[fd].index == 0)
+    {
+        active_dev = i2c_dev_handle_0;
+    }
+    else if(fd_context[fd].index == 1)
+    {
+        active_dev = i2c_dev_handle_1;
+    }
+    else
+    {
+        return -1;
+    }
+
+    i2c_ops[op++].command = I2C_MASTER_CMD_START;
+    i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+
+    for(i=0;i<data->nmsgs;i++)
+    {
+        op = 0;
+        msg = &data->msgs[i];
+        if(!(msg->flags & I2C_M_NOSTART))
+        {
+            address = (msg->addr << 1) | (msg->flags & I2C_M_RD);
+            i2c_ops[op].command = I2C_MASTER_CMD_WRITE;
+            i2c_ops[op].write.ack_check = 1;
+            i2c_ops[op].write.data = &address;
+            i2c_ops[op].write.total_bytes = 1;
+            op++;
+        }
+        if(msg->flags & I2C_M_RD)
+        {
+            i2c_ops[op].command = I2C_MASTER_CMD_READ;
+            i2c_ops[op].read.data = msg->buf;
+            i2c_ops[op].read.total_bytes = msg->len;
+            op++;
+        }
+        else
+        {
+            i2c_ops[op].command = I2C_MASTER_CMD_WRITE;
+            i2c_ops[op].write.data = msg->buf;
+            i2c_ops[op].write.total_bytes = msg->len;
+            op++;
+        }
+        i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+        //i2c transact data->msgs
+    }
+    op = 0;
+    i2c_ops[op++].command = I2C_MASTER_CMD_STOP;
+    i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+    return 0;
+}
+
 int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
 {
-    int i;
     struct i2c_rdwr_ioctl_data *data;
-    struct i2c_msg *msg;
     unsigned int *arg;
-    i2c_operation_job_t i2c_ops[3];
-    int op;
+
     switch(cmd)
     {
         case I2C_IOCTL_SET_SLAVE:
@@ -449,25 +508,7 @@ int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
             break;
         case I2C_IOCTL_RDWR:
             data = va_arg(args, struct i2c_rdwr_ioctl_data *);
-            for(i=0;i<data->nmsgs;i++)
-            {
-                op = 0;
-                msg = &data->msgs[i];
-                if(!(msg->flags & I2C_M_NOSTART))
-                {
-                    i2c_ops[op++].command = I2C_MASTER_CMD_START;
-                }
-                if(msg->flags & I2C_M_RD)
-                {
-                    
-                }
-                if(fd_context[fd].index == 0)
-                {
-                    i2c_master_execute_defined_operations(i2c_handle_0, i2c_ops, op, -1);
-                }
-                //i2c transact data->msgs
-                
-            }
+            return os_devfs_i2c_rdwr(fd,data);
             break;
     }
     return 0;
