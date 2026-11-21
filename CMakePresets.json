@@ -22,6 +22,17 @@
                 "SDKCONFIG_DEFAULTS": "sdkconfig.esp32s3_zero;sdkconfig.defaults.esp32s3;sdkconfig.defaults",
                 "SDKCONFIG": "build/esp32s3_zero/sdkconfig"
             }
+        },
+        {
+            "name": "alarm_clock",
+            "binaryDir": "build/alarm_clock",
+            "displayName": "An alarm clock I hacked",
+            "description": "",
+            "cacheVariables": {
+                "IDF_TARGET": "esp32s3",
+                "SDKCONFIG_DEFAULTS": "sdkconfig.alarm_clock;sdkconfig.defaults.esp32s3;sdkconfig.defaults",
+                "SDKCONFIG": "build/alarm_clock/sdkconfig"
+            }
         }
     ]
 }

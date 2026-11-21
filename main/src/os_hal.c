@@ -12,7 +12,6 @@ void os_hal_sd_init()
         return;
     }
     os_hal_spi_init();
-
 }
 
 #if CONFIG_NUM_SPI >= 1
@@ -150,6 +149,7 @@ void os_hal_i2c_init()
 
     ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_mst_config0, &i2c_handle_0));
     ESP_ERROR_CHECK(i2c_master_bus_add_device(i2c_handle_0, &dev_cfg0, &i2c_dev_handle_0));
+    printf("i2c initialized\n");
 #if CONFIG_NUM_I2C >= 2
     i2c_master_bus_config_t i2c_mst_config1 = {
         .clk_source = I2C_CLK_SRC_DEFAULT,

@@ -70,6 +70,7 @@ void app_main(void)
     printf("os start\n");
     os_psram_init();
     os_hal_spi_init();
+    os_hal_i2c_init();
     os_vfs_init();
     os_threads_init();
     os_threads_create(init_launcher, 0);

@@ -455,19 +455,21 @@ int os_devfs_i2c_rdwr(int fd, struct i2c_rdwr_ioctl_data *data)
     {
         return -1;
     }
-
-    i2c_ops[op++].command = I2C_MASTER_CMD_START;
-    i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
-
+    printf("i2c debug at line %d\n",__LINE__);
+    //i2c_ops[op++].command = I2C_MASTER_CMD_START;
+    //i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+    printf("i2c debug at line %d\n",__LINE__);
     for(i=0;i<data->nmsgs;i++)
     {
+        printf("i2c debug at line %d\n",__LINE__);
         op = 0;
         msg = &data->msgs[i];
+        i2c_ops[op++].command = I2C_MASTER_CMD_START;
         if(!(msg->flags & I2C_M_NOSTART))
         {
             address = (msg->addr << 1) | (msg->flags & I2C_M_RD);
             i2c_ops[op].command = I2C_MASTER_CMD_WRITE;
-            i2c_ops[op].write.ack_check = 1;
+            i2c_ops[op].write.ack_check = 0;
             i2c_ops[op].write.data = &address;
             i2c_ops[op].write.total_bytes = 1;
             op++;
@@ -486,12 +488,16 @@ int os_devfs_i2c_rdwr(int fd, struct i2c_rdwr_ioctl_data *data)
             i2c_ops[op].write.total_bytes = msg->len;
             op++;
         }
+        printf("i2c debug at line %d\n",__LINE__);
         i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+        printf("i2c debug at line %d\n",__LINE__);
         //i2c transact data->msgs
     }
     op = 0;
     i2c_ops[op++].command = I2C_MASTER_CMD_STOP;
+    printf("i2c debug at line %d\n",__LINE__);
     i2c_master_execute_defined_operations(active_dev, i2c_ops, op, -1);
+    printf("i2c debug at line %d\n",__LINE__);
     return 0;
 }
 
@@ -499,7 +505,6 @@ int os_devfs_i2c_ioctl(int fd, int cmd, va_list args)
 {
     struct i2c_rdwr_ioctl_data *data;
     unsigned int *arg;
-
     switch(cmd)
     {
         case I2C_IOCTL_SET_SLAVE:

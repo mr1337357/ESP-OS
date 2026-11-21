@@ -263,6 +263,15 @@ int syscall_ioctl(ioctl_args *args)
     return os_file_ioctl(current->filedes_list[args->fd],args->cmd,args->args);
 }
 
+int syscall_nanosleep(struct timespec *ts)
+{
+    int ms = ts->tv_sec * 1000;
+    ms += ts->tv_nsec / 1000000;
+    printf("sleep for %dms\n",ms);
+    vTaskDelay(pdMS_TO_TICKS(ms));
+    return 0;
+}
+
 int syscall_handler(int syscall, void *args)
 {
     //printf("syscall_handler(%d, %p)\r\n",syscall, args);
@@ -309,6 +318,9 @@ int syscall_handler(int syscall, void *args)
             break;
         case SYSCALL_IOCTL:
             return syscall_ioctl(args);
+            break;
+        case SYSCALL_NANOSLEEP:
+            return syscall_nanosleep(args);
             break;
     }
     return 0;

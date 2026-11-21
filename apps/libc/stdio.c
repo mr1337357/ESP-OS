@@ -201,6 +201,61 @@ int	printf(const char *__restrict format, ...)
     vsprintf(buffer,format,args);
     va_end(args);
     fputs(buffer,stdout);
-    //write(1,format,strlen(format));
-    return strlen(format);
+    return strlen(buffer);
+}
+
+int	fprintf(FILE *stream, const char *__restrict format, ...)
+{
+    char buffer[1024];
+    va_list args;
+    va_start(args,format);
+    vsprintf(buffer,format,args);
+    va_end(args);
+    fputs(buffer,stream);
+
+    return strlen(buffer);
+}
+
+#include <errno.h>
+
+char *strerror(int errnum)
+{
+    switch(errnum)
+    {
+        case EPERM:
+            return "Operation not permitted";
+        case ENOENT:
+            return "No such file or directory";
+        case ESRCH:
+            return "No such process";
+        case EINTR:
+            return "Interrupted system call";
+        case EIO:
+            return "I/O error";
+        case ENXIO:
+        	return "No such device or address";
+        case E2BIG:
+            return "Arg list too long";
+        case ENOEXEC:
+            return "Exec format error";
+        case EBADF:
+            return "Bad file number";
+        case ECHILD:
+            return "No children";
+        case EAGAIN:
+            return "No more processes";
+        case ENOMEM:
+            return "Not enough space";
+        case EACCES:
+            return "Permission denied";
+        case EFAULT:
+            return "Bad address";
+    }
+    return 0;
+}
+
+void perror(const char *s)
+{
+    char *err = strerror(errno);
+    fprintf(stderr,"%s: %s\n", s, err);
 }

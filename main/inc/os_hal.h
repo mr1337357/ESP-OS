@@ -3,5 +3,6 @@
 
 void os_hal_spi_init();
 void os_hal_sd_init();
+void os_hal_i2c_init();
 
 #endif

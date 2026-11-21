@@ -47,4 +47,5 @@ int closedir(DIR *dirp)
     struct dir_internal *dp = (struct dir_internal *)dirp;
     close(dp->fd);
     free(dp);
+    return 0;
 }

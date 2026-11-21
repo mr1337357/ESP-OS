@@ -14,6 +14,11 @@ struct _reent *__getreent()
     return &_re;
 }
 
+int *__errno()
+{
+    return &_re._errno;
+}
+
 struct exec_args
 {
     int (*syscall)(int, void*);
