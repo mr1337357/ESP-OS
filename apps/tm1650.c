@@ -8,9 +8,8 @@
 //#include <linux/i2c-dev.h>
 #include <i2c.h>
 
-// TM1650 8-bit commands shifted right by 1 to act as 7-bit I2C addresses
-#define TM1650_CMD_CTRL   (0x48 >> 1) // 0x24: Display control
-#define TM1650_DIGIT_BASE (0x68 >> 1) // 0x34: Digit 0 (0x34..0x37)
+#define TM1650_DISPLAY_BASE 0x34 // Address of the left-most digit 
+#define TM1650_DCTRL_BASE   0x24 // Address of the control register of the left-most digit
 
 // Standard 7-segment font (0-9, A-F) mapped to bits: DP G F E D C B A
 static const uint8_t HEX_FONT[16] = {
@@ -32,20 +31,24 @@ static const uint8_t HEX_FONT[16] = {
     0x71  // F
 };
 
-// Sends a single byte to one of the TM1650's pseudo-addresses
-int tm1650_write_byte(int fd, uint8_t addr7, uint8_t data) {
-    struct i2c_msg msg = {
-        .addr  = addr7,
+//
+int tm1650_send_cmd(int fd, uint8_t cmd, uint8_t data)
+{
+    struct i2c_msg msg =
+    {
+        .addr  = cmd,
         .flags = 0, // Write
         .len   = 1,
-        .buf   = &data
+        .buf   = &data,
     };
-    struct i2c_rdwr_ioctl_data packet = {
+    struct i2c_rdwr_ioctl_data packet =
+    {
         .msgs  = &msg,
         .nmsgs = 1
     };
 
-    if (ioctl(fd, I2C_RDWR, &packet) < 0) {
+    if (ioctl(fd, I2C_RDWR, &packet) < 0)
+    {
         perror("I2C_RDWR failed");
         return -1;
     }
@@ -53,24 +56,29 @@ int tm1650_write_byte(int fd, uint8_t addr7, uint8_t data) {
 }
 
 // Configure brightness (0-7, where 0 is max brightness on TM1650) and display state
-int tm1650_set_display(int fd, uint8_t brightness, int on) {
-    // Control byte format: [0 | B2 B1 B0 | 0 | 0 | 0 | ON/OFF]
-    // Note: 000 = level 8 (brightest), 001 = level 1 (dimmest), ..., 111 = level 7
-    uint8_t ctrl = ((brightness & 0x07) << 4) | (on ? 0x01 : 0x00);
-    return tm1650_write_byte(fd, TM1650_CMD_CTRL, ctrl);
+void tm1650_set_display(int fd, uint8_t brightness, int on)
+{
+    uint8_t ctrlbyte;
+    int i;
+    for(i=0;i<4;i++)
+    {
+        ctrlbyte = (brightness << 4) | (!!on);
+        tm1650_send_cmd(fd, TM1650_DCTRL_BASE + i, ctrlbyte);
+    }
 }
 
-// Write a 4-digit hex number with an optional decimal point mask (bits 0..3)
-void tm1650_draw_hex(int fd, uint16_t value, uint8_t dot_mask) {
-    for (int i = 0; i < 4; i++) {
-        // Extract nibbles from left (digit 0) to right (digit 3)
-        uint8_t nibble = (value >> ((3 - i) * 4)) & 0x0F;
-        uint8_t segments = HEX_FONT[nibble];
-        
-        if (dot_mask & (1 << i)) {
-            segments |= 0x80; // Set DP bit (bit 7)
+void tm1650_show_string(int fd, char *string)
+{
+    uint8_t segments;
+    int i;
+    for(i=0;i<4;i++)
+    {
+        if(string[i] >= '0' && string[i] <= '9')
+        {
+            segments = HEX_FONT[string[i]-'0'];
         }
-        tm1650_write_byte(fd, TM1650_DIGIT_BASE + i, segments);
+        //segments = 0x55;//HEX_FONT[string[i]];
+        tm1650_send_cmd(fd, TM1650_DISPLAY_BASE + i, segments);
     }
 }
 
@@ -83,20 +91,10 @@ int main(int argc, char **argv) {
     }
 
     // Turn display ON at medium brightness (level 3)
-    if (tm1650_set_display(fd, 3, 1) < 0) {
-        close(fd);
-        return 1;
-    }
+    tm1650_set_display(fd, 3, 1);
 
-    // Draw "CAFE" with a decimal point after 'A' (digit index 1)
-    tm1650_draw_hex(fd, 0xCAFE, 0b0010);
+    tm1650_show_string(fd,"1234");
     sleep(2);
-
-    // Simple counter loop
-    for (uint16_t count = 0; count <= 0x0100; count++) {
-        tm1650_draw_hex(fd, count, 0x00);
-        usleep(50000); // 50ms
-    }
 
     close(fd);
     return 0;
