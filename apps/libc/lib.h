@@ -16,6 +16,8 @@
 #define SYSCALL_DUP2 12
 #define SYSCALL_IOCTL 13
 #define SYSCALL_NANOSLEEP 14
+#define SYSCALL_GETTIMEOFDAY 15
+#define SYSCALL_SETTIMEOFDAY 16
 
 extern int (*do_syscall)(int callnum, void *arg);
 

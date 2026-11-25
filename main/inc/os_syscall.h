@@ -18,5 +18,7 @@ int syscall_handler(int syscall, void *args);
 #define SYSCALL_DUP2 12
 #define SYSCALL_IOCTL 13
 #define SYSCALL_NANOSLEEP 14
+#define SYSCALL_GETTIMEOFDAY 15
+#define SYSCALL_SETTIMEOFDAY 16
 
 #endif

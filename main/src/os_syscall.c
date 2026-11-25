@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <dirent.h>
+#include "esp_timer.h"
 
 #include "os_syscall.h"
 #include "os_thread.h"
@@ -265,11 +266,30 @@ int syscall_ioctl(ioctl_args *args)
 
 int syscall_nanosleep(struct timespec *ts)
 {
-    int ms = ts->tv_sec * 1000;
-    ms += ts->tv_nsec / 1000000;
-    printf("sleep for %dms\n",ms);
-    vTaskDelay(pdMS_TO_TICKS(ms));
+    //if as long as a millisecond then just let the os do other stuff
+    if(ts->tv_sec > 0 || ts->tv_nsec > 1000000)
+    {
+        int ms = ts->tv_sec * 1000;
+        ms += ts->tv_nsec / 1000000;
+        vTaskDelay(pdMS_TO_TICKS(ms));
+    }
+    else//if less then spinlock the thread
+    {
+        int us = ts->tv_nsec / 1000;
+        uint64_t end = esp_timer_get_time() + us;
+        while(end > esp_timer_get_time());
+    }
     return 0;
+}
+
+int syscall_gettimeofday(struct timeval *tv)
+{
+    return gettimeofday(tv,0);
+}
+
+int syscall_settimeofday(struct timeval *tv)
+{
+    return settimeofday(tv,0);
 }
 
 int syscall_handler(int syscall, void *args)
@@ -321,6 +341,12 @@ int syscall_handler(int syscall, void *args)
             break;
         case SYSCALL_NANOSLEEP:
             return syscall_nanosleep(args);
+            break;
+        case SYSCALL_GETTIMEOFDAY:
+            return syscall_gettimeofday(args);
+            break;
+        case SYSCALL_SETTIMEOFDAY:
+            return syscall_settimeofday(args);
             break;
     }
     return 0;
