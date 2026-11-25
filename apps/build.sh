@@ -6,7 +6,7 @@ export READELF=${PREFIX}-readelf
 export OBJDUMP=${PREFIX}-objdump
 export AR=${PREFIX}-ar
 
-CFLAGS="-Wall -Wl,-q -fPIE -nostdlib -static"
+CFLAGS="-Wall -Wl,-q -fPIE -nostdlib -static -static-libgcc -lgcc"
 #CFLAGS="-static-pie -nostdlib"
 
 pushd libc
