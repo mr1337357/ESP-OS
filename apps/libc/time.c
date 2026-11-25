@@ -22,3 +22,12 @@ int usleep(useconds_t usec)
     do_syscall(SYSCALL_NANOSLEEP,&ts);
     return 0;
 }
+
+int gettimeofday(struct timeval *restrict tv, struct timezone *_Nullable restrict tz)
+{
+    return 0;
+}
+int settimeofday(const struct timeval *tv, const struct timezone *_Nullable tz)
+{
+    return 0;
+}

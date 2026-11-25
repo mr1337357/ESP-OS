@@ -6,5 +6,5 @@ cp ls ../FATFS/espos/bin/
 cp cat ../FATFS/espos/bin/
 cp echo ../FATFS/espos/bin/
 cp gpio ../FATFS/espos/bin/
-cp aip650 ../FATFS/espos/bin/
 cp tm1650 ../FATFS/espos/bin/
+cp ds1302 ../FATFS/espos/bin/

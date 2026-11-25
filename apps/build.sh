@@ -26,8 +26,9 @@ ${CC} ${CFLAGS} ls.c -o ls libc/esplibc.a
 ${CC} ${CFLAGS} cat.c -o cat libc/esplibc.a
 ${CC} ${CFLAGS} echo.c -o echo libc/esplibc.a
 ${CC} ${CFLAGS} gpio.c -o gpio libc/esplibc.a
-${CC} ${CFLAGS} aip650.c -o aip650 libc/esplibc.a
+
 ${CC} ${CFLAGS} tm1650.c -o tm1650 libc/esplibc.a
+${CC} ${CFLAGS} ds1302.c -o ds1302 libc/esplibc.a
 
 #${OBJDUMP} -x -r -R -s -S sh > sh.dis
 

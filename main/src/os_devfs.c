@@ -96,6 +96,10 @@ typedef struct
     int index;
 }   expanded_dirp;
 
+esp_vfs_select_sem_t gpio_select_sem;
+fd_set gpio_readfds_in;
+fd_set *gpio_readfds_out;
+
 int os_devfs_fd_nextcontext()
 {
     int i;
@@ -395,6 +399,11 @@ void gpio_isr_handler(void* arg)
         if(fd_context[i].inuse && fd_context[i].type == HANDLE_IS_GPIO && fd_context[i].index == pin)
         {
             xSemaphoreGiveFromISR(fd_context[i].ginfo.mtx,&xHigherPriorityTaskWoken);
+            if(FD_ISSET(i,&gpio_readfds_in))
+            {
+                FD_SET(i,gpio_readfds_out);
+                esp_vfs_select_triggered_isr(gpio_select_sem, &xHigherPriorityTaskWoken);
+            }
         }
     }
 }
@@ -540,6 +549,7 @@ static esp_err_t os_devfs_start_select(int nfds, fd_set *readfds, fd_set *writef
         esp_vfs_select_sem_t select_sem, void **end_select_args)
 {
     int i;
+    FD_ZERO(&gpio_readfds_in);
     for(i=0;i<nfds;i++)
     {
         if(FD_ISSET(i,readfds))
@@ -550,15 +560,20 @@ static esp_err_t os_devfs_start_select(int nfds, fd_set *readfds, fd_set *writef
             }
             else
             {
-
             }
         }
     }
+    gpio_readfds_in = *readfds;
+    gpio_readfds_out = readfds;
+    FD_ZERO(readfds);
+    gpio_select_sem = select_sem;
+    *end_select_args = 0;
     return ESP_OK;
 }
 
 static esp_err_t os_devfs_end_select(void *end_select_args)
 {
+    FD_ZERO(&gpio_readfds_in);
     return ESP_OK;
 }
 
