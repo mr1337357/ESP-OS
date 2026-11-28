@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
+
 #include "gpio.h"
 
 int CLOCKPIN = 0;
@@ -13,12 +16,12 @@ int rstfd;
 int gpio_from_env(char *env)
 {
     int index;
-    char *name = getenv("PIN_CLK");
+    char *name = getenv(env);
     if(!name)
     {
         return -1;
     }
-    index = atoi(pin_name);
+    index = atoi(name);
     if(index < 0)
     {
         return -1;
@@ -78,12 +81,13 @@ uint8_t read_byte()
     for(i=0;i<8;i++)
     {
         byte >>= 1;
-        byte |= gpio_getInput(datfd)?0x80|0x00;
+        byte |= gpio_getInput(datfd)?0x80:0x00;
         gpio_setOutput(clkfd,1);
         usleep(1);
         gpio_setOutput(clkfd,0);
         usleep(1);
     }
+    return byte;
 }
 
 int main(int argc, char **argv)

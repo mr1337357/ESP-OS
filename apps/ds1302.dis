@@ -1,0 +1,1300 @@
+
+ds1302:     file format elf32-xtensa-le
+
+
+Disassembly of section .text:
+
+00400074 <gpio_from_env-0xac>:
+  400074:	400414        	ee.ld.qacc_l.l.128.ip	a1, 0xfffff840
+  400077:	00          	.byte	00
+  400078:	0b48      	l32i.n	a4, a11, 0
+  40007a:	40          	.byte	0x40
+  40007b:	089800        	lsx	f9, a8, a0
+  40007e:	b00040        	addx8	a0, a0, a4
+  400081:	400b      	addi.n	a4, a0, -1
+  400083:	00          	.byte	00
+  400084:	1df8      	l32i.n	a15, a13, 4
+  400086:	40          	.byte	0x40
+  400087:	00          	.byte	00
+  400088:	0bb8      	l32i.n	a11, a11, 0
+  40008a:	40          	.byte	0x40
+  40008b:	00          	.byte	00
+  40008c:	1dfc      	bnez.n	a13, 4000c1 <gpio_from_env-0x5f>
+  40008e:	c00040        	sub	a0, a0, a4
+  400091:	400b      	addi.n	a4, a0, -1
+  400093:	00          	.byte	00
+  400094:	401e00        	ssl	a14
+  400097:	08d800        	lsx	f13, a8, a0
+  40009a:	40          	.byte	0x40
+  40009b:	08f800        	lsx	f15, a8, a0
+  40009e:	480040        	ssx	f0, a0, a4
+  4000a1:	4009      	s32i.n	a0, a0, 16
+  4000a3:	092000        	l32e	a0, a0, -56
+  4000a6:	580040        	ssxp	f0, a0, a4
+  4000a9:	004004        	ee.ld.qacc_l.l.128.ip	a0, 0x400
+  4000ac:	0bc8      	l32i.n	a12, a11, 0
+  4000ae:	40          	.byte	0x40
+  4000af:	052800        	extui	a2, a0, 24, 1
+  4000b2:	040040        	extui	a0, a4, 0, 1
+  4000b5:	0000401e 	ee.vmulas.s16.accx.ld.ip.qup	q0, a1, 0, q1, q0, q0, q0
+  4000b9:	400a      	add.n	a4, a0, a0
+  4000bb:	0aa400        	add.s	f10, f4, f0
+  4000be:	40          	.byte	0x40
+  4000bf:	00          	.byte	00
+  4000c0:	038c      	beqz.n	a3, 4000c4 <gpio_from_env-0x5c>
+  4000c2:	040040        	extui	a0, a4, 0, 1
+  4000c5:	400b      	addi.n	a4, a0, -1
+  4000c7:	00          	.byte	00
+  4000c8:	1e08      	l32i.n	a0, a14, 4
+  4000ca:	40          	.byte	0x40
+  4000cb:	00          	.byte	00
+  4000cc:	1ef8      	l32i.n	a15, a14, 4
+  4000ce:	f40040        	extui	a0, a4, 0, 16
+  4000d1:	004004        	ee.ld.qacc_l.l.128.ip	a0, 0x400
+  4000d4:	400354        	ee.ld.qacc_l.l.128.ip	a5, 0xfffff830
+  4000d7:	0a2800        	add.s	f2, f8, f0
+  4000da:	40          	.byte	0x40
+  4000db:	00          	.byte	00
+  4000dc:	1efc      	bnez.n	a14, 400111 <gpio_from_env-0xf>
+  4000de:	40          	.byte	0x40
+  4000df:	00          	.byte	00
+  4000e0:	1d1c      	movi.n	a13, 17
+  4000e2:	840040        	extui	a0, a4, 0, 9
+  4000e5:	1d          	.byte	0x1d
+  4000e6:	800040        	add	a0, a0, a4
+  4000e9:	4009      	s32i.n	a0, a0, 16
+  4000eb:	666700        	ee.ldf.64.xp	f6, f6, a0, a7
+  4000ee:	e46666        	bnei	a6, 6, 4000d6 <gpio_from_env-0x4a>
+  4000f1:	400b      	addi.n	a4, a0, -1
+  4000f3:	0a6800        	add.s	f6, f8, f0
+  4000f6:	580040        	ssxp	f0, a0, a4
+  4000f9:	004005        	call0	4004fc <stdio_init+0x8>
+  4000fc:	0638      	l32i.n	a3, a6, 0
+  4000fe:	40          	.byte	0x40
+  4000ff:	06a800        	ee.ldf.64.xp	f10, f0, a0, a8
+  400102:	40          	.byte	0x40
+  400103:	06cc00        	ee.ldf.64.xp	f12, f0, a0, a12
+  400106:	100040        	and	a0, a0, a4
+  400109:	0d          	.byte	0xd
+  40010a:	580040        	ssxp	f0, a0, a4
+  40010d:	4008      	l32i.n	a0, a0, 16
+  40010f:	09d800        	l32e	a0, a8, -12
+  400112:	010040        	slli	a0, a0, 28
+  400115:	000067        	bnone	a0, a6, 400119 <gpio_from_env-0x7>
+  400118:	049c      	beqz.n	a4, 40012c <gpio_from_env+0xc>
+  40011a:	40          	.byte	0x40
+  40011b:	09ac00        	l32e	a0, a12, -24
+  40011e:	40          	.byte	0x40
+	...
+
+00400120 <gpio_from_env>:
+  400120:	008136        	entry	a1, 64
+  400123:	017d      	mov.n	a7, a1
+  400125:	4729      	s32i.n	a2, a7, 16
+  400127:	0427a2        	l32i	a10, a7, 16
+  40012a:	ffd281        	l32r	a8, 400074 <gpio_from_env-0xac> (400414 <getenv>)
+  40012d:	0008e0        	callx8	a8
+  400130:	07a9      	s32i.n	a10, a7, 0
+  400132:	0788      	l32i.n	a8, a7, 0
+  400134:	48cc      	bnez.n	a8, 40013c <gpio_from_env+0x1c>
+  400136:	f87c      	movi.n	a8, -1
+  400138:	000786        	j	40015a <gpio_from_env+0x3a>
+  40013b:	07a800        	ee.stf.64.xp	f10, f0, a0, a8
+  40013e:	ffce81        	l32r	a8, 400078 <gpio_from_env-0xa8> (400b48 <atoi>)
+  400141:	0008e0        	callx8	a8
+  400144:	17a9      	s32i.n	a10, a7, 4
+  400146:	1788      	l32i.n	a8, a7, 4
+  400148:	0048d6        	bgez	a8, 400150 <gpio_from_env+0x30>
+  40014b:	f87c      	movi.n	a8, -1
+  40014d:	000246        	j	40015a <gpio_from_env+0x3a>
+  400150:	17a8      	l32i.n	a10, a7, 4
+  400152:	ffca81        	l32r	a8, 40007c <gpio_from_env-0xa4> (400898 <gpio_open>)
+  400155:	0008e0        	callx8	a8
+  400158:	0a8d      	mov.n	a8, a10
+  40015a:	082d      	mov.n	a2, a8
+  40015c:	f01d      	retw.n
+	...
+
+00400160 <open_gpios>:
+  400160:	004136        	entry	a1, 32
+  400163:	017d      	mov.n	a7, a1
+  400165:	ffc681        	l32r	a8, 400080 <gpio_from_env-0xa0> (400bb0 <atoi+0x68>)
+  400168:	20a880        	or	a10, a8, a8
+  40016b:	fffb65        	call8	400120 <gpio_from_env>
+  40016e:	0a9d      	mov.n	a9, a10
+  400170:	ffc581        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  400173:	0899      	s32i.n	a9, a8, 0
+  400175:	ffc481        	l32r	a8, 400088 <gpio_from_env-0x98> (400bb8 <atoi+0x70>)
+  400178:	20a880        	or	a10, a8, a8
+  40017b:	fffa65        	call8	400120 <gpio_from_env>
+  40017e:	0a9d      	mov.n	a9, a10
+  400180:	ffc381        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  400183:	0899      	s32i.n	a9, a8, 0
+  400185:	ffc281        	l32r	a8, 400090 <gpio_from_env-0x90> (400bc0 <atoi+0x78>)
+  400188:	08ad      	mov.n	a10, a8
+  40018a:	fff965        	call8	400120 <gpio_from_env>
+  40018d:	0a9d      	mov.n	a9, a10
+  40018f:	ffc181        	l32r	a8, 400094 <gpio_from_env-0x8c> (401e00 <rstfd>)
+  400192:	0899      	s32i.n	a9, a8, 0
+  400194:	ffbc81        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  400197:	0888      	l32i.n	a8, a8, 0
+  400199:	00f896        	bltz	a8, 4001ac <open_gpios+0x4c>
+  40019c:	ffbc81        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  40019f:	0888      	l32i.n	a8, a8, 0
+  4001a1:	007896        	bltz	a8, 4001ac <open_gpios+0x4c>
+  4001a4:	ffbc81        	l32r	a8, 400094 <gpio_from_env-0x8c> (401e00 <rstfd>)
+  4001a7:	0888      	l32i.n	a8, a8, 0
+  4001a9:	0048d6        	bgez	a8, 4001b1 <open_gpios+0x51>
+  4001ac:	f87c      	movi.n	a8, -1
+  4001ae:	001006        	j	4001f2 <open_gpios+0x92>
+  4001b1:	ffb481        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  4001b4:	0888      	l32i.n	a8, a8, 0
+  4001b6:	2b0c      	movi.n	a11, 2
+  4001b8:	20a880        	or	a10, a8, a8
+  4001bb:	ffb781        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  4001be:	0008e0        	callx8	a8
+  4001c1:	ffb281        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  4001c4:	0888      	l32i.n	a8, a8, 0
+  4001c6:	1b0c      	movi.n	a11, 1
+  4001c8:	20a880        	or	a10, a8, a8
+  4001cb:	ffb381        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  4001ce:	0008e0        	callx8	a8
+  4001d1:	ffb081        	l32r	a8, 400094 <gpio_from_env-0x8c> (401e00 <rstfd>)
+  4001d4:	0888      	l32i.n	a8, a8, 0
+  4001d6:	2b0c      	movi.n	a11, 2
+  4001d8:	20a880        	or	a10, a8, a8
+  4001db:	ffaf81        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  4001de:	0008e0        	callx8	a8
+  4001e1:	ffac81        	l32r	a8, 400094 <gpio_from_env-0x8c> (401e00 <rstfd>)
+  4001e4:	0888      	l32i.n	a8, a8, 0
+  4001e6:	0b0c      	movi.n	a11, 0
+  4001e8:	08ad      	mov.n	a10, a8
+  4001ea:	ffac81        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  4001ed:	0008e0        	callx8	a8
+  4001f0:	080c      	movi.n	a8, 0
+  4001f2:	082d      	mov.n	a2, a8
+  4001f4:	f01d      	retw.n
+	...
+
+004001f8 <start_transaction>:
+  4001f8:	004136        	entry	a1, 32
+  4001fb:	017d      	mov.n	a7, a1
+  4001fd:	ffa181        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  400200:	0888      	l32i.n	a8, a8, 0
+  400202:	0b0c      	movi.n	a11, 0
+  400204:	20a880        	or	a10, a8, a8
+  400207:	ffa581        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  40020a:	0008e0        	callx8	a8
+  40020d:	ffa181        	l32r	a8, 400094 <gpio_from_env-0x8c> (401e00 <rstfd>)
+  400210:	0888      	l32i.n	a8, a8, 0
+  400212:	1b0c      	movi.n	a11, 1
+  400214:	08ad      	mov.n	a10, a8
+  400216:	ffa181        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  400219:	0008e0        	callx8	a8
+  40021c:	4a0c      	movi.n	a10, 4
+  40021e:	ffa081        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  400221:	0008e0        	callx8	a8
+  400224:	f03d      	nop.n
+  400226:	f01d      	retw.n
+
+00400228 <write_byte>:
+  400228:	008136        	entry	a1, 64
+  40022b:	017d      	mov.n	a7, a1
+  40022d:	028d      	mov.n	a8, a2
+  40022f:	104782        	s8i	a8, a7, 16
+  400232:	ff9681        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  400235:	0888      	l32i.n	a8, a8, 0
+  400237:	2b0c      	movi.n	a11, 2
+  400239:	08ad      	mov.n	a10, a8
+  40023b:	ff9781        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  40023e:	0008e0        	callx8	a8
+  400241:	1a0c      	movi.n	a10, 1
+  400243:	ff9781        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  400246:	0008e0        	callx8	a8
+  400249:	080c      	movi.n	a8, 0
+  40024b:	0789      	s32i.n	a8, a7, 0
+  40024d:	001986        	j	4002b7 <write_byte+0x8f>
+  400250:	ff8f81        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  400253:	0898      	l32i.n	a9, a8, 0
+  400255:	100782        	l8ui	a8, a7, 16
+  400258:	048080        	extui	a8, a8, 0, 1
+  40025b:	08bd      	mov.n	a11, a8
+  40025d:	09ad      	mov.n	a10, a9
+  40025f:	ff8f81        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  400262:	0008e0        	callx8	a8
+  400265:	1a0c      	movi.n	a10, 1
+  400267:	ff8e81        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  40026a:	0008e0        	callx8	a8
+  40026d:	ff8581        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  400270:	0888      	l32i.n	a8, a8, 0
+  400272:	1b0c      	movi.n	a11, 1
+  400274:	08ad      	mov.n	a10, a8
+  400276:	ff8981        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  400279:	0008e0        	callx8	a8
+  40027c:	1a0c      	movi.n	a10, 1
+  40027e:	ff8881        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  400281:	0008e0        	callx8	a8
+  400284:	0788      	l32i.n	a8, a7, 0
+  400286:	0f7866        	bnei	a8, 7, 400299 <write_byte+0x71>
+  400289:	ff8081        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  40028c:	0888      	l32i.n	a8, a8, 0
+  40028e:	1b0c      	movi.n	a11, 1
+  400290:	20a880        	or	a10, a8, a8
+  400293:	ff8181        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  400296:	0008e0        	callx8	a8
+  400299:	ff7a81        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  40029c:	0888      	l32i.n	a8, a8, 0
+  40029e:	0b0c      	movi.n	a11, 0
+  4002a0:	08ad      	mov.n	a10, a8
+  4002a2:	ff7e81        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  4002a5:	0008e0        	callx8	a8
+  4002a8:	100782        	l8ui	a8, a7, 16
+  4002ab:	418180        	srli	a8, a8, 1
+  4002ae:	104782        	s8i	a8, a7, 16
+  4002b1:	0788      	l32i.n	a8, a7, 0
+  4002b3:	881b      	addi.n	a8, a8, 1
+  4002b5:	0789      	s32i.n	a8, a7, 0
+  4002b7:	0788      	l32i.n	a8, a7, 0
+  4002b9:	9388a6        	blti	a8, 8, 400250 <write_byte+0x28>
+  4002bc:	f03d      	nop.n
+  4002be:	f03d      	nop.n
+  4002c0:	f01d      	retw.n
+	...
+
+004002c4 <read_byte>:
+  4002c4:	006136        	entry	a1, 48
+  4002c7:	017d      	mov.n	a7, a1
+  4002c9:	ff7081        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  4002cc:	0888      	l32i.n	a8, a8, 0
+  4002ce:	1b0c      	movi.n	a11, 1
+  4002d0:	08ad      	mov.n	a10, a8
+  4002d2:	ff7181        	l32r	a8, 400098 <gpio_from_env-0x88> (4008d8 <gpio_set_mode>)
+  4002d5:	0008e0        	callx8	a8
+  4002d8:	080c      	movi.n	a8, 0
+  4002da:	0789      	s32i.n	a8, a7, 0
+  4002dc:	001986        	j	400346 <read_byte+0x82>
+  4002df:	078200        	ee.stf.64.xp	f8, f0, a0, a2
+  4002e2:	818004        	ee.ld.128.usar.ip	q1, a0, 0
+  4002e5:	478241        	l32r	a4, 3d20f0 <gpio_from_env-0x2e030>
+  4002e8:	04          	.byte	0x4
+  4002e9:	ff6881        	l32r	a8, 40008c <gpio_from_env-0x94> (401dfc <datfd>)
+  4002ec:	0888      	l32i.n	a8, a8, 0
+  4002ee:	08ad      	mov.n	a10, a8
+  4002f0:	ff6d81        	l32r	a8, 4000a4 <gpio_from_env-0x7c> (400920 <gpio_getInput>)
+  4002f3:	0008e0        	callx8	a8
+  4002f6:	0a8d      	mov.n	a8, a10
+  4002f8:	588c      	beqz.n	a8, 400301 <read_byte+0x3d>
+  4002fa:	80a082        	movi	a8, 128
+  4002fd:	000086        	j	400303 <read_byte+0x3f>
+  400300:	080c00        	lsx	f0, a12, a0
+  400303:	749080        	extui	a9, a8, 0, 8
+  400306:	040782        	l8ui	a8, a7, 4
+  400309:	208980        	or	a8, a9, a8
+  40030c:	748080        	extui	a8, a8, 0, 8
+  40030f:	044782        	s8i	a8, a7, 4
+  400312:	ff5c81        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  400315:	0888      	l32i.n	a8, a8, 0
+  400317:	1b0c      	movi.n	a11, 1
+  400319:	08ad      	mov.n	a10, a8
+  40031b:	ff6081        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  40031e:	0008e0        	callx8	a8
+  400321:	1a0c      	movi.n	a10, 1
+  400323:	ff5f81        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  400326:	0008e0        	callx8	a8
+  400329:	ff5681        	l32r	a8, 400084 <gpio_from_env-0x9c> (401df8 <clkfd>)
+  40032c:	0888      	l32i.n	a8, a8, 0
+  40032e:	0b0c      	movi.n	a11, 0
+  400330:	08ad      	mov.n	a10, a8
+  400332:	ff5a81        	l32r	a8, 40009c <gpio_from_env-0x84> (4008f8 <gpio_setOutput>)
+  400335:	0008e0        	callx8	a8
+  400338:	1a0c      	movi.n	a10, 1
+  40033a:	ff5981        	l32r	a8, 4000a0 <gpio_from_env-0x80> (400948 <usleep>)
+  40033d:	0008e0        	callx8	a8
+  400340:	0788      	l32i.n	a8, a7, 0
+  400342:	881b      	addi.n	a8, a8, 1
+  400344:	0789      	s32i.n	a8, a7, 0
+  400346:	0788      	l32i.n	a8, a7, 0
+  400348:	9488a6        	blti	a8, 8, 4002e0 <read_byte+0x1c>
+  40034b:	040782        	l8ui	a8, a7, 4
+  40034e:	082d      	mov.n	a2, a8
+  400350:	f01d      	retw.n
+	...
+
+00400354 <main>:
+  400354:	006136        	entry	a1, 48
+  400357:	017d      	mov.n	a7, a1
+  400359:	0729      	s32i.n	a2, a7, 0
+  40035b:	016732        	s32i	a3, a7, 4
+  40035e:	ffe025        	call8	400160 <open_gpios>
+  400361:	0a8d      	mov.n	a8, a10
+  400363:	01f8d6        	bgez	a8, 400386 <main+0x32>
+  400366:	ff5081        	l32r	a8, 4000a8 <gpio_from_env-0x78> (400458 <__getreent>)
+  400369:	0008e0        	callx8	a8
+  40036c:	0a8d      	mov.n	a8, a10
+  40036e:	3898      	l32i.n	a9, a8, 12
+  400370:	ff4f81        	l32r	a8, 4000ac <gpio_from_env-0x74> (400bc8 <atoi+0x80>)
+  400373:	09dd      	mov.n	a13, a9
+  400375:	5c1c      	movi.n	a12, 21
+  400377:	1b0c      	movi.n	a11, 1
+  400379:	08ad      	mov.n	a10, a8
+  40037b:	ff4d81        	l32r	a8, 4000b0 <gpio_from_env-0x70> (400528 <fwrite>)
+  40037e:	0008e0        	callx8	a8
+  400381:	180c      	movi.n	a8, 1
+  400383:	000046        	j	400388 <main+0x34>
+  400386:	080c      	movi.n	a8, 0
+  400388:	082d      	mov.n	a2, a8
+  40038a:	f01d      	retw.n
+
+0040038c <ggetenv>:
+  40038c:	008136        	entry	a1, 64
+  40038f:	017d      	mov.n	a7, a1
+  400391:	4729      	s32i.n	a2, a7, 16
+  400393:	ff4881        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  400396:	0888      	l32i.n	a8, a8, 0
+  400398:	48cc      	bnez.n	a8, 4003a0 <ggetenv+0x14>
+  40039a:	f87c      	movi.n	a8, -1
+  40039c:	001b46        	j	40040d <ggetenv+0x81>
+  40039f:	47a800        	ee.stf.64.xp	f10, f4, a0, a8
+  4003a2:	ff4581        	l32r	a8, 4000b8 <gpio_from_env-0x68> (400a00 <strlen>)
+  4003a5:	0008e0        	callx8	a8
+  4003a8:	0a8d      	mov.n	a8, a10
+  4003aa:	1789      	s32i.n	a8, a7, 4
+  4003ac:	080c      	movi.n	a8, 0
+  4003ae:	0789      	s32i.n	a8, a7, 0
+  4003b0:	001186        	j	4003fa <ggetenv+0x6e>
+  4003b3:	00          	.byte	00
+  4003b4:	ff4081        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  4003b7:	0898      	l32i.n	a9, a8, 0
+  4003b9:	0788      	l32i.n	a8, a7, 0
+  4003bb:	1188e0        	slli	a8, a8, 2
+  4003be:	898a      	add.n	a8, a9, a8
+  4003c0:	0888      	l32i.n	a8, a8, 0
+  4003c2:	1798      	l32i.n	a9, a7, 4
+  4003c4:	09cd      	mov.n	a12, a9
+  4003c6:	47b8      	l32i.n	a11, a7, 16
+  4003c8:	08ad      	mov.n	a10, a8
+  4003ca:	ff3c81        	l32r	a8, 4000bc <gpio_from_env-0x64> (400aa4 <strncmp>)
+  4003cd:	0008e0        	callx8	a8
+  4003d0:	0a8d      	mov.n	a8, a10
+  4003d2:	e8dc      	bnez.n	a8, 4003f4 <ggetenv+0x68>
+  4003d4:	ff3881        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  4003d7:	0898      	l32i.n	a9, a8, 0
+  4003d9:	0788      	l32i.n	a8, a7, 0
+  4003db:	1188e0        	slli	a8, a8, 2
+  4003de:	898a      	add.n	a8, a9, a8
+  4003e0:	0898      	l32i.n	a9, a8, 0
+  4003e2:	1788      	l32i.n	a8, a7, 4
+  4003e4:	898a      	add.n	a8, a9, a8
+  4003e6:	000892        	l8ui	a9, a8, 0
+  4003e9:	d83c      	movi.n	a8, 61
+  4003eb:	059987        	bne	a9, a8, 4003f4 <ggetenv+0x68>
+  4003ee:	0788      	l32i.n	a8, a7, 0
+  4003f0:	000646        	j	40040d <ggetenv+0x81>
+  4003f3:	078800        	ee.stf.64.xp	f8, f0, a0, a8
+  4003f6:	881b      	addi.n	a8, a8, 1
+  4003f8:	0789      	s32i.n	a8, a7, 0
+  4003fa:	ff2e81        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  4003fd:	0898      	l32i.n	a9, a8, 0
+  4003ff:	0788      	l32i.n	a8, a7, 0
+  400401:	1188e0        	slli	a8, a8, 2
+  400404:	898a      	add.n	a8, a9, a8
+  400406:	0888      	l32i.n	a8, a8, 0
+  400408:	fa8856        	bnez	a8, 4003b4 <ggetenv+0x28>
+  40040b:	f87c      	movi.n	a8, -1
+  40040d:	082d      	mov.n	a2, a8
+  40040f:	f01d      	retw.n
+  400411:	000000        	ill
+
+00400414 <getenv>:
+  400414:	008136        	entry	a1, 64
+  400417:	017d      	mov.n	a7, a1
+  400419:	4729      	s32i.n	a2, a7, 16
+  40041b:	0427a2        	l32i	a10, a7, 16
+  40041e:	ff2881        	l32r	a8, 4000c0 <gpio_from_env-0x60> (40038c <ggetenv>)
+  400421:	0008e0        	callx8	a8
+  400424:	07a9      	s32i.n	a10, a7, 0
+  400426:	0788      	l32i.n	a8, a7, 0
+  400428:	025896        	bltz	a8, 400451 <getenv+0x3d>
+  40042b:	ff2281        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  40042e:	0898      	l32i.n	a9, a8, 0
+  400430:	0788      	l32i.n	a8, a7, 0
+  400432:	1188e0        	slli	a8, a8, 2
+  400435:	898a      	add.n	a8, a9, a8
+  400437:	0888      	l32i.n	a8, a8, 0
+  400439:	db3c      	movi.n	a11, 61
+  40043b:	20a880        	or	a10, a8, a8
+  40043e:	ff2181        	l32r	a8, 4000c4 <gpio_from_env-0x5c> (400b04 <strchr>)
+  400441:	0008e0        	callx8	a8
+  400444:	17a9      	s32i.n	a10, a7, 4
+  400446:	1788      	l32i.n	a8, a7, 4
+  400448:	588c      	beqz.n	a8, 400451 <getenv+0x3d>
+  40044a:	1788      	l32i.n	a8, a7, 4
+  40044c:	881b      	addi.n	a8, a8, 1
+  40044e:	000046        	j	400453 <getenv+0x3f>
+  400451:	080c      	movi.n	a8, 0
+  400453:	082d      	mov.n	a2, a8
+  400455:	f01d      	retw.n
+	...
+
+00400458 <__getreent>:
+  400458:	004136        	entry	a1, 32
+  40045b:	017d      	mov.n	a7, a1
+  40045d:	ff1a81        	l32r	a8, 4000c8 <gpio_from_env-0x58> (401e08 <_re>)
+  400460:	082d      	mov.n	a2, a8
+  400462:	f01d      	retw.n
+
+00400464 <_start>:
+  400464:	006136        	entry	a1, 48
+  400467:	017d      	mov.n	a7, a1
+  400469:	0729      	s32i.n	a2, a7, 0
+  40046b:	0788      	l32i.n	a8, a7, 0
+  40046d:	0898      	l32i.n	a9, a8, 0
+  40046f:	ff1781        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  400472:	0899      	s32i.n	a9, a8, 0
+  400474:	0788      	l32i.n	a8, a7, 0
+  400476:	032892        	l32i	a9, a8, 12
+  400479:	ff0e81        	l32r	a8, 4000b4 <gpio_from_env-0x6c> (401e04 <__environ>)
+  40047c:	0899      	s32i.n	a9, a8, 0
+  40047e:	ff1481        	l32r	a8, 4000d0 <gpio_from_env-0x50> (4004f4 <stdio_init>)
+  400481:	0008e0        	callx8	a8
+  400484:	0788      	l32i.n	a8, a7, 0
+  400486:	1898      	l32i.n	a9, a8, 4
+  400488:	0788      	l32i.n	a8, a7, 0
+  40048a:	2888      	l32i.n	a8, a8, 8
+  40048c:	08bd      	mov.n	a11, a8
+  40048e:	09ad      	mov.n	a10, a9
+  400490:	ff1181        	l32r	a8, 4000d4 <gpio_from_env-0x4c> (400354 <main>)
+  400493:	0008e0        	callx8	a8
+  400496:	f03d      	nop.n
+  400498:	f01d      	retw.n
+	...
+
+0040049c <ioctl>:
+  40049c:	010136        	entry	a1, 128
+  40049f:	078d      	mov.n	a8, a7
+  4004a1:	017d      	mov.n	a7, a1
+  4004a3:	126742        	s32i	a4, a7, 72
+  4004a6:	136752        	s32i	a5, a7, 76
+  4004a9:	146762        	s32i	a6, a7, 80
+  4004ac:	156782        	s32i	a8, a7, 84
+  4004af:	c729      	s32i.n	a2, a7, 48
+  4004b1:	d739      	s32i.n	a3, a7, 52
+  4004b3:	40c782        	addi	a8, a7, 64
+  4004b6:	2789      	s32i.n	a8, a7, 8
+  4004b8:	60c782        	addi	a8, a7, 96
+  4004bb:	1789      	s32i.n	a8, a7, 4
+  4004bd:	880c      	movi.n	a8, 8
+  4004bf:	3789      	s32i.n	a8, a7, 12
+  4004c1:	c788      	l32i.n	a8, a7, 48
+  4004c3:	4789      	s32i.n	a8, a7, 16
+  4004c5:	d788      	l32i.n	a8, a7, 52
+  4004c7:	5789      	s32i.n	a8, a7, 20
+  4004c9:	18c782        	addi	a8, a7, 24
+  4004cc:	974b      	addi.n	a9, a7, 4
+  4004ce:	ca0c      	movi.n	a10, 12
+  4004d0:	0acd      	mov.n	a12, a10
+  4004d2:	09bd      	mov.n	a11, a9
+  4004d4:	20a880        	or	a10, a8, a8
+  4004d7:	ff0081        	l32r	a8, 4000d8 <gpio_from_env-0x48> (400a28 <memcpy>)
+  4004da:	0008e0        	callx8	a8
+  4004dd:	fefb81        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  4004e0:	0888      	l32i.n	a8, a8, 0
+  4004e2:	10c792        	addi	a9, a7, 16
+  4004e5:	09bd      	mov.n	a11, a9
+  4004e7:	da0c      	movi.n	a10, 13
+  4004e9:	0008e0        	callx8	a8
+  4004ec:	07a9      	s32i.n	a10, a7, 0
+  4004ee:	0788      	l32i.n	a8, a7, 0
+  4004f0:	082d      	mov.n	a2, a8
+  4004f2:	f01d      	retw.n
+
+004004f4 <stdio_init>:
+  4004f4:	004136        	entry	a1, 32
+  4004f7:	207110        	or	a7, a1, a1
+  4004fa:	feeb81        	l32r	a8, 4000a8 <gpio_from_env-0x78> (400458 <__getreent>)
+  4004fd:	0008e0        	callx8	a8
+  400500:	0a9d      	mov.n	a9, a10
+  400502:	fef681        	l32r	a8, 4000dc <gpio_from_env-0x44> (401efc <_stdin>)
+  400505:	1989      	s32i.n	a8, a9, 4
+  400507:	fee881        	l32r	a8, 4000a8 <gpio_from_env-0x78> (400458 <__getreent>)
+  40050a:	0008e0        	callx8	a8
+  40050d:	0a9d      	mov.n	a9, a10
+  40050f:	fef481        	l32r	a8, 4000e0 <gpio_from_env-0x40> (401d1c <_stdout>)
+  400512:	2989      	s32i.n	a8, a9, 8
+  400514:	fee581        	l32r	a8, 4000a8 <gpio_from_env-0x78> (400458 <__getreent>)
+  400517:	0008e0        	callx8	a8
+  40051a:	0a9d      	mov.n	a9, a10
+  40051c:	fef281        	l32r	a8, 4000e4 <gpio_from_env-0x3c> (401d84 <_stderr>)
+  40051f:	3989      	s32i.n	a8, a9, 12
+  400521:	f03d      	nop.n
+  400523:	f01d      	retw.n
+  400525:	000000        	ill
+
+00400528 <fwrite>:
+  400528:	006136        	entry	a1, 48
+  40052b:	017d      	mov.n	a7, a1
+  40052d:	0729      	s32i.n	a2, a7, 0
+  40052f:	1739      	s32i.n	a3, a7, 4
+  400531:	2749      	s32i.n	a4, a7, 8
+  400533:	3759      	s32i.n	a5, a7, 12
+  400535:	3788      	l32i.n	a8, a7, 12
+  400537:	071882        	l16ui	a8, a8, 14
+  40053a:	238880        	sext	a8, a8, 15
+  40053d:	08ad      	mov.n	a10, a8
+  40053f:	1798      	l32i.n	a9, a7, 4
+  400541:	2788      	l32i.n	a8, a7, 8
+  400543:	828980        	mull	a8, a9, a8
+  400546:	08cd      	mov.n	a12, a8
+  400548:	07b8      	l32i.n	a11, a7, 0
+  40054a:	fee781        	l32r	a8, 4000e8 <gpio_from_env-0x38> (400980 <write>)
+  40054d:	0008e0        	callx8	a8
+  400550:	0a8d      	mov.n	a8, a10
+  400552:	082d      	mov.n	a2, a8
+  400554:	f01d      	retw.n
+	...
+
+00400558 <append_int>:
+  400558:	00a136        	entry	a1, 80
+  40055b:	017d      	mov.n	a7, a1
+  40055d:	8729      	s32i.n	a2, a7, 32
+  40055f:	9739      	s32i.n	a3, a7, 36
+  400561:	080c      	movi.n	a8, 0
+  400563:	1789      	s32i.n	a8, a7, 4
+  400565:	9788      	l32i.n	a8, a7, 36
+  400567:	0888      	l32i.n	a8, a8, 0
+  400569:	2789      	s32i.n	a8, a7, 8
+  40056b:	8788      	l32i.n	a8, a7, 32
+  40056d:	0118d6        	bgez	a8, 400582 <append_int+0x2a>
+  400570:	2788      	l32i.n	a8, a7, 8
+  400572:	981b      	addi.n	a9, a8, 1
+  400574:	2799      	s32i.n	a9, a7, 8
+  400576:	d92c      	movi.n	a9, 45
+  400578:	004892        	s8i	a9, a8, 0
+  40057b:	8788      	l32i.n	a8, a7, 32
+  40057d:	608080        	neg	a8, a8
+  400580:	8789      	s32i.n	a8, a7, 32
+  400582:	980c      	movi.n	a8, 9
+  400584:	0789      	s32i.n	a8, a7, 0
+  400586:	001446        	j	4005db <append_int+0x83>
+  400589:	8798      	l32i.n	a9, a7, 32
+  40058b:	fed881        	l32r	a8, 4000ec <gpio_from_env-0x34> (66666667 <_end+0x66264703>)
+  40058e:	82a980        	mull	a10, a9, a8
+  400591:	b2d980        	mulsh	a13, a9, a8
+  400594:	0acd      	mov.n	a12, a10
+  400596:	21a2d0        	srai	a10, a13, 2
+  400599:	318f90        	srai	a8, a9, 31
+  40059c:	c0aa80        	sub	a10, a10, a8
+  40059f:	0a8d      	mov.n	a8, a10
+  4005a1:	1188e0        	slli	a8, a8, 2
+  4005a4:	88aa      	add.n	a8, a8, a10
+  4005a6:	888a      	add.n	a8, a8, a8
+  4005a8:	c0a980        	sub	a10, a9, a8
+  4005ab:	7480a0        	extui	a8, a10, 0, 8
+  4005ae:	30c882        	addi	a8, a8, 48
+  4005b1:	749080        	extui	a9, a8, 0, 8
+  4005b4:	a7cb      	addi.n	a10, a7, 12
+  4005b6:	0788      	l32i.n	a8, a7, 0
+  4005b8:	8a8a      	add.n	a8, a10, a8
+  4005ba:	004892        	s8i	a9, a8, 0
+  4005bd:	8788      	l32i.n	a8, a7, 32
+  4005bf:	fecb91        	l32r	a9, 4000ec <gpio_from_env-0x34> (66666667 <_end+0x66264703>)
+  4005c2:	82a890        	mull	a10, a8, a9
+  4005c5:	b2f890        	mulsh	a15, a8, a9
+  4005c8:	0aed      	mov.n	a14, a10
+  4005ca:	2192f0        	srai	a9, a15, 2
+  4005cd:	318f80        	srai	a8, a8, 31
+  4005d0:	c08980        	sub	a8, a9, a8
+  4005d3:	8789      	s32i.n	a8, a7, 32
+  4005d5:	0788      	l32i.n	a8, a7, 0
+  4005d7:	880b      	addi.n	a8, a8, -1
+  4005d9:	0789      	s32i.n	a8, a7, 0
+  4005db:	0788      	l32i.n	a8, a7, 0
+  4005dd:	fa88d6        	bgez	a8, 400589 <append_int+0x31>
+  4005e0:	080c      	movi.n	a8, 0
+  4005e2:	164782        	s8i	a8, a7, 22
+  4005e5:	080c      	movi.n	a8, 0
+  4005e7:	0789      	s32i.n	a8, a7, 0
+  4005e9:	000b46        	j	40061a <append_int+0xc2>
+  4005ec:	1788      	l32i.n	a8, a7, 4
+  4005ee:	c8cc      	bnez.n	a8, 4005fe <append_int+0xa6>
+  4005f0:	97cb      	addi.n	a9, a7, 12
+  4005f2:	0788      	l32i.n	a8, a7, 0
+  4005f4:	898a      	add.n	a8, a9, a8
+  4005f6:	000882        	l8ui	a8, a8, 0
+  4005f9:	093c      	movi.n	a9, 48
+  4005fb:	15b987        	bgeu	a9, a8, 400614 <append_int+0xbc>
+  4005fe:	180c      	movi.n	a8, 1
+  400600:	1789      	s32i.n	a8, a7, 4
+  400602:	2788      	l32i.n	a8, a7, 8
+  400604:	981b      	addi.n	a9, a8, 1
+  400606:	2799      	s32i.n	a9, a7, 8
+  400608:	a7cb      	addi.n	a10, a7, 12
+  40060a:	0798      	l32i.n	a9, a7, 0
+  40060c:	9a9a      	add.n	a9, a10, a9
+  40060e:	000992        	l8ui	a9, a9, 0
+  400611:	004892        	s8i	a9, a8, 0
+  400614:	0788      	l32i.n	a8, a7, 0
+  400616:	881b      	addi.n	a8, a8, 1
+  400618:	0789      	s32i.n	a8, a7, 0
+  40061a:	0788      	l32i.n	a8, a7, 0
+  40061c:	cc98a6        	blti	a8, 10, 4005ec <append_int+0x94>
+  40061f:	1788      	l32i.n	a8, a7, 4
+  400621:	98cc      	bnez.n	a8, 40062e <append_int+0xd6>
+  400623:	2788      	l32i.n	a8, a7, 8
+  400625:	981b      	addi.n	a9, a8, 1
+  400627:	2799      	s32i.n	a9, a7, 8
+  400629:	093c      	movi.n	a9, 48
+  40062b:	004892        	s8i	a9, a8, 0
+  40062e:	9788      	l32i.n	a8, a7, 36
+  400630:	2798      	l32i.n	a9, a7, 8
+  400632:	0899      	s32i.n	a9, a8, 0
+  400634:	f03d      	nop.n
+  400636:	f01d      	retw.n
+
+00400638 <append_hex>:
+  400638:	008136        	entry	a1, 64
+  40063b:	017d      	mov.n	a7, a1
+  40063d:	4729      	s32i.n	a2, a7, 16
+  40063f:	5739      	s32i.n	a3, a7, 20
+  400641:	feab81        	l32r	a8, 4000f0 <gpio_from_env-0x30> (400be4 <atoi+0x9c>)
+  400644:	3789      	s32i.n	a8, a7, 12
+  400646:	080c      	movi.n	a8, 0
+  400648:	1789      	s32i.n	a8, a7, 4
+  40064a:	5788      	l32i.n	a8, a7, 20
+  40064c:	0888      	l32i.n	a8, a8, 0
+  40064e:	2789      	s32i.n	a8, a7, 8
+  400650:	080c      	movi.n	a8, 0
+  400652:	0789      	s32i.n	a8, a7, 0
+  400654:	000c86        	j	40068a <append_hex+0x52>
+  400657:	00          	.byte	00
+  400658:	178800        	ee.stf.64.xp	f8, f1, a0, a8
+  40065b:	58cc      	bnez.n	a8, 400664 <append_hex+0x2c>
+  40065d:	4788      	l32i.n	a8, a7, 16
+  40065f:	358c80        	extui	a8, a8, 28, 4
+  400662:	789c      	beqz.n	a8, 40067d <append_hex+0x45>
+  400664:	180c      	movi.n	a8, 1
+  400666:	1789      	s32i.n	a8, a7, 4
+  400668:	4788      	l32i.n	a8, a7, 16
+  40066a:	358c80        	extui	a8, a8, 28, 4
+  40066d:	3798      	l32i.n	a9, a7, 12
+  40066f:	998a      	add.n	a9, a9, a8
+  400671:	2788      	l32i.n	a8, a7, 8
+  400673:	a81b      	addi.n	a10, a8, 1
+  400675:	27a9      	s32i.n	a10, a7, 8
+  400677:	000992        	l8ui	a9, a9, 0
+  40067a:	004892        	s8i	a9, a8, 0
+  40067d:	4788      	l32i.n	a8, a7, 16
+  40067f:	1188c0        	slli	a8, a8, 4
+  400682:	4789      	s32i.n	a8, a7, 16
+  400684:	0788      	l32i.n	a8, a7, 0
+  400686:	881b      	addi.n	a8, a8, 1
+  400688:	0789      	s32i.n	a8, a7, 0
+  40068a:	0788      	l32i.n	a8, a7, 0
+  40068c:	c988a6        	blti	a8, 8, 400659 <append_hex+0x21>
+  40068f:	1788      	l32i.n	a8, a7, 4
+  400691:	98cc      	bnez.n	a8, 40069e <append_hex+0x66>
+  400693:	2788      	l32i.n	a8, a7, 8
+  400695:	981b      	addi.n	a9, a8, 1
+  400697:	2799      	s32i.n	a9, a7, 8
+  400699:	093c      	movi.n	a9, 48
+  40069b:	004892        	s8i	a9, a8, 0
+  40069e:	5788      	l32i.n	a8, a7, 20
+  4006a0:	2798      	l32i.n	a9, a7, 8
+  4006a2:	0899      	s32i.n	a9, a8, 0
+  4006a4:	f03d      	nop.n
+  4006a6:	f01d      	retw.n
+
+004006a8 <append_str>:
+  4006a8:	006136        	entry	a1, 48
+  4006ab:	017d      	mov.n	a7, a1
+  4006ad:	0729      	s32i.n	a2, a7, 0
+  4006af:	1739      	s32i.n	a3, a7, 4
+  4006b1:	1788      	l32i.n	a8, a7, 4
+  4006b3:	0888      	l32i.n	a8, a8, 0
+  4006b5:	07b8      	l32i.n	a11, a7, 0
+  4006b7:	20a880        	or	a10, a8, a8
+  4006ba:	fe8e81        	l32r	a8, 4000f4 <gpio_from_env-0x2c> (400a68 <stpcpy>)
+  4006bd:	0008e0        	callx8	a8
+  4006c0:	0a9d      	mov.n	a9, a10
+  4006c2:	1788      	l32i.n	a8, a7, 4
+  4006c4:	0899      	s32i.n	a9, a8, 0
+  4006c6:	f03d      	nop.n
+  4006c8:	f01d      	retw.n
+	...
+
+004006cc <vsprintf>:
+  4006cc:	00a136        	entry	a1, 80
+  4006cf:	017d      	mov.n	a7, a1
+  4006d1:	4729      	s32i.n	a2, a7, 16
+  4006d3:	5739      	s32i.n	a3, a7, 20
+  4006d5:	6749      	s32i.n	a4, a7, 24
+  4006d7:	7759      	s32i.n	a5, a7, 28
+  4006d9:	8769      	s32i.n	a6, a7, 32
+  4006db:	4788      	l32i.n	a8, a7, 16
+  4006dd:	2789      	s32i.n	a8, a7, 8
+  4006df:	0527a2        	l32i	a10, a7, 20
+  4006e2:	fe7581        	l32r	a8, 4000b8 <gpio_from_env-0x68> (400a00 <strlen>)
+  4006e5:	0008e0        	callx8	a8
+  4006e8:	0a8d      	mov.n	a8, a10
+  4006ea:	1789      	s32i.n	a8, a7, 4
+  4006ec:	080c      	movi.n	a8, 0
+  4006ee:	0789      	s32i.n	a8, a7, 0
+  4006f0:	0051c6        	j	40083b <vsprintf+0x16f>
+  4006f3:	078800        	ee.stf.64.xp	f8, f0, a0, a8
+  4006f6:	5798      	l32i.n	a9, a7, 20
+  4006f8:	898a      	add.n	a8, a9, a8
+  4006fa:	000892        	l8ui	a9, a8, 0
+  4006fd:	582c      	movi.n	a8, 37
+  4006ff:	151987        	beq	a9, a8, 400718 <vsprintf+0x4c>
+  400702:	0788      	l32i.n	a8, a7, 0
+  400704:	5798      	l32i.n	a9, a7, 20
+  400706:	998a      	add.n	a9, a9, a8
+  400708:	2788      	l32i.n	a8, a7, 8
+  40070a:	a81b      	addi.n	a10, a8, 1
+  40070c:	27a9      	s32i.n	a10, a7, 8
+  40070e:	000992        	l8ui	a9, a9, 0
+  400711:	004892        	s8i	a9, a8, 0
+  400714:	004746        	j	400835 <vsprintf+0x169>
+  400717:	078800        	ee.stf.64.xp	f8, f0, a0, a8
+  40071a:	881b      	addi.n	a8, a8, 1
+  40071c:	0789      	s32i.n	a8, a7, 0
+  40071e:	0788      	l32i.n	a8, a7, 0
+  400720:	5798      	l32i.n	a9, a7, 20
+  400722:	898a      	add.n	a8, a9, a8
+  400724:	000882        	l8ui	a8, a8, 0
+  400727:	78a092        	movi	a9, 120
+  40072a:	621897        	beq	a8, a9, 400790 <vsprintf+0xc4>
+  40072d:	78a092        	movi	a9, 120
+  400730:	02a987        	bge	a9, a8, 400736 <vsprintf+0x6a>
+  400733:	003f86        	j	400835 <vsprintf+0x169>
+  400736:	73a092        	movi	a9, 115
+  400739:	029897        	bne	a8, a9, 40073f <vsprintf+0x73>
+  40073c:	002206        	j	4007c8 <vsprintf+0xfc>
+  40073f:	73a092        	movi	a9, 115
+  400742:	02a987        	bge	a9, a8, 400748 <vsprintf+0x7c>
+  400745:	003b06        	j	400835 <vsprintf+0x169>
+  400748:	63a092        	movi	a9, 99
+  40074b:	029897        	bne	a8, a9, 400751 <vsprintf+0x85>
+  40074e:	002b86        	j	400800 <vsprintf+0x134>
+  400751:	64a092        	movi	a9, 100
+  400754:	021897        	beq	a8, a9, 40075a <vsprintf+0x8e>
+  400757:	003686        	j	400835 <vsprintf+0x169>
+  40075a:	8788      	l32i.n	a8, a7, 32
+  40075c:	984b      	addi.n	a9, a8, 4
+  40075e:	8799      	s32i.n	a9, a7, 32
+  400760:	8798      	l32i.n	a9, a7, 32
+  400762:	8a1c      	movi.n	a10, 24
+  400764:	042a97        	blt	a10, a9, 40076c <vsprintf+0xa0>
+  400767:	7788      	l32i.n	a8, a7, 28
+  400769:	000286        	j	400777 <vsprintf+0xab>
+  40076c:	891c      	movi.n	a9, 24
+  40076e:	032987        	blt	a9, a8, 400775 <vsprintf+0xa9>
+  400771:	482c      	movi.n	a8, 36
+  400773:	8789      	s32i.n	a8, a7, 32
+  400775:	6788      	l32i.n	a8, a7, 24
+  400777:	8798      	l32i.n	a9, a7, 32
+  400779:	fcc992        	addi	a9, a9, -4
+  40077c:	889a      	add.n	a8, a8, a9
+  40077e:	0888      	l32i.n	a8, a8, 0
+  400780:	978b      	addi.n	a9, a7, 8
+  400782:	09bd      	mov.n	a11, a9
+  400784:	08ad      	mov.n	a10, a8
+  400786:	fe5c81        	l32r	a8, 4000f8 <gpio_from_env-0x28> (400558 <append_int>)
+  400789:	0008e0        	callx8	a8
+  40078c:	002946        	j	400835 <vsprintf+0x169>
+  40078f:	878800        	ee.stf.64.xp	f8, f8, a0, a8
+  400792:	984b      	addi.n	a9, a8, 4
+  400794:	8799      	s32i.n	a9, a7, 32
+  400796:	8798      	l32i.n	a9, a7, 32
+  400798:	8a1c      	movi.n	a10, 24
+  40079a:	042a97        	blt	a10, a9, 4007a2 <vsprintf+0xd6>
+  40079d:	7788      	l32i.n	a8, a7, 28
+  40079f:	0002c6        	j	4007ae <vsprintf+0xe2>
+  4007a2:	891c      	movi.n	a9, 24
+  4007a4:	042987        	blt	a9, a8, 4007ac <vsprintf+0xe0>
+  4007a7:	482c      	movi.n	a8, 36
+  4007a9:	086782        	s32i	a8, a7, 32
+  4007ac:	6788      	l32i.n	a8, a7, 24
+  4007ae:	8798      	l32i.n	a9, a7, 32
+  4007b0:	fcc992        	addi	a9, a9, -4
+  4007b3:	889a      	add.n	a8, a8, a9
+  4007b5:	0888      	l32i.n	a8, a8, 0
+  4007b7:	978b      	addi.n	a9, a7, 8
+  4007b9:	09bd      	mov.n	a11, a9
+  4007bb:	20a880        	or	a10, a8, a8
+  4007be:	fe4f81        	l32r	a8, 4000fc <gpio_from_env-0x24> (400638 <append_hex>)
+  4007c1:	0008e0        	callx8	a8
+  4007c4:	001b46        	j	400835 <vsprintf+0x169>
+  4007c7:	878800        	ee.stf.64.xp	f8, f8, a0, a8
+  4007ca:	984b      	addi.n	a9, a8, 4
+  4007cc:	8799      	s32i.n	a9, a7, 32
+  4007ce:	8798      	l32i.n	a9, a7, 32
+  4007d0:	8a1c      	movi.n	a10, 24
+  4007d2:	042a97        	blt	a10, a9, 4007da <vsprintf+0x10e>
+  4007d5:	7788      	l32i.n	a8, a7, 28
+  4007d7:	0002c6        	j	4007e6 <vsprintf+0x11a>
+  4007da:	891c      	movi.n	a9, 24
+  4007dc:	042987        	blt	a9, a8, 4007e4 <vsprintf+0x118>
+  4007df:	482c      	movi.n	a8, 36
+  4007e1:	086782        	s32i	a8, a7, 32
+  4007e4:	6788      	l32i.n	a8, a7, 24
+  4007e6:	8798      	l32i.n	a9, a7, 32
+  4007e8:	fcc992        	addi	a9, a9, -4
+  4007eb:	889a      	add.n	a8, a8, a9
+  4007ed:	0888      	l32i.n	a8, a8, 0
+  4007ef:	978b      	addi.n	a9, a7, 8
+  4007f1:	09bd      	mov.n	a11, a9
+  4007f3:	20a880        	or	a10, a8, a8
+  4007f6:	fe4281        	l32r	a8, 400100 <gpio_from_env-0x20> (4006a8 <append_str>)
+  4007f9:	0008e0        	callx8	a8
+  4007fc:	000d46        	j	400835 <vsprintf+0x169>
+  4007ff:	878800        	ee.stf.64.xp	f8, f8, a0, a8
+  400802:	984b      	addi.n	a9, a8, 4
+  400804:	8799      	s32i.n	a9, a7, 32
+  400806:	8798      	l32i.n	a9, a7, 32
+  400808:	8a1c      	movi.n	a10, 24
+  40080a:	042a97        	blt	a10, a9, 400812 <vsprintf+0x146>
+  40080d:	7788      	l32i.n	a8, a7, 28
+  40080f:	0002c6        	j	40081e <vsprintf+0x152>
+  400812:	891c      	movi.n	a9, 24
+  400814:	042987        	blt	a9, a8, 40081c <vsprintf+0x150>
+  400817:	482c      	movi.n	a8, 36
+  400819:	086782        	s32i	a8, a7, 32
+  40081c:	6788      	l32i.n	a8, a7, 24
+  40081e:	8798      	l32i.n	a9, a7, 32
+  400820:	fcc992        	addi	a9, a9, -4
+  400823:	889a      	add.n	a8, a8, a9
+  400825:	08a8      	l32i.n	a10, a8, 0
+  400827:	2788      	l32i.n	a8, a7, 8
+  400829:	981b      	addi.n	a9, a8, 1
+  40082b:	2799      	s32i.n	a9, a7, 8
+  40082d:	7490a0        	extui	a9, a10, 0, 8
+  400830:	004892        	s8i	a9, a8, 0
+  400833:	f03d      	nop.n
+  400835:	0788      	l32i.n	a8, a7, 0
+  400837:	881b      	addi.n	a8, a8, 1
+  400839:	0789      	s32i.n	a8, a7, 0
+  40083b:	0798      	l32i.n	a9, a7, 0
+  40083d:	1788      	l32i.n	a8, a7, 4
+  40083f:	02a987        	bge	a9, a8, 400845 <vsprintf+0x179>
+  400842:	ffab86        	j	4006f4 <vsprintf+0x28>
+  400845:	2788      	l32i.n	a8, a7, 8
+  400847:	090c      	movi.n	a9, 0
+  400849:	004892        	s8i	a9, a8, 0
+  40084c:	2798      	l32i.n	a9, a7, 8
+  40084e:	4788      	l32i.n	a8, a7, 16
+  400850:	c08980        	sub	a8, a9, a8
+  400853:	082d      	mov.n	a2, a8
+  400855:	f01d      	retw.n
+	...
+
+00400858 <sprintf>:
+  400858:	00c136        	entry	a1, 96
+  40085b:	078d      	mov.n	a8, a7
+  40085d:	017d      	mov.n	a7, a1
+  40085f:	a749      	s32i.n	a4, a7, 40
+  400861:	b759      	s32i.n	a5, a7, 44
+  400863:	c769      	s32i.n	a6, a7, 48
+  400865:	d789      	s32i.n	a8, a7, 52
+  400867:	4729      	s32i.n	a2, a7, 16
+  400869:	5739      	s32i.n	a3, a7, 20
+  40086b:	20c782        	addi	a8, a7, 32
+  40086e:	1789      	s32i.n	a8, a7, 4
+  400870:	40c782        	addi	a8, a7, 64
+  400873:	0789      	s32i.n	a8, a7, 0
+  400875:	880c      	movi.n	a8, 8
+  400877:	2789      	s32i.n	a8, a7, 8
+  400879:	07c8      	l32i.n	a12, a7, 0
+  40087b:	17d8      	l32i.n	a13, a7, 4
+  40087d:	27e8      	l32i.n	a14, a7, 8
+  40087f:	57b8      	l32i.n	a11, a7, 20
+  400881:	47a8      	l32i.n	a10, a7, 16
+  400883:	fe2081        	l32r	a8, 400104 <gpio_from_env-0x1c> (4006cc <vsprintf>)
+  400886:	0008e0        	callx8	a8
+  400889:	57a8      	l32i.n	a10, a7, 20
+  40088b:	fe0b81        	l32r	a8, 4000b8 <gpio_from_env-0x68> (400a00 <strlen>)
+  40088e:	0008e0        	callx8	a8
+  400891:	0a8d      	mov.n	a8, a10
+  400893:	082d      	mov.n	a2, a8
+  400895:	f01d      	retw.n
+	...
+
+00400898 <gpio_open>:
+  400898:	00a136        	entry	a1, 80
+  40089b:	017d      	mov.n	a7, a1
+  40089d:	8729      	s32i.n	a2, a7, 32
+  40089f:	f87c      	movi.n	a8, -1
+  4008a1:	0789      	s32i.n	a8, a7, 0
+  4008a3:	8788      	l32i.n	a8, a7, 32
+  4008a5:	2718a6        	blti	a8, 1, 4008d0 <gpio_open+0x38>
+  4008a8:	8788      	l32i.n	a8, a7, 32
+  4008aa:	e6a392        	movi	a9, 0x3e6
+  4008ad:	1f2987        	blt	a9, a8, 4008d0 <gpio_open+0x38>
+  4008b0:	fe1691        	l32r	a9, 400108 <gpio_from_env-0x18> (400d10 <atoi+0x1c8>)
+  4008b3:	874b      	addi.n	a8, a7, 4
+  4008b5:	87c8      	l32i.n	a12, a7, 32
+  4008b7:	09bd      	mov.n	a11, a9
+  4008b9:	20a880        	or	a10, a8, a8
+  4008bc:	fe1481        	l32r	a8, 40010c <gpio_from_env-0x14> (400858 <sprintf>)
+  4008bf:	0008e0        	callx8	a8
+  4008c2:	874b      	addi.n	a8, a7, 4
+  4008c4:	2b0c      	movi.n	a11, 2
+  4008c6:	08ad      	mov.n	a10, a8
+  4008c8:	fe1281        	l32r	a8, 400110 <gpio_from_env-0x10> (4009d8 <open>)
+  4008cb:	0008e0        	callx8	a8
+  4008ce:	07a9      	s32i.n	a10, a7, 0
+  4008d0:	0788      	l32i.n	a8, a7, 0
+  4008d2:	082d      	mov.n	a2, a8
+  4008d4:	f01d      	retw.n
+	...
+
+004008d8 <gpio_set_mode>:
+  4008d8:	006136        	entry	a1, 48
+  4008db:	017d      	mov.n	a7, a1
+  4008dd:	0729      	s32i.n	a2, a7, 0
+  4008df:	1739      	s32i.n	a3, a7, 4
+  4008e1:	974b      	addi.n	a9, a7, 4
+  4008e3:	fe0c81        	l32r	a8, 400114 <gpio_from_env-0xc> (6701 <gpio_from_env-0x3f9a1f>)
+  4008e6:	09cd      	mov.n	a12, a9
+  4008e8:	08bd      	mov.n	a11, a8
+  4008ea:	07a8      	l32i.n	a10, a7, 0
+  4008ec:	fe0b81        	l32r	a8, 400118 <gpio_from_env-0x8> (40049c <ioctl>)
+  4008ef:	0008e0        	callx8	a8
+  4008f2:	0a8d      	mov.n	a8, a10
+  4008f4:	082d      	mov.n	a2, a8
+  4008f6:	f01d      	retw.n
+
+004008f8 <gpio_setOutput>:
+  4008f8:	008136        	entry	a1, 64
+  4008fb:	017d      	mov.n	a7, a1
+  4008fd:	4729      	s32i.n	a2, a7, 16
+  4008ff:	5739      	s32i.n	a3, a7, 20
+  400901:	5788      	l32i.n	a8, a7, 20
+  400903:	388c      	beqz.n	a8, 40090a <gpio_setOutput+0x12>
+  400905:	183c      	movi.n	a8, 49
+  400907:	000046        	j	40090c <gpio_setOutput+0x14>
+  40090a:	083c      	movi.n	a8, 48
+  40090c:	0789      	s32i.n	a8, a7, 0
+  40090e:	1c0c      	movi.n	a12, 1
+  400910:	07bd      	mov.n	a11, a7
+  400912:	47a8      	l32i.n	a10, a7, 16
+  400914:	fdf581        	l32r	a8, 4000e8 <gpio_from_env-0x38> (400980 <write>)
+  400917:	0008e0        	callx8	a8
+  40091a:	0a8d      	mov.n	a8, a10
+  40091c:	082d      	mov.n	a2, a8
+  40091e:	f01d      	retw.n
+
+00400920 <gpio_getInput>:
+  400920:	008136        	entry	a1, 64
+  400923:	017d      	mov.n	a7, a1
+  400925:	4729      	s32i.n	a2, a7, 16
+  400927:	1c0c      	movi.n	a12, 1
+  400929:	07bd      	mov.n	a11, a7
+  40092b:	0427a2        	l32i	a10, a7, 16
+  40092e:	fdfb81        	l32r	a8, 40011c <gpio_from_env-0x4> (4009ac <read>)
+  400931:	0008e0        	callx8	a8
+  400934:	0798      	l32i.n	a9, a7, 0
+  400936:	183c      	movi.n	a8, 49
+  400938:	049987        	bne	a9, a8, 400940 <gpio_getInput+0x20>
+  40093b:	180c      	movi.n	a8, 1
+  40093d:	000046        	j	400942 <gpio_getInput+0x22>
+  400940:	080c      	movi.n	a8, 0
+  400942:	082d      	mov.n	a2, a8
+  400944:	f01d      	retw.n
+	...
+
+00400948 <usleep>:
+  400948:	008136        	entry	a1, 64
+  40094b:	017d      	mov.n	a7, a1
+  40094d:	4729      	s32i.n	a2, a7, 16
+  40094f:	080c      	movi.n	a8, 0
+  400951:	090c      	movi.n	a9, 0
+  400953:	0789      	s32i.n	a8, a7, 0
+  400955:	1799      	s32i.n	a9, a7, 4
+  400957:	4798      	l32i.n	a9, a7, 16
+  400959:	098d      	mov.n	a8, a9
+  40095b:	1188b0        	slli	a8, a8, 5
+  40095e:	c08890        	sub	a8, a8, a9
+  400961:	1188e0        	slli	a8, a8, 2
+  400964:	889a      	add.n	a8, a8, a9
+  400966:	1188d0        	slli	a8, a8, 3
+  400969:	2789      	s32i.n	a8, a7, 8
+  40096b:	fdd881        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  40096e:	0888      	l32i.n	a8, a8, 0
+  400970:	07bd      	mov.n	a11, a7
+  400972:	0ea0a2        	movi	a10, 14
+  400975:	0008e0        	callx8	a8
+  400978:	080c      	movi.n	a8, 0
+  40097a:	082d      	mov.n	a2, a8
+  40097c:	f01d      	retw.n
+	...
+
+00400980 <write>:
+  400980:	008136        	entry	a1, 64
+  400983:	017d      	mov.n	a7, a1
+  400985:	4729      	s32i.n	a2, a7, 16
+  400987:	5739      	s32i.n	a3, a7, 20
+  400989:	6749      	s32i.n	a4, a7, 24
+  40098b:	4788      	l32i.n	a8, a7, 16
+  40098d:	0789      	s32i.n	a8, a7, 0
+  40098f:	6788      	l32i.n	a8, a7, 24
+  400991:	1789      	s32i.n	a8, a7, 4
+  400993:	5788      	l32i.n	a8, a7, 20
+  400995:	2789      	s32i.n	a8, a7, 8
+  400997:	fdcd81        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  40099a:	0888      	l32i.n	a8, a8, 0
+  40099c:	07bd      	mov.n	a11, a7
+  40099e:	01a0a2        	movi	a10, 1
+  4009a1:	0008e0        	callx8	a8
+  4009a4:	0a8d      	mov.n	a8, a10
+  4009a6:	082d      	mov.n	a2, a8
+  4009a8:	f01d      	retw.n
+	...
+
+004009ac <read>:
+  4009ac:	008136        	entry	a1, 64
+  4009af:	017d      	mov.n	a7, a1
+  4009b1:	4729      	s32i.n	a2, a7, 16
+  4009b3:	5739      	s32i.n	a3, a7, 20
+  4009b5:	6749      	s32i.n	a4, a7, 24
+  4009b7:	4788      	l32i.n	a8, a7, 16
+  4009b9:	0789      	s32i.n	a8, a7, 0
+  4009bb:	6788      	l32i.n	a8, a7, 24
+  4009bd:	1789      	s32i.n	a8, a7, 4
+  4009bf:	5788      	l32i.n	a8, a7, 20
+  4009c1:	2789      	s32i.n	a8, a7, 8
+  4009c3:	fdc281        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  4009c6:	0888      	l32i.n	a8, a8, 0
+  4009c8:	07bd      	mov.n	a11, a7
+  4009ca:	00a0a2        	movi	a10, 0
+  4009cd:	0008e0        	callx8	a8
+  4009d0:	0a8d      	mov.n	a8, a10
+  4009d2:	082d      	mov.n	a2, a8
+  4009d4:	f01d      	retw.n
+	...
+
+004009d8 <open>:
+  4009d8:	008136        	entry	a1, 64
+  4009db:	017d      	mov.n	a7, a1
+  4009dd:	4729      	s32i.n	a2, a7, 16
+  4009df:	5739      	s32i.n	a3, a7, 20
+  4009e1:	5788      	l32i.n	a8, a7, 20
+  4009e3:	0789      	s32i.n	a8, a7, 0
+  4009e5:	080c      	movi.n	a8, 0
+  4009e7:	1789      	s32i.n	a8, a7, 4
+  4009e9:	4788      	l32i.n	a8, a7, 16
+  4009eb:	2789      	s32i.n	a8, a7, 8
+  4009ed:	fdb781        	l32r	a8, 4000cc <gpio_from_env-0x54> (401ef8 <do_syscall>)
+  4009f0:	0888      	l32i.n	a8, a8, 0
+  4009f2:	07bd      	mov.n	a11, a7
+  4009f4:	2a0c      	movi.n	a10, 2
+  4009f6:	0008e0        	callx8	a8
+  4009f9:	0a8d      	mov.n	a8, a10
+  4009fb:	082d      	mov.n	a2, a8
+  4009fd:	f01d      	retw.n
+	...
+
+00400a00 <strlen>:
+  400a00:	008136        	entry	a1, 64
+  400a03:	017d      	mov.n	a7, a1
+  400a05:	4729      	s32i.n	a2, a7, 16
+  400a07:	080c      	movi.n	a8, 0
+  400a09:	0789      	s32i.n	a8, a7, 0
+  400a0b:	000146        	j	400a14 <strlen+0x14>
+  400a0e:	0788      	l32i.n	a8, a7, 0
+  400a10:	881b      	addi.n	a8, a8, 1
+  400a12:	0789      	s32i.n	a8, a7, 0
+  400a14:	4788      	l32i.n	a8, a7, 16
+  400a16:	981b      	addi.n	a9, a8, 1
+  400a18:	4799      	s32i.n	a9, a7, 16
+  400a1a:	000882        	l8ui	a8, a8, 0
+  400a1d:	fed856        	bnez	a8, 400a0e <strlen+0xe>
+  400a20:	0788      	l32i.n	a8, a7, 0
+  400a22:	082d      	mov.n	a2, a8
+  400a24:	f01d      	retw.n
+	...
+
+00400a28 <memcpy>:
+  400a28:	008136        	entry	a1, 64
+  400a2b:	017d      	mov.n	a7, a1
+  400a2d:	4729      	s32i.n	a2, a7, 16
+  400a2f:	5739      	s32i.n	a3, a7, 20
+  400a31:	6749      	s32i.n	a4, a7, 24
+  400a33:	4788      	l32i.n	a8, a7, 16
+  400a35:	1789      	s32i.n	a8, a7, 4
+  400a37:	5788      	l32i.n	a8, a7, 20
+  400a39:	2789      	s32i.n	a8, a7, 8
+  400a3b:	080c      	movi.n	a8, 0
+  400a3d:	0789      	s32i.n	a8, a7, 0
+  400a3f:	0005c6        	j	400a5a <memcpy+0x32>
+  400a42:	0788      	l32i.n	a8, a7, 0
+  400a44:	2798      	l32i.n	a9, a7, 8
+  400a46:	998a      	add.n	a9, a9, a8
+  400a48:	0788      	l32i.n	a8, a7, 0
+  400a4a:	17a8      	l32i.n	a10, a7, 4
+  400a4c:	8a8a      	add.n	a8, a10, a8
+  400a4e:	000992        	l8ui	a9, a9, 0
+  400a51:	004892        	s8i	a9, a8, 0
+  400a54:	0788      	l32i.n	a8, a7, 0
+  400a56:	881b      	addi.n	a8, a8, 1
+  400a58:	0789      	s32i.n	a8, a7, 0
+  400a5a:	0798      	l32i.n	a9, a7, 0
+  400a5c:	6788      	l32i.n	a8, a7, 24
+  400a5e:	e03987        	bltu	a9, a8, 400a42 <memcpy+0x1a>
+  400a61:	4788      	l32i.n	a8, a7, 16
+  400a63:	082d      	mov.n	a2, a8
+  400a65:	f01d      	retw.n
+	...
+
+00400a68 <stpcpy>:
+  400a68:	008136        	entry	a1, 64
+  400a6b:	017d      	mov.n	a7, a1
+  400a6d:	4729      	s32i.n	a2, a7, 16
+  400a6f:	5739      	s32i.n	a3, a7, 20
+  400a71:	4788      	l32i.n	a8, a7, 16
+  400a73:	0789      	s32i.n	a8, a7, 0
+  400a75:	5788      	l32i.n	a8, a7, 20
+  400a77:	1789      	s32i.n	a8, a7, 4
+  400a79:	000446        	j	400a8e <stpcpy+0x26>
+  400a7c:	1798      	l32i.n	a9, a7, 4
+  400a7e:	891b      	addi.n	a8, a9, 1
+  400a80:	1789      	s32i.n	a8, a7, 4
+  400a82:	0788      	l32i.n	a8, a7, 0
+  400a84:	a81b      	addi.n	a10, a8, 1
+  400a86:	07a9      	s32i.n	a10, a7, 0
+  400a88:	000992        	l8ui	a9, a9, 0
+  400a8b:	004892        	s8i	a9, a8, 0
+  400a8e:	1788      	l32i.n	a8, a7, 4
+  400a90:	000882        	l8ui	a8, a8, 0
+  400a93:	fe5856        	bnez	a8, 400a7c <stpcpy+0x14>
+  400a96:	0788      	l32i.n	a8, a7, 0
+  400a98:	090c      	movi.n	a9, 0
+  400a9a:	004892        	s8i	a9, a8, 0
+  400a9d:	0788      	l32i.n	a8, a7, 0
+  400a9f:	082d      	mov.n	a2, a8
+  400aa1:	f01d      	retw.n
+	...
+
+00400aa4 <strncmp>:
+  400aa4:	008136        	entry	a1, 64
+  400aa7:	017d      	mov.n	a7, a1
+  400aa9:	4729      	s32i.n	a2, a7, 16
+  400aab:	5739      	s32i.n	a3, a7, 20
+  400aad:	6749      	s32i.n	a4, a7, 24
+  400aaf:	080c      	movi.n	a8, 0
+  400ab1:	0789      	s32i.n	a8, a7, 0
+  400ab3:	000fc6        	j	400af6 <strncmp+0x52>
+  400ab6:	0788      	l32i.n	a8, a7, 0
+  400ab8:	4798      	l32i.n	a9, a7, 16
+  400aba:	898a      	add.n	a8, a9, a8
+  400abc:	000882        	l8ui	a8, a8, 0
+  400abf:	389c      	beqz.n	a8, 400ad6 <strncmp+0x32>
+  400ac1:	0788      	l32i.n	a8, a7, 0
+  400ac3:	4798      	l32i.n	a9, a7, 16
+  400ac5:	898a      	add.n	a8, a9, a8
+  400ac7:	000892        	l8ui	a9, a8, 0
+  400aca:	0788      	l32i.n	a8, a7, 0
+  400acc:	57a8      	l32i.n	a10, a7, 20
+  400ace:	8a8a      	add.n	a8, a10, a8
+  400ad0:	000882        	l8ui	a8, a8, 0
+  400ad3:	191987        	beq	a9, a8, 400af0 <strncmp+0x4c>
+  400ad6:	0788      	l32i.n	a8, a7, 0
+  400ad8:	4798      	l32i.n	a9, a7, 16
+  400ada:	898a      	add.n	a8, a9, a8
+  400adc:	000882        	l8ui	a8, a8, 0
+  400adf:	08ad      	mov.n	a10, a8
+  400ae1:	0788      	l32i.n	a8, a7, 0
+  400ae3:	5798      	l32i.n	a9, a7, 20
+  400ae5:	898a      	add.n	a8, a9, a8
+  400ae7:	000882        	l8ui	a8, a8, 0
+  400aea:	c08a80        	sub	a8, a10, a8
+  400aed:	000386        	j	400aff <strncmp+0x5b>
+  400af0:	0788      	l32i.n	a8, a7, 0
+  400af2:	881b      	addi.n	a8, a8, 1
+  400af4:	0789      	s32i.n	a8, a7, 0
+  400af6:	0798      	l32i.n	a9, a7, 0
+  400af8:	6788      	l32i.n	a8, a7, 24
+  400afa:	b83987        	bltu	a9, a8, 400ab6 <strncmp+0x12>
+  400afd:	080c      	movi.n	a8, 0
+  400aff:	082d      	mov.n	a2, a8
+  400b01:	f01d      	retw.n
+	...
+
+00400b04 <strchr>:
+  400b04:	008136        	entry	a1, 64
+  400b07:	017d      	mov.n	a7, a1
+  400b09:	4729      	s32i.n	a2, a7, 16
+  400b0b:	5739      	s32i.n	a3, a7, 20
+  400b0d:	080c      	movi.n	a8, 0
+  400b0f:	0789      	s32i.n	a8, a7, 0
+  400b11:	000786        	j	400b33 <strchr+0x2f>
+  400b14:	0788      	l32i.n	a8, a7, 0
+  400b16:	4798      	l32i.n	a9, a7, 16
+  400b18:	898a      	add.n	a8, a9, a8
+  400b1a:	000882        	l8ui	a8, a8, 0
+  400b1d:	089d      	mov.n	a9, a8
+  400b1f:	5788      	l32i.n	a8, a7, 20
+  400b21:	089897        	bne	a8, a9, 400b2d <strchr+0x29>
+  400b24:	0788      	l32i.n	a8, a7, 0
+  400b26:	4798      	l32i.n	a9, a7, 16
+  400b28:	898a      	add.n	a8, a9, a8
+  400b2a:	0004c6        	j	400b41 <strchr+0x3d>
+  400b2d:	0788      	l32i.n	a8, a7, 0
+  400b2f:	881b      	addi.n	a8, a8, 1
+  400b31:	0789      	s32i.n	a8, a7, 0
+  400b33:	0788      	l32i.n	a8, a7, 0
+  400b35:	4798      	l32i.n	a9, a7, 16
+  400b37:	898a      	add.n	a8, a9, a8
+  400b39:	000882        	l8ui	a8, a8, 0
+  400b3c:	fd4856        	bnez	a8, 400b14 <strchr+0x10>
+  400b3f:	080c      	movi.n	a8, 0
+  400b41:	082d      	mov.n	a2, a8
+  400b43:	f01d      	retw.n
+  400b45:	000000        	ill
+
+00400b48 <atoi>:
+  400b48:	008136        	entry	a1, 64
+  400b4b:	017d      	mov.n	a7, a1
+  400b4d:	4729      	s32i.n	a2, a7, 16
+  400b4f:	180c      	movi.n	a8, 1
+  400b51:	0789      	s32i.n	a8, a7, 0
+  400b53:	080c      	movi.n	a8, 0
+  400b55:	1789      	s32i.n	a8, a7, 4
+  400b57:	4788      	l32i.n	a8, a7, 16
+  400b59:	000892        	l8ui	a9, a8, 0
+  400b5c:	d82c      	movi.n	a8, 45
+  400b5e:	2e9987        	bne	a9, a8, 400b90 <atoi+0x48>
+  400b61:	4788      	l32i.n	a8, a7, 16
+  400b63:	881b      	addi.n	a8, a8, 1
+  400b65:	4789      	s32i.n	a8, a7, 16
+  400b67:	f87c      	movi.n	a8, -1
+  400b69:	0789      	s32i.n	a8, a7, 0
+  400b6b:	000846        	j	400b90 <atoi+0x48>
+  400b6e:	1798      	l32i.n	a9, a7, 4
+  400b70:	098d      	mov.n	a8, a9
+  400b72:	1188e0        	slli	a8, a8, 2
+  400b75:	889a      	add.n	a8, a8, a9
+  400b77:	888a      	add.n	a8, a8, a8
+  400b79:	1789      	s32i.n	a8, a7, 4
+  400b7b:	4788      	l32i.n	a8, a7, 16
+  400b7d:	000882        	l8ui	a8, a8, 0
+  400b80:	d0c882        	addi	a8, a8, -48
+  400b83:	1798      	l32i.n	a9, a7, 4
+  400b85:	898a      	add.n	a8, a9, a8
+  400b87:	1789      	s32i.n	a8, a7, 4
+  400b89:	4788      	l32i.n	a8, a7, 16
+  400b8b:	881b      	addi.n	a8, a8, 1
+  400b8d:	046782        	s32i	a8, a7, 16
+  400b90:	4788      	l32i.n	a8, a7, 16
+  400b92:	000882        	l8ui	a8, a8, 0
+  400b95:	f92c      	movi.n	a9, 47
+  400b97:	09b987        	bgeu	a9, a8, 400ba4 <atoi+0x5c>
+  400b9a:	4788      	l32i.n	a8, a7, 16
+  400b9c:	000882        	l8ui	a8, a8, 0
+  400b9f:	993c      	movi.n	a9, 57
+  400ba1:	c9b987        	bgeu	a9, a8, 400b6e <atoi+0x26>
+  400ba4:	1798      	l32i.n	a9, a7, 4
+  400ba6:	0788      	l32i.n	a8, a7, 0
+  400ba8:	828980        	mull	a8, a9, a8
+  400bab:	082d      	mov.n	a2, a8
+  400bad:	f01d      	retw.n

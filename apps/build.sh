@@ -6,31 +6,38 @@ export READELF=${PREFIX}-readelf
 export OBJDUMP=${PREFIX}-objdump
 export AR=${PREFIX}-ar
 
-CFLAGS="-Wall -Wl,-q -fPIE -nostdlib -static -static-libgcc -lgcc"
+APPS="hello pwd init sh ls cat echo gpio tm1650 ds1302"
+
+if [ $# -ge 1 ]
+then
+    if [ $1 == "clean" ]
+    then
+        echo cleaning
+        for APP in $APPS
+        do
+            rm $APP
+        done
+        exit
+    fi
+fi
+
+CFLAGS="-Wall -Wl,-gc-sections -Wl,-q -fPIE -nostdlib -static -static-libgcc -lgcc"
 #CFLAGS="-static-pie -nostdlib"
 
 pushd libc
 echo "BUILDING LIBC"
-CFLAGS="${CFLAGS} -I../inc" make
+CFLAGS="${CFLAGS} -ffunction-sections -I../inc" make
 popd
 echo
 
 echo "BULIDING APPS"
 CFLAGS="${CFLAGS} -Iinc"
 
-${CC} ${CFLAGS} -o hello hello.c libc/esplibc.a
-${CC} ${CFLAGS} pwd.c -o pwd libc/esplibc.a
-${CC} ${CFLAGS} init.c -o init libc/esplibc.a
-${CC} ${CFLAGS} sh.c -o sh libc/esplibc.a
-${CC} ${CFLAGS} ls.c -o ls libc/esplibc.a
-${CC} ${CFLAGS} cat.c -o cat libc/esplibc.a
-${CC} ${CFLAGS} echo.c -o echo libc/esplibc.a
-${CC} ${CFLAGS} gpio.c -o gpio libc/esplibc.a
-
-${CC} ${CFLAGS} tm1650.c -o tm1650 libc/esplibc.a
-${CC} ${CFLAGS} ds1302.c -o ds1302 libc/esplibc.a
-
-#${OBJDUMP} -x -r -R -s -S sh > sh.dis
+for APP in $APPS
+do
+    echo building $APP
+    ${CC} ${CFLAGS} -o $APP ${APP}.c libc/esplibc.a
+done
 
 echo done
 read
